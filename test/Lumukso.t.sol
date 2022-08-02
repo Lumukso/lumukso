@@ -30,8 +30,15 @@ contract LumuksoTest is Test {
     }
 
     function testAddMagicLinkGuardian() public {
-        myLumukso.setPendingMagicLinkGuardian(0x47A8A64B2c1A1636D269a0F774DC7532f45c70E3);
-        vm.startPrank(0x47A8A64B2c1A1636D269a0F774DC7532f45c70E3);
-        // FIXME: myLumukso.confirmMagicLinkGuardian();
+        uint256 expirationTimestamp = block.timestamp + 300;
+        address alice = vm.addr(1);
+        myLumukso.setPendingMagicLinkGuardian(alice);
+        bytes32 hash = keccak256(bytes(string.concat(
+                "{\"operation\":\"confirmMagicLinkGuardian\",\"expirationTimestamp\":",
+                Strings.toString(expirationTimestamp),
+                "}"
+            )));
+        (uint8 v, bytes32 r, bytes32 s) = vm.sign(1, hash);
+        myLumukso.confirmMagicLinkGuardian(expirationTimestamp, abi.encodePacked(r, s, v));
     }
 }
