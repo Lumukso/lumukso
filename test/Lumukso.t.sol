@@ -3,7 +3,7 @@ pragma solidity ^0.8.10;
 
 import "forge-std/Test.sol";
 import "../src/Lumukso.sol";
-import "../src/MyProfile.sol";
+import "@lukso/lsp-smart-contracts/contracts/UniversalProfile.sol";
 import {LSP6Utils} from "@lukso/lsp-smart-contracts/contracts/LSP6KeyManager/LSP6Utils.sol";
 import {_ALL_DEFAULT_PERMISSIONS} from "@lukso/lsp-smart-contracts/contracts/LSP6KeyManager/LSP6Constants.sol";
 
@@ -12,7 +12,7 @@ contract LumuksoTest is Test {
     Lumukso myLumukso;
 
     function setUp() public {
-        myUniversalProfile = new MyProfile();
+        myUniversalProfile = new UniversalProfile(address(this));
         myLumukso = new Lumukso(myUniversalProfile);
         assertEq(myLumukso.target(), address(myUniversalProfile));
 
