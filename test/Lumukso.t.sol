@@ -30,6 +30,8 @@ contract LumuksoTest is Test {
     }
 
     function testAddMagicLinkGuardian() public {
-        myLumukso.addMagicLinkGuardian(0x47A8A64B2c1A1636D269a0F774DC7532f45c70E3);
+        myLumukso.setPendingMagicLinkGuardian(0x47A8A64B2c1A1636D269a0F774DC7532f45c70E3);
+        vm.startPrank(0x47A8A64B2c1A1636D269a0F774DC7532f45c70E3);
+        // FIXME: myLumukso.confirmMagicLinkGuardian();
     }
 }

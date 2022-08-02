@@ -6,14 +6,21 @@ import "@erc725/smart-contracts/contracts/interfaces/IERC725Y.sol";
 import "@lukso/lsp-smart-contracts/contracts/UniversalProfile.sol";
 import "@lukso/lsp-smart-contracts/contracts/LSP6KeyManager/LSP6KeyManager.sol";
 import "@lukso/lsp-smart-contracts/contracts/LSP11BasicSocialRecovery/LSP11BasicSocialRecovery.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
+import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 import {LSP6Utils} from "@lukso/lsp-smart-contracts/contracts/LSP6KeyManager/LSP6Utils.sol";
 import {MAGIC_LINK_GUARDIAN_KEY} from "./constants.sol";
-import {_ALL_DEFAULT_PERMISSIONS} from "@lukso/lsp-smart-contracts/contracts/LSP6KeyManager/LSP6Constants.sol";
 
 contract Lumukso is LSP6KeyManager, LSP11BasicSocialRecovery(msg.sender), IERC725X, IERC725Y {
-    UniversalProfile public profile;
+    using ECDSA for bytes32;
 
-    constructor(UniversalProfile _profile) LSP6KeyManager(address(_profile)) public {
+    UniversalProfile public profile;
+    address public pendingMagicLinkGuardian;
+
+    event PendingMagicLinkGuardianUpdated(address guardian);
+    event MagicLinkGuardianUpdated(address guardian);
+
+    constructor(UniversalProfile _profile) LSP6KeyManager(address(_profile)) {
         profile = _profile;
     }
 
@@ -21,20 +28,37 @@ contract Lumukso is LSP6KeyManager, LSP11BasicSocialRecovery(msg.sender), IERC72
         profile.claimOwnership();
     }
 
-    function addMagicLinkGuardian(address magicLinkAddress) public virtual onlyOwner {
+    function setPendingMagicLinkGuardian(address magicLinkAddress) public virtual onlyOwner {
+        pendingMagicLinkGuardian = magicLinkAddress;
+        emit PendingMagicLinkGuardianUpdated(pendingMagicLinkGuardian);
+    }
+
+    function confirmMagicLinkGuardian(uint256 expirationTimestamp, bytes memory pendingMagicLinkGuardianSignature) public virtual onlyOwner {
+        require(block.timestamp < expirationTimestamp, "SIGNATURE_EXPIRED");
+        require(
+            keccak256(bytes(string.concat(
+                "{\"operation\":\"confirmMagicLinkGuardian\",\"expirationTimestamp\":",
+                Strings.toString(expirationTimestamp),
+                "}"
+            ))).toEthSignedMessageHash().recover(pendingMagicLinkGuardianSignature) == pendingMagicLinkGuardian,
+            "SIGNATURE_INVALID"
+        );
+
+        // set profile key MAGIC_LINK_GUARDIAN_KEY as magic link guardian
         bytes32[] memory keys = new bytes32[](1);
         keys[0] = bytes32(keccak256(abi.encodePacked(MAGIC_LINK_GUARDIAN_KEY)));
-
         bytes[] memory values = new bytes[](1);
-        values[0] = abi.encodePacked(magicLinkAddress);
-
+        values[0] = abi.encodePacked(pendingMagicLinkGuardian);
         LSP6Utils.setDataViaKeyManager(
             address(this),
             keys,
             values
         );
 
-        addGuardian(magicLinkAddress);
+        // commit pending guardian address
+        addGuardian(pendingMagicLinkGuardian);
+        emit MagicLinkGuardianUpdated(pendingMagicLinkGuardian);
+        pendingMagicLinkGuardian = address(0);
     }
 
     function execute(
