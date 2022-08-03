@@ -108,7 +108,5 @@ contract LumuksoTest is Test {
         vm.startPrank(vm.addr(newOwner));
         myLumukso.socialRecovery().recoverOwnership(recoverProcessId, secret, keccak256("new secret"));
         vm.stopPrank();
-
-        // assertEq(myUniversalProfile.owner(), bob);
     }
 }
