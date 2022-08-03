@@ -40,7 +40,7 @@ contract LumuksoTest is Test {
             (bytes32[] memory keys, bytes[] memory values) = LSP6Utils
                 .createPermissionsKeysForController(
                     myUniversalProfile,
-                    address(myLumukso),
+                    address(myLumukso.socialRecovery()),
                     abi.encodePacked(_ALL_DEFAULT_PERMISSIONS)
                 );
             myUniversalProfile.setData(keys, values);
@@ -84,8 +84,8 @@ contract LumuksoTest is Test {
         bytes32 hash = keccak256(bytes(string.concat(
                 "operation=confirmMagicLinkGuardian&expirationTimestamp=",
                 Strings.toString(expirationTimestamp),
-                "&lumuksoAddress=",
-                string(abi.encodePacked(address(myLumukso)))
+                "&address=",
+                string(abi.encodePacked(address(myLumukso.socialRecovery())))
             ))).toEthSignedMessageHash();
         (uint8 v, bytes32 r, bytes32 s) = vm.sign(guardian, hash);
         myLumukso.execute(abi.encodeWithSignature(

@@ -30,7 +30,7 @@ contract LumuksoSocialRecovery is LSP11BasicSocialRecovery {
             keccak256(bytes(string.concat(
                     "operation=confirmMagicLinkGuardian&expirationTimestamp=",
                     Strings.toString(expirationTimestamp),
-                    "&lumuksoAddress=",
+                    "&address=",
                     string(abi.encodePacked(address(this)))
                 ))).toEthSignedMessageHash().recover(v, r, s) == pendingMagicLinkGuardian,
             "SIGNATURE_INVALID"
