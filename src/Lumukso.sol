@@ -33,14 +33,15 @@ contract Lumukso is LSP6KeyManager, LSP11BasicSocialRecovery(msg.sender), IERC72
         emit PendingMagicLinkGuardianUpdated(pendingMagicLinkGuardian);
     }
 
-    function confirmMagicLinkGuardian(uint256 expirationTimestamp, bytes memory pendingMagicLinkGuardianSignature) public virtual onlyOwner {
+    function confirmMagicLinkGuardian(uint256 expirationTimestamp, bytes32 r, bytes32 s, uint8 v) public virtual onlyOwner {
         require(block.timestamp < expirationTimestamp, "SIGNATURE_EXPIRED");
         require(
             keccak256(bytes(string.concat(
-                "{\"operation\":\"confirmMagicLinkGuardian\",\"expirationTimestamp\":",
+                "operation=confirmMagicLinkGuardian&expirationTimestamp=",
                 Strings.toString(expirationTimestamp),
-                "}"
-            ))).toEthSignedMessageHash().recover(pendingMagicLinkGuardianSignature) == pendingMagicLinkGuardian,
+                "&lumuksoAddress=",
+                string(abi.encodePacked(address(this)))
+            ))).toEthSignedMessageHash().recover(v, r, s) == pendingMagicLinkGuardian,
             "SIGNATURE_INVALID"
         );
 

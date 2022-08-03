@@ -2,12 +2,15 @@
 pragma solidity ^0.8.10;
 
 import "forge-std/Test.sol";
+import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 import "../src/Lumukso.sol";
 import "@lukso/lsp-smart-contracts/contracts/UniversalProfile.sol";
 import {LSP6Utils} from "@lukso/lsp-smart-contracts/contracts/LSP6KeyManager/LSP6Utils.sol";
 import {_ALL_DEFAULT_PERMISSIONS} from "@lukso/lsp-smart-contracts/contracts/LSP6KeyManager/LSP6Constants.sol";
 
 contract LumuksoTest is Test {
+    using ECDSA for bytes32;
+
     UniversalProfile myUniversalProfile;
     Lumukso myLumukso;
 
@@ -31,14 +34,15 @@ contract LumuksoTest is Test {
 
     function testAddMagicLinkGuardian() public {
         uint256 expirationTimestamp = block.timestamp + 300;
-        address alice = vm.addr(1);
-        myLumukso.setPendingMagicLinkGuardian(alice);
+        address bob = vm.addr(2);
+        myLumukso.setPendingMagicLinkGuardian(bob);
         bytes32 hash = keccak256(bytes(string.concat(
-                "{\"operation\":\"confirmMagicLinkGuardian\",\"expirationTimestamp\":",
+                "operation=confirmMagicLinkGuardian&expirationTimestamp=",
                 Strings.toString(expirationTimestamp),
-                "}"
-            )));
-        (uint8 v, bytes32 r, bytes32 s) = vm.sign(1, hash);
-        myLumukso.confirmMagicLinkGuardian(expirationTimestamp, abi.encodePacked(r, s, v));
+                "&lumuksoAddress=",
+                string(abi.encodePacked(address(myLumukso)))
+            ))).toEthSignedMessageHash();
+        (uint8 v, bytes32 r, bytes32 s) = vm.sign(2, hash);
+        myLumukso.confirmMagicLinkGuardian(expirationTimestamp, r, s, v);
     }
 }
