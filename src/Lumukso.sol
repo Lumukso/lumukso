@@ -16,7 +16,7 @@ contract Lumukso is LSP6KeyManager {
         socialRecovery = new LumuksoSocialRecovery(address(profile));
     }
 
-    function claimOwnership() public virtual {
+    function claimProfileOwnership() public virtual {
         profile.claimOwnership();
     }
 }

@@ -51,7 +51,7 @@ contract LumuksoTest is Test {
             OPERATION_CALL,
             address(myLumukso),
             0,
-            abi.encodeWithSignature("claimOwnership()")
+            abi.encodeWithSignature("claimProfileOwnership()")
         );
         assertEq(myUniversalProfile.owner(), address(myLumukso));
 
