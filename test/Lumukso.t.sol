@@ -41,7 +41,7 @@ contract LumuksoTest is Test {
                 .createPermissionsKeysForController(
                     myUniversalProfile,
                     address(myLumukso.socialRecovery()),
-                    abi.encodePacked(_ALL_DEFAULT_PERMISSIONS)
+                    abi.encodePacked(hex"0000000000000000000000000000000000000000000000000000000000000026") // STATICCALL + CHANGEPERMISSIONS + ADDPERMISSIONS
                 );
             myUniversalProfile.setData(keys, values);
         }
