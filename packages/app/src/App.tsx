@@ -15,10 +15,10 @@ export function App() {
                     <div className="flex p-4 max-w-sm rounded-2xl border shadow-2xl sm:p-6 dark:bg-gray-800 dark:border-gray-700 min-h-[300px] main-card">
                         <div className="flex flex-col grow place-content-center place-items-center h-[inherit] pt-5">
                             <Logo className="flex-none" />
-                            <div className="flex grow items-center">
+                            <div className="flex flex-col grow justify-center items-center mt-5 bt-5 gap-y-2.5">
                                 {
                                     !isConnected ? (
-                                        <div>
+                                        <>
                                             <Button
                                                 outline={true}
                                                 gradientDuoTone="purpleToBlue"
@@ -28,7 +28,34 @@ export function App() {
                                                     <span>Enable Social Recovery</span>
                                                 </span>
                                             </Button>
-                                        </div>
+                                            <Button
+                                                outline={true}
+                                                gradientDuoTone="purpleToBlue"
+                                                size="">
+                                                <span className="flex flex-row items-center relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0 text-magic-purple group-hover:text-white text-lg">
+                                                    <LightningBoltIcon className="w-4 h-4 mr-1" />
+                                                    <span>Login MagicLink</span>
+                                                </span>
+                                            </Button>
+                                            <Button
+                                                outline={true}
+                                                gradientDuoTone="purpleToBlue"
+                                                size="">
+                                                <span className="flex flex-row items-center relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0 text-magic-purple group-hover:text-white text-lg">
+                                                    <LightningBoltIcon className="w-4 h-4 mr-1" />
+                                                    <span>Login Twitter</span>
+                                                </span>
+                                            </Button>
+                                            <Button
+                                                outline={true}
+                                                gradientDuoTone="purpleToBlue"
+                                                size="">
+                                                <span className="flex flex-row items-center relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0 text-magic-purple group-hover:text-white text-lg">
+                                                    <LightningBoltIcon className="w-4 h-4 mr-1" />
+                                                    <span>Recover My Profile</span>
+                                                </span>
+                                            </Button>
+                                        </>
                                     ) : (<div></div>)
                                 }
                             </div>
