@@ -34,28 +34,26 @@ body {
     border-radius: 10px;
 }
 
-.glow-on-hover:active {
-    color: #000
+.gradient-background {
+    background: linear-gradient(60deg, #f79533, #f37055, #ef4e7b, #a166ab, #5073b8, #1098ad, #07b39b, #6fba82);
+    animation: animatedgradient 5s ease alternate infinite;
+    background-size: 300% 300%;
 }
 
-.glow-on-hover:active:after {
-    background: transparent;
+@keyframes animatedgradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
 }
 
-.glow-on-hover:hover:before {
-    opacity: 1;
-}
 
-.glow-on-hover:after {
-    z-index: -1;
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    left: 0;
-    top: 0;
-    border-radius: 10px;
-}
+
 
 @keyframes glowing {
     0% { background-position: 0 0; }
