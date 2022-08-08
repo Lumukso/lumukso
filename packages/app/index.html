@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🛡️LUMUKSO</title>
+    <link rel="stylesheet" href="/src/index.css">
+    <script>window.global = window;</script>
+    <script type="module">
+        import process from "process";
+        import { Buffer } from "buffer";
+        import EventEmitter from "events";
+
+        window.process = process;
+        window.Buffer = Buffer;
+        window.EventEmitter = EventEmitter;
+    </script>
+</head>
+<body class="h-full">
+<div id="root"></div>
+<script type="module" src="/src/index.tsx"></script>
+</body>
+</html>
