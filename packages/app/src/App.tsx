@@ -2,6 +2,7 @@ import {useAccount} from 'wagmi'
 import Logo from "./components/Logo";
 import {Button} from "flowbite-react/lib/esm/components/Button";
 import {LightningBoltIcon, QuestionMarkCircleIcon} from "@heroicons/react/outline";
+import { Switch } from '@headlessui/react';
 
 export function App() {
     const {isConnected} = useAccount()
@@ -12,9 +13,9 @@ export function App() {
             <div className="flex h-screen justify-center items-center py-12 px-4 sm:px-6 lg:px-8">
                 <div className="max-w-md w-full space-y-8">
                     <div className="flex p-4 max-w-sm rounded-2xl border shadow-2xl sm:p-6 dark:bg-gray-800 dark:border-gray-700 min-h-[300px] main-card">
-                        <div className="flex flex-col grow place-content-center place-items-center h-[inherit]">
+                        <div className="flex flex-col grow place-content-center place-items-center h-[inherit] pt-5">
                             <Logo className="flex-none" />
-                            <div className="flex grow items-center justify-center">
+                            <div className="flex grow items-center">
                                 {
                                     !isConnected ? (
                                         <div>
@@ -31,7 +32,7 @@ export function App() {
                                     ) : (<div></div>)
                                 }
                             </div>
-                            <div className="flex-none text-right align-middle self-end items-end">
+                            <div className="flex-none text-right align-middle self-end items-end pt-5">
                                 <a href="#" className="flex flex-row justify-center items-center self-end text-xs align-middle font-normal text-gray-500 hover:underline dark:text-gray-400">
                                     <QuestionMarkCircleIcon className="mr-1 w-3 h-3" aria-hidden="true" focusable="false" data-prefix="far" />
                                     <span className="align-middle">How this works?</span>
