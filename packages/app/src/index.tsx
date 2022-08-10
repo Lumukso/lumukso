@@ -10,6 +10,7 @@ import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 
 import { App } from './App'
+import Context from './Context'
 
 const { chains, provider, webSocketProvider } = configureChains([
     {
@@ -52,7 +53,9 @@ const client = createClient({
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
         <WagmiConfig client={client}>
-            <App />
+            <Context.Provider value={{}}>
+                <App />
+            </Context.Provider>
         </WagmiConfig>
     </React.StrictMode>,
 )

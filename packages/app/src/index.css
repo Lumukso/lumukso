@@ -7,6 +7,13 @@ body {
     background-image: linear-gradient(-20deg, #e9defa 0%, #fbfcdb 100%);
 }
 
+.logo {
+    background: #E685FC;
+    background: linear-gradient(to right, #E685FC 0%, #86d5ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
 .main-card {
     /* From https://css.glass */
     background: rgba(255, 255, 255, 0.2);
