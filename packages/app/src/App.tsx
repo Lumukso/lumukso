@@ -2,7 +2,6 @@ import Logo from "./components/Logo";
 import {Button} from "flowbite-react/lib/esm/components/Button";
 import {LightningBoltIcon, QuestionMarkCircleIcon} from "@heroicons/react/outline";
 import {Switch} from '@headlessui/react';
-import MagicLinkLogo from "./components/MagicLinkLogo";
 import Toggle from "./components/Toggle";
 import {Magic} from 'magic-sdk';
 
@@ -10,9 +9,9 @@ const magic = new Magic("pk_live_A83681BBE4DEC49F");
 import {useAccount, useConnect} from 'wagmi'
 
 export function App() {
-    const {connector: activeConnector, isConnected, address} = useAccount()
-    const {connect, connectors, error, isLoading, pendingConnector} =
-        useConnect()
+    const {connector: activeConnector, isConnected, address} = useAccount();
+    const {connect, connectors, error, isLoading, pendingConnector} = useConnect();
+    const connector = connectors[0];
     return (
         <>
             <div
@@ -23,58 +22,46 @@ export function App() {
                         className="flex p-4 max-w-sm rounded-2xl border shadow-2xl sm:p-6 dark:bg-gray-800 dark:border-gray-700 min-h-[300px] main-card">
                         <div className="flex flex-col grow place-content-center place-items-center h-[inherit] pt-5">
                             <Logo className="flex-none"/>
-                            <div className="flex flex-col grow justify-center items-center mt-5 bt-5 gap-y-2.5">
+                            <div className="flex flex-col grow justify-center items-center mt-5 bt-5 gap-y-2.5 w-full">
                                 {
                                     <>
-                                        {isConnected && <div>Connected to {activeConnector.name}'s {address}</div>}
-
-                                        {connectors.map((connector) => (
-                                            <button
-                                                disabled={!connector.ready}
-                                                key={connector.id}
-                                                onClick={() => connect({connector})}
-                                            >
-                                                {connector.name}
-                                                {isLoading &&
-                                                    pendingConnector?.id === connector.id &&
-                                                    ' (connecting)'}
-                                            </button>
-                                        ))}
-
-                                        {error && <div>{error.message}</div>}
-
-                                        <Button
-                                            outline={true}
-                                            gradientDuoTone="purpleToBlue"
-                                            size="">
-                                                <span
-                                                    className="flex flex-row items-center relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0 text-magic-purple group-hover:text-white text-lg">
-                                                    <LightningBoltIcon className="w-4 h-4 mr-1"/>
-                                                    <span>Enable Social Recovery</span>
-                                                </span>
-                                        </Button>
                                         <div className="flow-root w-full">
                                             <ul role="list"
                                                 className="divide-y divide-gray-200 dark:divide-gray-700 w-full">
-                                                <li className="py-3 sm:py-4 grayscale">
-                                                    <div className="flex justify-between items-center space-x-4">
-                                                        <div className="flex-shrink-0">
-                                                            <MagicLinkLogo/>
+                                                <li className="py-3 sm:py-4">
+                                                    <div
+                                                        className="flex flex-row align-center items-center space-x-4">
+                                                        <div className="">
+                                                            <img src="/assets/lukso.png" className="lukso-item" />
                                                         </div>
-                                                        <div
-                                                            className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-                                                            <Toggle/>
+                                                        <div className="whitespace-nowrap justify-self-start grow"><strong>LUKSO</strong></div>
+                                                        <div>
+                                                            <button type="button"
+                                                                    onClick={() => connect({connector})}
+                                                                    disabled={isConnected}
+                                                                    key={connector.id}
+                                                                    className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                                                                Connect
+                                                                {isLoading &&
+                                                                    pendingConnector?.id === connector.id &&
+                                                                    ' (connecting)'}
+                                                                {
+                                                                    isConnected ? ' (connected)' : ''
+                                                                }
+                                                            </button>
                                                         </div>
                                                     </div>
                                                 </li>
                                                 <li className="py-3 sm:py-4">
-                                                    <div
-                                                        className="flex flex-row justify-between items-center space-x-4">
+                                                    <div className="flex items-center space-x-4 w-full">
                                                         <div className="">
-                                                            <MagicLinkLogo/>
+                                                            <img src="/assets/magic.png" className="lukso-item" />
                                                         </div>
-                                                        <div className="">
-                                                            <Toggle/>
+                                                        <div className="whitespace-nowrap justify-self-start grow"><strong>Magic.link</strong></div>
+                                                        <div className="justify-self-end">
+                                                            <button type="button" className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                                                                Connect
+                                                            </button>
                                                         </div>
                                                     </div>
                                                 </li>
@@ -92,10 +79,7 @@ export function App() {
                                 </a>
                             </div>
                         </div>
-
                     </div>
-
-
                 </div>
             </div>
         </>

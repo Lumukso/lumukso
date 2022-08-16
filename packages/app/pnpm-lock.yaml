@@ -14,17 +14,24 @@ specifiers:
   '@types/react-dom': ^18.0.6
   '@vitejs/plugin-react': ^2.0.0
   '@vitejs/plugin-react-refresh': ^1.3.6
+  async-sema: ^3.1.1
   autoprefixer: ^10.4.8
+  beautiful-react-hooks: ^3.10.0
   buffer: ^6.0.3
   ethers: ^5.6.9
+  event-emitter: ^0.3.5
   events: ^3.3.0
   flowbite: ^1.5.1
   flowbite-react: ^0.1.5
+  isomorphic-unfetch: ^3.1.0
   magic-sdk: ^9.0.0
+  node-fetch: ^3.2.10
   postcss: ^8.4.16
   process: ^0.11.10
   react: ^18.2.0
   react-dom: ^18.2.0
+  react-router-dom: ^6.3.0
+  rxjs: ^7.5.6
   tailwindcss: ^3.1.8
   typescript: ^4.7.4
   util: ^0.12.4
@@ -37,19 +44,26 @@ dependencies:
   '@headlessui/react': 1.6.6_biqbaboplfbrettd7655fr4n2y
   '@headlessui/tailwindcss': 0.1.0_25hquoklqeoqwmt7fwvvcyxm5e
   '@heroicons/react': 1.0.6_react@18.2.0
-  '@lukso/lsp-factory.js': 2.3.3_@babel+core@7.18.10
+  '@lukso/lsp-factory.js': 2.3.3_ro77iljec4owcikbn6ked36gny
   '@tailwindcss/aspect-ratio': 0.4.0_tailwindcss@3.1.8
   '@tailwindcss/forms': 0.5.2_tailwindcss@3.1.8
   '@tailwindcss/typography': 0.5.4_tailwindcss@3.1.8
+  async-sema: 3.1.1
+  beautiful-react-hooks: 3.10.0_sfxl6x4friol5evfjsxwdjftwm
   buffer: 6.0.3
   ethers: 5.6.9
+  event-emitter: 0.3.5
   events: 3.3.0
   flowbite: 1.5.1
   flowbite-react: 0.1.5_5jwqzlh4mpoms2sflexoxrbnl4
+  isomorphic-unfetch: 3.1.0
   magic-sdk: 9.0.0
+  node-fetch: 3.2.10
   process: 0.11.10
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
+  react-router-dom: 6.3.0_biqbaboplfbrettd7655fr4n2y
+  rxjs: 7.5.6
   util: 0.12.4
   wagmi: 0.6.1_v53yskzlb7auon6fdtjnpmvxqu
 
@@ -1312,7 +1326,7 @@ packages:
       '@pedrouid/environment': 1.0.1
     dev: false
 
-  /@lukso/lsp-factory.js/2.3.3_@babel+core@7.18.10:
+  /@lukso/lsp-factory.js/2.3.3_ro77iljec4owcikbn6ked36gny:
     resolution: {integrity: sha512-2KErArIqLNwU6A+WGWnUvZPF72mKcnJeBmqoOWx7SqUCehpkUM5H/DZ/ruWfDTUFUQCKyekJtI85fllPmQzxuA==}
     engines: {node: '>=10'}
     dependencies:
@@ -1323,7 +1337,7 @@ packages:
       axios: 0.23.0
       browser-image-compression: 1.0.17
       ethers: 5.5.0
-      ipfs-http-client: 52.0.3
+      ipfs-http-client: 52.0.3_node-fetch@3.2.10
       ipfs-utils: 8.1.6
       rxjs: 7.5.6
     transitivePeerDependencies:
@@ -2195,6 +2209,10 @@ packages:
       tslib: 2.4.0
     dev: false
 
+  /async-sema/3.1.1:
+    resolution: {integrity: sha512-tLRNUXati5MFePdAk8dw7Qt7DpxPB60ofAgn8WRhW6a2rcimZnYBP9oxHiv0OHy+Wz7kPMG+t4LGdt31+4EmGg==}
+    dev: false
+
   /async/1.5.2:
     resolution: {integrity: sha512-nSVgobk4rv61R9PUSDtYt7mPVB2olxNR5RWJcAsH676/ef11bUZwvu7+RGYrYauVdDPcO519v68wRhXQtxsV9w==}
     dev: false
@@ -2319,6 +2337,22 @@ packages:
     resolution: {integrity: sha512-qeFIXtP4MSoi6NLqO12WfqARWWuCKi2Rn/9hJLEmtB5yTNr9DqFWkJRCf2qShWzPeAMRnOgCrq0sg/KLv5ES9w==}
     dependencies:
       tweetnacl: 0.14.5
+    dev: false
+
+  /beautiful-react-hooks/3.10.0_sfxl6x4friol5evfjsxwdjftwm:
+    resolution: {integrity: sha512-uS2aT6dg4Jf4yxVeNaIGdMTr24f3p0e7W68V9sbtEtZub1KagMmAZpDz9NzNeIfFHjuz7Pjq3CR4mqa5NymqWA==}
+    peerDependencies:
+      react: '>=16.0.0'
+      react-dom: '>=16.0.0'
+      react-router-dom: '>=5.0.0'
+      rxjs: '>=7.0.0'
+    dependencies:
+      lodash.debounce: 4.0.8
+      lodash.throttle: 4.1.1
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      react-router-dom: 6.3.0_biqbaboplfbrettd7655fr4n2y
+      rxjs: 7.5.6
     dev: false
 
   /bech32/1.1.4:
@@ -2863,6 +2897,11 @@ packages:
       assert-plus: 1.0.0
     dev: false
 
+  /data-uri-to-buffer/4.0.0:
+    resolution: {integrity: sha512-Vr3mLBA8qWmcuschSLAOogKgQ/Jwxulv3RNE4FXnYWRGujzrRWQI4m12fQqRkwX06C0KanhLr4hK+GydchZsaA==}
+    engines: {node: '>= 12'}
+    dev: false
+
   /debounce/1.2.1:
     resolution: {integrity: sha512-XRRe6Glud4rd/ZGQfiV1ruXSfbvfJedlV9Y6zOlP+2K04vBYiJEte6stfFkCP03aMnY5tsipamumUjL14fofug==}
     dev: false
@@ -2981,11 +3020,11 @@ packages:
   /dlv/1.1.3:
     resolution: {integrity: sha512-+HlytyjlPKnIG8XuRG8WvmBP8xs8P71y+SKKS6ZXWoEgLuePxtDoUEiH7WkdePWrQ5JBpE6aoVqfZfJUQkjXwA==}
 
-  /dns-over-http-resolver/1.2.3:
+  /dns-over-http-resolver/1.2.3_node-fetch@3.2.10:
     resolution: {integrity: sha512-miDiVSI6KSNbi4SVifzO/reD8rMnxgrlnkrlkugOLQpWQTe2qMdHsZp5DmfKjxNE+/T3VAAYLQUZMv9SMr6+AA==}
     dependencies:
       debug: 4.3.4
-      native-fetch: 3.0.0
+      native-fetch: 3.0.0_node-fetch@3.2.10
       receptacle: 1.3.2
     transitivePeerDependencies:
       - node-fetch
@@ -3929,6 +3968,13 @@ packages:
       strip-hex-prefix: 1.0.0
     dev: false
 
+  /event-emitter/0.3.5:
+    resolution: {integrity: sha512-D9rRn9y7kLPnJ+hMq7S/nhvoKwwvVJahBi2BPmx3bvbsEdK3W9ii8cBSGjP+72/LnM4n6fo3+dkCX5FeTQruXA==}
+    dependencies:
+      d: 1.0.1
+      es5-ext: 0.10.62
+    dev: false
+
   /event-target-shim/5.0.1:
     resolution: {integrity: sha512-i/2XbnSz/uxRCU6+NdVJgKWDTM427+MqYbkQzD321DuCQJUqOuJKIA0IM2+W2xtYHdKOmZ4dR6fExsd4SXL+WQ==}
     engines: {node: '>=6'}
@@ -4021,6 +4067,14 @@ packages:
     resolution: {integrity: sha512-YpkpUnK8od0o1hmeSc7UUs/eB/vIPWJYjKck2QKIzAf71Vm1AAQ3EbuZB3g2JIy+pg+ERD0vqI79KyZiB2e2Nw==}
     dependencies:
       reusify: 1.0.4
+
+  /fetch-blob/3.2.0:
+    resolution: {integrity: sha512-7yAQpD2UMJzLi1Dqv7qFYnPbaPx7ZfFK6PiIxQ4PfkGPyNyl2Ugx+a/umUonmKqjhM4DnfbMvdX6otXq83soQQ==}
+    engines: {node: ^12.20 || >= 14.13}
+    dependencies:
+      node-domexception: 1.0.0
+      web-streams-polyfill: 3.2.1
+    dev: false
 
   /figures/3.2.0:
     resolution: {integrity: sha512-yaduQFRKLXYOGgEn6AZau90j3ggSOyiqXU0F9JZfeXYhNa+Jk4X+s45A2zg5jns87GAFa34BBm2kXw4XpNcbdg==}
@@ -4130,6 +4184,13 @@ packages:
       asynckit: 0.4.0
       combined-stream: 1.0.8
       mime-types: 2.1.35
+    dev: false
+
+  /formdata-polyfill/4.0.10:
+    resolution: {integrity: sha512-buewHzMvYL29jdeQTVILecSaZKnt/RJWjoZCF5OW60Z67/GmSLBkOFM7qh1PI3zFNtJbaZL5eQu1vLfazOwj4g==}
+    engines: {node: '>=12.20.0'}
+    dependencies:
+      fetch-blob: 3.2.0
     dev: false
 
   /fraction.js/4.2.0:
@@ -4345,6 +4406,12 @@ packages:
       minimalistic-assert: 1.0.1
     dev: false
 
+  /history/5.3.0:
+    resolution: {integrity: sha512-ZqaKwjjrAYUYfLG+htGaIIZ4nioX2L70ZUMIFysS3xvBsSG4x/n1V6TXV3N8ZYNuFGlDirFg32T7B6WOUPDYcQ==}
+    dependencies:
+      '@babel/runtime': 7.18.9
+    dev: false
+
   /hmac-drbg/1.0.1:
     resolution: {integrity: sha512-Tti3gMqLdZfhOQY1Mzf/AanLiqh1WTiJgEj26ZuYQ9fbkLomzGchCws4FyrSd4VkpBfiNhaE1On+lOz894jvXg==}
     dependencies:
@@ -4488,32 +4555,32 @@ packages:
     engines: {node: '>=8'}
     dev: false
 
-  /ipfs-core-types/0.7.3:
+  /ipfs-core-types/0.7.3_node-fetch@3.2.10:
     resolution: {integrity: sha512-FkmOlqhEf3yG0K8Qt7We7kqA0xKjj8pe0dmNK593I3cgMP0MQS/xjMj1CXVdGeZc5Nn5CJ+TsuQydPbJ+7Y8eQ==}
     dependencies:
       interface-datastore: 5.2.0
-      multiaddr: 10.0.1
+      multiaddr: 10.0.1_node-fetch@3.2.10
       multiformats: 9.7.1
     transitivePeerDependencies:
       - node-fetch
       - supports-color
     dev: false
 
-  /ipfs-core-utils/0.10.5:
+  /ipfs-core-utils/0.10.5_node-fetch@3.2.10:
     resolution: {integrity: sha512-WPRbMkbn/99pKMF3h8x1/c19+eTXVWOZu1+cmlc3NLR6gMlCd8KNpcq9OCAvs9G1JHx3w/FbEWHnqJm0TJMvrw==}
     dependencies:
       any-signal: 2.1.2
       blob-to-it: 1.0.4
       browser-readablestream-to-it: 1.0.3
       err-code: 3.0.1
-      ipfs-core-types: 0.7.3
+      ipfs-core-types: 0.7.3_node-fetch@3.2.10
       ipfs-unixfs: 6.0.9
       ipfs-utils: 8.1.6
       it-all: 1.0.6
       it-map: 1.0.6
       it-peekable: 1.0.3
-      multiaddr: 10.0.1
-      multiaddr-to-uri: 8.0.0
+      multiaddr: 10.0.1_node-fetch@3.2.10
+      multiaddr-to-uri: 8.0.0_node-fetch@3.2.10
       multiformats: 9.7.1
       parse-duration: 1.0.2
       timeout-abort-controller: 1.1.1
@@ -4523,7 +4590,7 @@ packages:
       - supports-color
     dev: false
 
-  /ipfs-http-client/52.0.3:
+  /ipfs-http-client/52.0.3_node-fetch@3.2.10:
     resolution: {integrity: sha512-pMLDTz54MIUQk+9N4huSzMBfp+Gg33sk69nm6uaHfyO91InbFSlerwXL31CplpqRXW9vIjk8Jl4X1ZgMLnfs+w==}
     engines: {node: '>=14.0.0', npm: '>=3.0.0'}
     dependencies:
@@ -4534,14 +4601,14 @@ packages:
       debug: 4.3.4
       err-code: 3.0.1
       form-data: 4.0.0
-      ipfs-core-types: 0.7.3
-      ipfs-core-utils: 0.10.5
+      ipfs-core-types: 0.7.3_node-fetch@3.2.10
+      ipfs-core-utils: 0.10.5_node-fetch@3.2.10
       ipfs-utils: 8.1.6
       it-first: 1.0.7
       it-last: 1.0.6
       it-to-stream: 1.0.0
       merge-options: 3.0.4
-      multiaddr: 10.0.1
+      multiaddr: 10.0.1_node-fetch@3.2.10
       multiformats: 9.7.1
       nanoid: 3.3.4
       native-abort-controller: 1.0.4_abort-controller@3.0.0
@@ -4793,6 +4860,15 @@ packages:
     engines: {node: '>=12'}
     dev: false
 
+  /isomorphic-unfetch/3.1.0:
+    resolution: {integrity: sha512-geDJjpoZ8N0kWexiwkX8F9NkTsXhetLPVbZFQ+JTW239QNOwvB0gniuR1Wc6f0AMTn7/mFGyXvHTifrCp/GH8Q==}
+    dependencies:
+      node-fetch: 2.6.7
+      unfetch: 4.2.0
+    transitivePeerDependencies:
+      - encoding
+    dev: false
+
   /isstream/0.1.2:
     resolution: {integrity: sha512-Yljz7ffyPbrLpLngrMtZ7NduUgVvi6wG9RJ9IUcyCd59YQ911PBJphODUcbOVbqYfxe1wuYf/LJ8PauMRwsM/g==}
     dev: false
@@ -5041,6 +5117,10 @@ packages:
     resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}
     dev: false
 
+  /lodash.throttle/4.1.1:
+    resolution: {integrity: sha512-wIkUCfVKpVsWo3JSZlc+8MB5it+2AN5W8J7YVMST30UrvcQNZ1Okbj+rbVniijTWE6FGYy4XJq/rHkas8qJMLQ==}
+    dev: false
+
   /lodash/4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
     dev: false
@@ -5270,19 +5350,19 @@ packages:
   /ms/2.1.2:
     resolution: {integrity: sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==}
 
-  /multiaddr-to-uri/8.0.0:
+  /multiaddr-to-uri/8.0.0_node-fetch@3.2.10:
     resolution: {integrity: sha512-dq4p/vsOOUdVEd1J1gl+R2GFrXJQH8yjLtz4hodqdVbieg39LvBOdMQRdQnfbg5LSM/q1BYNVf5CBbwZFFqBgA==}
     dependencies:
-      multiaddr: 10.0.1
+      multiaddr: 10.0.1_node-fetch@3.2.10
     transitivePeerDependencies:
       - node-fetch
       - supports-color
     dev: false
 
-  /multiaddr/10.0.1:
+  /multiaddr/10.0.1_node-fetch@3.2.10:
     resolution: {integrity: sha512-G5upNcGzEGuTHkzxezPrrD6CaIHR9uo+7MwqhNVcXTs33IInon4y7nMiGxl2CY5hG7chvYQUQhz5V52/Qe3cbg==}
     dependencies:
-      dns-over-http-resolver: 1.2.3
+      dns-over-http-resolver: 1.2.3_node-fetch@3.2.10
       err-code: 3.0.1
       is-ip: 3.1.0
       multiformats: 9.7.1
@@ -5325,12 +5405,6 @@ packages:
       abort-controller: 3.0.0
     dev: false
 
-  /native-fetch/3.0.0:
-    resolution: {integrity: sha512-G3Z7vx0IFb/FQ4JxvtqGABsOTIqRWvgQz6e+erkB+JJD6LrszQtMozEHI4EkmgZQvnGHrpLVzUWk7t4sJCIkVw==}
-    peerDependencies:
-      node-fetch: '*'
-    dev: false
-
   /native-fetch/3.0.0_hmwa7nplpltavckpkeobtw6pv4:
     resolution: {integrity: sha512-G3Z7vx0IFb/FQ4JxvtqGABsOTIqRWvgQz6e+erkB+JJD6LrszQtMozEHI4EkmgZQvnGHrpLVzUWk7t4sJCIkVw==}
     peerDependencies:
@@ -5339,12 +5413,25 @@ packages:
       node-fetch: /@achingbrain/node-fetch/2.6.7
     dev: false
 
+  /native-fetch/3.0.0_node-fetch@3.2.10:
+    resolution: {integrity: sha512-G3Z7vx0IFb/FQ4JxvtqGABsOTIqRWvgQz6e+erkB+JJD6LrszQtMozEHI4EkmgZQvnGHrpLVzUWk7t4sJCIkVw==}
+    peerDependencies:
+      node-fetch: '*'
+    dependencies:
+      node-fetch: 3.2.10
+    dev: false
+
   /next-tick/1.1.0:
     resolution: {integrity: sha512-CXdUiJembsNjuToQvxayPZF9Vqht7hewsvy2sOWafLvi2awflj9mOC6bHIg50orX8IJvWKY9wYQ/zB2kogPslQ==}
     dev: false
 
   /node-addon-api/2.0.2:
     resolution: {integrity: sha512-Ntyt4AIXyaLIuMHF6IOoTakB3K+RWxwtsHNRxllEoA6vPwP9o4866g6YWDLUdnucilZhmkxiHwHr11gAENw+QA==}
+    dev: false
+
+  /node-domexception/1.0.0:
+    resolution: {integrity: sha512-/jKZoMpw0F8GRwl4/eLROPA3cfcXtLApP0QzLmUT/HuPCZWyB7IY9ZrMeKw2O/nFIqPQB3PVM9aYm0F312AXDQ==}
+    engines: {node: '>=10.5.0'}
     dev: false
 
   /node-fetch/2.6.7:
@@ -5357,6 +5444,15 @@ packages:
         optional: true
     dependencies:
       whatwg-url: 5.0.0
+    dev: false
+
+  /node-fetch/3.2.10:
+    resolution: {integrity: sha512-MhuzNwdURnZ1Cp4XTazr69K0BTizsBroX7Zx3UgDSVcZYKF/6p0CBe4EUb/hLqmzVhl0UpYfgRljQ4yxE+iCxA==}
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+    dependencies:
+      data-uri-to-buffer: 4.0.0
+      fetch-blob: 3.2.0
+      formdata-polyfill: 4.0.10
     dev: false
 
   /node-forge/1.3.1:
@@ -5847,6 +5943,27 @@ packages:
     resolution: {integrity: sha512-wViHqhAd8OHeLS/IRMJjTSDHF3U9eWi62F/MledQGPdJGDhodXJ9PBLNGr6WWL7qlH12Mt3TyTpbS+hGXMjCzQ==}
     engines: {node: '>=0.10.0'}
     dev: true
+
+  /react-router-dom/6.3.0_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-uaJj7LKytRxZNQV8+RbzJWnJ8K2nPsOOEuX7aQstlMZKQT0164C+X2w6bnkqU3sjtLvpd5ojrezAyfZ1+0sStw==}
+    peerDependencies:
+      react: '>=16.8'
+      react-dom: '>=16.8'
+    dependencies:
+      history: 5.3.0
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      react-router: 6.3.0_react@18.2.0
+    dev: false
+
+  /react-router/6.3.0_react@18.2.0:
+    resolution: {integrity: sha512-7Wh1DzVQ+tlFjkeo+ujvjSqSJmkt1+8JO+T5xklPlgrh70y7ogx75ODRW0ThWhY7S+6yEDks8TYrtQe/aoboBQ==}
+    peerDependencies:
+      react: '>=16.8'
+    dependencies:
+      history: 5.3.0
+      react: 18.2.0
+    dev: false
 
   /react/18.2.0:
     resolution: {integrity: sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==}
@@ -6614,6 +6731,10 @@ packages:
     engines: {node: '>=12.18'}
     dev: true
 
+  /unfetch/4.2.0:
+    resolution: {integrity: sha512-F9p7yYCn6cIW9El1zi0HI6vqpeIvBsr3dSuRO6Xuppb1u5rXpCPmMvLSyECLhybr9isec8Ohl0hPekMVrEinDA==}
+    dev: false
+
   /universalify/2.0.0:
     resolution: {integrity: sha512-hAZsKq7Yy11Zu1DE0OzWjw7nnLZmJZYTDZZyEFHZdUhV8FkH5MCfoU1XMaxXovpyW5nq5scPqq0ZDP9Zyl04oQ==}
     engines: {node: '>= 10.0.0'}
@@ -6786,6 +6907,11 @@ packages:
     resolution: {integrity: sha512-XHPEwS0q6TaxcvG85+8EYkbiCux2XtWG2mkc47Ng2A77BQu9+DqIOJldST4HgPkuea7dvKSj5VgX3P1d4rW8Tg==}
     dependencies:
       defaults: 1.0.3
+    dev: false
+
+  /web-streams-polyfill/3.2.1:
+    resolution: {integrity: sha512-e0MO3wdXWKrLbL0DgGnUV7WHVuw9OUvL4hjgnPkIeEvESk74gAITi5G606JtZPp39cd8HA9VQzCIvA49LpPN5Q==}
+    engines: {node: '>= 8'}
     dev: false
 
   /web3-core-helpers/1.5.2:

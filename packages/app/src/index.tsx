@@ -10,7 +10,7 @@ import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 
 import { App } from './App'
-import Context from './Context'
+import Context from './LumuksoContext'
 
 const { chains, provider, webSocketProvider } = configureChains([
     {
