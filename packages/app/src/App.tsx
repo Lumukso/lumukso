@@ -65,6 +65,19 @@ export function App() {
                                                         </div>
                                                     </div>
                                                 </li>
+                                                <li className="py-3 sm:py-4">
+                                                    <div className="flex items-center space-x-4 w-full">
+                                                        <div className="">
+                                                            <img src="/assets/twitter.png" className="lukso-item" />
+                                                        </div>
+                                                        <div className="whitespace-nowrap justify-self-start grow"><strong>Twitter</strong></div>
+                                                        <div className="justify-self-end">
+                                                            <button type="button" className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                                                                Connect
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </li>
                                             </ul>
                                         </div>
                                     </>
