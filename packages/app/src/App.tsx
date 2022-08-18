@@ -6,11 +6,13 @@ import Toggle from "./components/Toggle";
 import {Magic} from 'magic-sdk';
 
 const magic = new Magic("pk_live_A83681BBE4DEC49F");
-import {useAccount, useConnect} from 'wagmi'
+import {useAccount, useConnect, useBlockNumber} from 'wagmi'
 
 export function App() {
     const {connector: activeConnector, isConnected, address} = useAccount();
     const {connect, connectors, error, isLoading, pendingConnector} = useConnect();
+    const { data } = useBlockNumber()
+
     const connector = connectors[0];
     return (
         <>
@@ -22,6 +24,8 @@ export function App() {
                         className="flex p-4 max-w-sm rounded-2xl border shadow-2xl sm:p-6 dark:bg-gray-800 dark:border-gray-700 min-h-[300px] main-card">
                         <div className="flex flex-col grow place-content-center place-items-center h-[inherit] pt-5">
                             <Logo className="flex-none"/>
+                            <div>Block number: {data}</div>
+                            <h2 className="text-gray-500">Social recovery made easy</h2>
                             <div className="flex flex-col grow justify-center items-center mt-5 bt-5 gap-y-2.5 w-full">
                                 {
                                     <>
@@ -68,9 +72,9 @@ export function App() {
                                                 <li className="py-3 sm:py-4">
                                                     <div className="flex items-center space-x-4 w-full">
                                                         <div className="">
-                                                            <img src="/assets/twitter.png" className="lukso-item" />
+                                                            <img src="/assets/gitcoin.png" className="lukso-item" />
                                                         </div>
-                                                        <div className="whitespace-nowrap justify-self-start grow"><strong>Twitter</strong></div>
+                                                        <div className="whitespace-nowrap justify-self-start grow"><strong>Gitcoin Passport</strong></div>
                                                         <div className="justify-self-end">
                                                             <button type="button" className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                                                                 Connect

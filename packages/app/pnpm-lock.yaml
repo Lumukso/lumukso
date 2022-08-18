@@ -7,6 +7,7 @@ specifiers:
   '@headlessui/tailwindcss': ^0.1.0
   '@heroicons/react': ^1.0.6
   '@lukso/lsp-factory.js': ^2.3.3
+  '@lumukso/contracts': workspace:../contracts
   '@tailwindcss/aspect-ratio': ^0.4.0
   '@tailwindcss/forms': ^0.5.2
   '@tailwindcss/typography': ^0.5.4
@@ -45,6 +46,7 @@ dependencies:
   '@headlessui/tailwindcss': 0.1.0_25hquoklqeoqwmt7fwvvcyxm5e
   '@heroicons/react': 1.0.6_react@18.2.0
   '@lukso/lsp-factory.js': 2.3.3_ro77iljec4owcikbn6ked36gny
+  '@lumukso/contracts': link:../contracts
   '@tailwindcss/aspect-ratio': 0.4.0_tailwindcss@3.1.8
   '@tailwindcss/forms': 0.5.2_tailwindcss@3.1.8
   '@tailwindcss/typography': 0.5.4_tailwindcss@3.1.8
@@ -1695,8 +1697,8 @@ packages:
       tailwindcss: 3.1.8
     dev: false
 
-  /@truffle/hdwallet-provider/2.0.13_@babel+core@7.18.10:
-    resolution: {integrity: sha512-5sGsi9sScB4VkKEuD6itqkrvtpJUNVv0NhI07Nn1JAMDvkJmAAuh2GtoBElDq54y+0JCD8SI0T9BLVZ9IWj6AQ==}
+  /@truffle/hdwallet-provider/2.0.14_@babel+core@7.18.10:
+    resolution: {integrity: sha512-SO/T4qImJk7Nrerh2H9pGphIJTVgskmbnQ4n/2h/OcieLr63ZULWetjwdyHoUJzprDieXx6NZuWEUeEn0f4dTQ==}
     dependencies:
       '@ethereumjs/common': 2.6.5
       '@ethereumjs/tx': 3.5.2
@@ -6331,7 +6333,7 @@ packages:
   /solidity-bytes-utils/0.8.0_@babel+core@7.18.10:
     resolution: {integrity: sha512-r109ZHEf7zTMm1ENW6/IJFDWilFR/v0BZnGuFgDHJUV80ByobnV2k3txvwQaJ9ApL+6XAfwqsw5VFzjALbQPCw==}
     dependencies:
-      '@truffle/hdwallet-provider': 2.0.13_@babel+core@7.18.10
+      '@truffle/hdwallet-provider': 2.0.14_@babel+core@7.18.10
     transitivePeerDependencies:
       - '@babel/core'
       - bufferutil
