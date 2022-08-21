@@ -3,7 +3,8 @@ import {QuestionMarkCircleIcon} from "@heroicons/react/outline";
 import {useAccount, useConnect, useBlockNumber, useDisconnect} from 'wagmi'
 import {InjectedConnector} from "wagmi/connectors/injected";
 import {Account} from "../components/Account";
-import {Link, useNavigate} from "react-router-dom";
+import { useNavigate} from "react-router-dom";
+import {useMagic} from "../hooks/magic";
 
 export function Home() {
     const { connector, isConnected } = useAccount();
@@ -12,6 +13,7 @@ export function Home() {
     })
     const { disconnect } = useDisconnect();
     const navigate = useNavigate();
+    const { magicIsLoggedIn, magicLogout } = useMagic();
 
     return (
         <>
@@ -60,8 +62,10 @@ export function Home() {
                                                             <button type="button"
                                                                     className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center disabled:grayscale"
                                                                     disabled={!isConnected}
-                                                                    onClick={() => navigate('/login', { replace: true })}>
-                                                                Connect
+                                                                    onClick={() => magicIsLoggedIn ? magicLogout() : navigate('/login', { replace: true })}>
+                                                                {
+                                                                    magicIsLoggedIn ? 'Disconnect' : 'Connect'
+                                                                }
                                                             </button>
                                                         </div>
                                                     </div>

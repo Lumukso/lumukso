@@ -20,8 +20,8 @@ export function Login() {
     }, []);
 
     return (
-        <div ref={rootEl} className="flex h-screen justify-center items-center py-12 px-4 sm:px-6 lg:px-8">
-            <MoonLoader color="#C15DFFFF" />
+        <div ref={rootEl} className="flex h-screen justify-center py-12 px-4 sm:px-6 lg:px-8">
+            <MoonLoader color="#C15DFFFF" className="mt-[10rem]" />
         </div>
     )
 }

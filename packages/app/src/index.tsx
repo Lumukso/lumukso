@@ -14,10 +14,11 @@ import { InjectedConnector } from 'wagmi/connectors/injected'
 
 import { App } from './App'
 import Context from './LumuksoContext'
+import {L16_CHAIN_ID, L16_RPC_URL} from "./constants";
 
 const { chains, provider, webSocketProvider } = configureChains([
     {
-        id: 2828,
+        id: L16_CHAIN_ID,
         name: "Lukso L16 Public Testnet",
         network: "L16",
         nativeCurrency: {
@@ -26,14 +27,13 @@ const { chains, provider, webSocketProvider } = configureChains([
             decimals: 18,
         },
         rpcUrls: {
-            default: "https://rpc.l16.lukso.network",
+            default: L16_RPC_URL,
         }
     }
 ], [
     jsonRpcProvider({
         rpc: (chain) => ({
-            http: "https://rpc.l16.lukso.network",
-            webSocket: "wss://ws.rpc.l16.lukso.network"
+            http: L16_RPC_URL,
         }),
     }),
 ])
