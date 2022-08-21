@@ -1,5 +1,7 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom/client'
+import { Buffer } from 'buffer';
+window.Buffer = Buffer;
 
 import {
     WagmiConfig,
@@ -23,7 +25,7 @@ const { chains, provider, webSocketProvider } = configureChains([
             decimals: 18,
         },
         rpcUrls: {
-            default: "wss://ws.rpc.l16.lukso.network",
+            default: "https://rpc.l16.lukso.network",
         }
     }
 ], [

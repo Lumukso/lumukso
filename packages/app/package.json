@@ -9,18 +9,20 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@lumukso/contracts": "workspace:../contracts",
     "@erc725/erc725.js": "^0.14.4",
     "@headlessui/react": "^1.6.6",
     "@headlessui/tailwindcss": "^0.1.0",
     "@heroicons/react": "^1.0.6",
     "@lukso/lsp-factory.js": "^2.3.3",
+    "@lumukso/contracts": "workspace:../contracts",
     "@tailwindcss/aspect-ratio": "^0.4.0",
     "@tailwindcss/forms": "^0.5.2",
     "@tailwindcss/typography": "^0.5.4",
     "async-sema": "^3.1.1",
     "beautiful-react-hooks": "^3.10.0",
     "buffer": "^6.0.3",
+    "crypto-browserify": "^3.12.0",
+    "ethereum-blockies-base64": "^1.0.2",
     "ethers": "^5.6.9",
     "event-emitter": "^0.3.5",
     "events": "^3.3.0",
@@ -34,8 +36,10 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.3.0",
     "rxjs": "^7.5.6",
+    "stream": "^0.0.2",
     "util": "^0.12.4",
-    "wagmi": "^0.6.1"
+    "wagmi": "^0.6.1",
+    "webcrypto-shim": "^0.1.7"
   },
   "keywords": [],
   "author": "",

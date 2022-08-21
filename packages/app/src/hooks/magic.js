@@ -60,7 +60,7 @@ export default function useAuth (magicLinkKey) {
         throw new Error('Magic Link publishableKey required as the first argument')
     }
 
-    const [loggedIn, setLoggedIn] = useState(currentLoginState !== null ? currentLoginState : false)
+        const [loggedIn, setLoggedIn] = useState(currentLoginState !== null ? currentLoginState : false)
     const [loading, setLoading] = useState(currentLoginState === null)
     const [error, setError] = useState(null)
     const [loggingIn, setLoggingIn] = useState(false)
