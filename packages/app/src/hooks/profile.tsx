@@ -55,7 +55,7 @@ function useProfile() {
             fetchProfileData({address, provider: window.ethereum})
                 .then((resp : DecodeDataOutput) => {
                     setProfileData(resp.value);
-                    setName((resp.value as any).LSP3Profile.name);
+                    setName((resp.value as any).LSP3Profile.name + "#" + address.substring(2, 6));
 
                     const profileImages = (resp.value as any).LSP3Profile.profileImage;
                     setImage(getAvatarURL(profileImages[profileImages.length - 1]));
