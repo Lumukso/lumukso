@@ -10,17 +10,40 @@ import {useUp} from "../hooks/up";
 import {useWeb3auth} from "../hooks/web3auth";
 
 export function Home() {
-    const {connect, provider, isConnected, isConnecting, address: universalProfileAddress, universalProfileOwner} = useUp();
-    const {isLoading: isLumuksoLoading, lumuksoSocialRecovery, addPendingGuardian, confirmPendingGuardian} = useLumukso();
+    const {connect, signer: upSigner, isConnected, isConnecting, address: universalProfileAddress, universalProfileOwner} = useUp();
+    const {isLoading: isLumuksoLoading, lumuksoSocialRecovery, getConfirmationMessage, isPendingGuardian} = useLumukso();
     const navigate = useNavigate();
     const {magicIsLoggedIn, magicIsLoading, magicAddress} = useMagic();
     const {connect: connectWeb3auth, web3authAddress, web3authIsLoggedIn, web3authIsLoading, web3authIsReady} = useWeb3auth();
 
     const [isGuardiansDisabled, setIsGuardiansDisabled] = useState(false);
+    const [addingPendingGuardian, setAddingPendingGuardian] = useState(false);
 
     useEffect(() => {
         setIsGuardiansDisabled(!isConnected || isConnecting);
     }, [isConnected, isConnecting]);
+
+    useEffect(() => {
+        if (lumuksoSocialRecovery && magicIsLoggedIn && !addingPendingGuardian) {
+            isPendingGuardian(magicAddress).then(isPending => {
+                if (!isPending) {
+                    setAddingPendingGuardian(true);
+                    return lumuksoSocialRecovery.connect(upSigner).addPendingGuardian(magicAddress).then(tx => tx.wait()).finally(() => setAddingPendingGuardian(false));
+                }
+            })
+        }
+    }, [lumuksoSocialRecovery, magicIsLoggedIn, addingPendingGuardian])
+
+    useEffect(() => {
+        if (lumuksoSocialRecovery && magicIsLoggedIn && !addingPendingGuardian) {
+            isPendingGuardian(web3authAddress).then(isPending => {
+                if (!isPending) {
+                    setAddingPendingGuardian(true);
+                    return lumuksoSocialRecovery.connect(upSigner).addPendingGuardian(web3authAddress).then(tx => tx.wait()).finally(() => setAddingPendingGuardian(false));
+                }
+            })
+        }
+    }, [lumuksoSocialRecovery, web3authIsLoggedIn, web3authAddress, addingPendingGuardian])
 
     return (
         <>
@@ -77,7 +100,7 @@ export function Home() {
                                                             disabled={isGuardiansDisabled || magicIsLoggedIn}
                                                             onClick={() => magicIsLoggedIn ? null : navigate('/magic-login', {replace: true})}>
                                                         {
-                                                            magicIsLoading ? <Spinner/> :
+                                                            (magicIsLoading || addingPendingGuardian) ? <Spinner/> :
                                                                 magicIsLoggedIn ? 'Connected' : 'Connect'
                                                         }
                                                     </button>
@@ -96,7 +119,7 @@ export function Home() {
                                                             disabled={isGuardiansDisabled || web3authIsLoggedIn}
                                                             onClick={connectWeb3auth}>
                                                         {
-                                                            (web3authIsLoading || !web3authIsReady) ?  <Spinner/> :
+                                                            (web3authIsLoading || !web3authIsReady || addingPendingGuardian) ?  <Spinner/> :
                                                                 web3authIsLoggedIn ? 'Connected' : 'Connect'
                                                         }
                                                     </button>
