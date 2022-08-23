@@ -9,43 +9,40 @@ const magic = new Magic(import.meta.env.VITE_MAGIC_KEY, {
         chainId: L16_CHAIN_ID, // Your own node's chainId
     },
 });
-const provider = new ethers.providers.Web3Provider(magic.rpcProvider);
 
 export function useMagic() {
+    const [magicIsLoading, setMagicIsLoading] = useState(true);
     const [magicIsLoggedIn, setMagicIsLoggedIn] = useState(false);
-    const [magicIsLoggingOut, setMagicIsLoggingOut] = useState(false);
+    const [magicProvider, setMagicProvider] = useState(null);
     const [magicAddress, setMagicAddress] = useState(null);
     const [magicSigner, setMagicSigner] = useState(null);
 
     useEffect(() => {
-        magic.user.isLoggedIn().then(setMagicIsLoggedIn).catch(console.error);
-
-        if (magicIsLoggingOut) {
-            magic.user.logout().then((done) => {
-                if (done) {
-                    setMagicIsLoggedIn(false);
-                }
-            }).catch(console.error).finally(() => {
-                setMagicIsLoggingOut(false);
-            });
-        }
-    }, [magicIsLoggingOut]);
+        setMagicIsLoading(true);
+        magic.preload()
+            .then(() => magic.user.isLoggedIn())
+            .then((result) => setMagicIsLoggedIn(result))
+            .catch(console.error)
+            .finally(() => setMagicIsLoading(false));
+    }, []);
 
     useEffect(() => {
         if (magicIsLoggedIn) {
-            setMagicSigner(provider.getSigner());
-            provider.getSigner().getAddress().then(setMagicAddress);
+            setMagicProvider(new ethers.providers.Web3Provider(magic.rpcProvider))
         }
     }, [magicIsLoggedIn]);
 
-    function magicLogout() {
-        setMagicIsLoggingOut(true);
-    }
+    useEffect(() => {
+        if (magicProvider) {
+            setMagicSigner(magicProvider.getSigner());
+            magicProvider.getSigner().getAddress().then(setMagicAddress);
+        }
+    }, [magicProvider]);
 
     return {
+        magicIsLoading,
         magicIsLoggedIn,
-        magicLogout,
-        magicProvider: provider,
+        magicProvider,
         magicAddress,
         magicSigner,
     }

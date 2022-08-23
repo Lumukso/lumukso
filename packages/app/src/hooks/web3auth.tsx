@@ -24,6 +24,7 @@ export function useWeb3auth() {
     useEffect(() => {
         const init = async () => {
             try {
+                setWeb3authIsLoading(true);
                 const web3auth = new Web3Auth({
                     clientId: import.meta.env.VITE_WEB3AUTH_KEY,
                     authMode: "DAPP",
@@ -49,6 +50,8 @@ export function useWeb3auth() {
                 }
             } catch (error) {
                 console.error(error);
+            } finally {
+                setWeb3authIsLoading(false);
             }
         };
 
@@ -77,6 +80,7 @@ export function useWeb3auth() {
     }, [ready, provider])
 
     return {
+        web3authIsReady: ready,
         web3auth,
         web3authIsLoading,
         web3authIsLoggedIn,
