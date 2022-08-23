@@ -1,11 +1,7 @@
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 import {UniversalProfile__factory} from "@lumukso/contracts/types/ethers-contracts/factories/UniversalProfile__factory";
-import {UniversalProfile} from "@lumukso/contracts/types/ethers-contracts/UniversalProfile";
 import {ethers} from "ethers";
-import {useWhatChanged} from "@simbathesailor/use-what-changed";
-import { createGlobalState } from 'react-hooks-global-state';
-import {ERC725} from "@erc725/erc725.js";
-import {createERC725, schema} from "./profile";
+import {createGlobalState} from 'react-hooks-global-state';
 
 const { useGlobalState } = createGlobalState({
     isConnecting: false,

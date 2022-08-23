@@ -7,12 +7,14 @@ import {Account} from "../components/Account";
 import Logo from "../components/Logo";
 import {QuestionMarkCircleIcon} from "@heroicons/react/outline";
 import {useUp} from "../hooks/up";
+import {useWeb3auth} from "../hooks/web3auth";
 
 export function Home() {
     const {connect, provider, isConnected, isConnecting, address: universalProfileAddress, universalProfileOwner} = useUp();
     const {isLoading: isLumuksoLoading, lumuksoSocialRecovery, addPendingGuardian, confirmPendingGuardian} = useLumukso();
     const navigate = useNavigate();
     const {magicIsLoggedIn, magicLogout, magicAddress} = useMagic();
+    const {connect: connectWeb3auth, web3authAddress} = useWeb3auth();
 
     const [isLuksoLoading, setIsLuksoLoading] = useState(true);
     const [isGuardiansDisabled, setIsGuardiansDisabled] = useState(false);
@@ -25,13 +27,15 @@ export function Home() {
 
     useEffect(() => {
         if (isConnecting || isLumuksoLoading) {
-            setIsLuksoLoading(true)
+            setIsLuksoLoading(true);
         } else {
-            setIsLuksoLoading(false)
+            setIsLuksoLoading(false);
         }
-
-        setIsGuardiansDisabled(!isConnected || isLuksoLoading)
     }, [isConnected, isConnecting, isLumuksoLoading]);
+
+    useEffect(() => {
+        setIsGuardiansDisabled(!isConnected || isLuksoLoading);
+    }, [isConnected, isLuksoLoading]);
 
     return (
         <>
@@ -51,7 +55,7 @@ export function Home() {
                                     <div><small>Universal Profile: {universalProfileAddress}</small></div>
                                     <div><small>Universal Profile Owner: {universalProfileOwner}</small></div>
                                     <div><small>Magic Address: {magicAddress}</small></div>
-                                    <div><small>Web3auth Address: {}</small></div>
+                                    <div><small>Web3auth Address: {web3authAddress}</small></div>
 
                                     <ul role="list"
                                         className="divide-y divide-gray-200 dark:divide-gray-700 w-full">
@@ -103,7 +107,8 @@ export function Home() {
                                                 <div className="justify-self-end">
                                                     <button type="button"
                                                             className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-                                                            disabled={isGuardiansDisabled}>
+                                                            disabled={isGuardiansDisabled}
+                                                            onClick={connectWeb3auth}>
                                                         Connect
                                                     </button>
                                                 </div>

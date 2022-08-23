@@ -1,34 +1,57 @@
 import {useEffect, useState} from "react";
 import {Web3Auth} from "@web3auth/web3auth";
+import {OpenloginAdapter} from "@web3auth/openlogin-adapter";
+import {TorusWalletConnectorPlugin} from "@web3auth/torus-wallet-connector-plugin";
+import { TorusWalletAdapter } from "@web3auth/torus-evm-adapter";
+import {chain} from "../client";
+import {L16_EXPLORER_URL} from "../constants";
+import {ethers} from "ethers";
 import {CHAIN_NAMESPACES, SafeEventEmitterProvider} from "@web3auth/base";
-import {L16_CHAIN_ID, L16_RPC_URL} from "../constants";
 
-const clientId = import.meta.env.VITE_WEB3AUTH_KEY;
+export function useWeb3auth() {
+    const [ready, setReady] = useState(false);
+    const [web3auth, setWeb3auth] = useState(null);
+    const [web3authIsLoading, setWeb3authIsLoading] = useState(false);
+    const [web3authIsLoggedIn, setWeb3authIsLoggedIn] = useState(false);
+    const [web3authAddress, setWeb3authAddress] = useState(null);
+    const [provider, setProvider] = useState(null);
 
-function useWeb3auth() {
-    const [web3auth, setWeb3auth] = useState<Web3Auth | null>(null);
-    const [provider, setProvider] = useState<SafeEventEmitterProvider | null>(null);
+    const connect = async () => {
+        if (!web3auth) {
+            console.log("web3auth not initialized yet");
+            return;
+        }
+        const web3authProvider = await web3auth.connect();
+        console.log("web3authProvider", web3authProvider);
+        setProvider(web3authProvider);
+    };
 
     useEffect(() => {
         const init = async () => {
             try {
-
                 const web3auth = new Web3Auth({
-                    clientId,
+                    clientId: import.meta.env.VITE_WEB3AUTH_KEY,
+                    authMode: "DAPP",
                     chainConfig: {
-                        chainNamespace: CHAIN_NAMESPACES.EIP155,
-                        chainId: "0x" + L16_CHAIN_ID.toString(16),
-                        rpcTarget: L16_RPC_URL,
+                        chainNamespace: 'eip155',
+                        chainId: `0x${chain.id.toString(16)}`,
+                        rpcTarget: chain.rpcUrls.default,
+                        displayName: chain.name,
+                        ticker: chain.nativeCurrency.symbol,
+                        tickerName: chain.nativeCurrency.name,
+                        blockExplorer: L16_EXPLORER_URL,
                     },
-                    authMode: 'WALLET',
+                    enableLogging: false,
                 });
 
                 setWeb3auth(web3auth);
 
                 await web3auth.initModal();
                 if (web3auth.provider) {
+                    console.log(web3auth.provider);
                     setProvider(web3auth.provider);
-                };
+                    setReady(true);
+                }
             } catch (error) {
                 console.error(error);
             }
@@ -37,31 +60,33 @@ function useWeb3auth() {
         init();
     }, []);
 
-    const login = async () => {
-        if (!web3auth) {
-            console.log("web3auth not initialized yet");
-            return;
+    useEffect(() => {
+        if (ready && provider) {
+            setWeb3authIsLoading(true);
+            provider.request({method: "eth_accounts"})
+                .then((accounts) => {
+                    if (accounts && accounts.length) {
+                        setWeb3authAddress(accounts[0]);
+                    } else {
+                        console.error("failed to load web3auth address")
+                    }
+                })
+                .then(() => setWeb3authIsLoggedIn(true))
+                .catch(console.error)
+                .finally(() => setWeb3authIsLoading(false));
+        } else {
+            setWeb3authIsLoading(false);
+            setWeb3authAddress(null);
+            setWeb3authIsLoggedIn(false)
         }
-        const web3authProvider = await web3auth.connect();
-        setProvider(web3authProvider);
-    };
-
-    const logout = async () => {
-        if (!web3auth) {
-            console.log("web3auth not initialized yet");
-            return;
-        }
-        await web3auth.logout();
-        setProvider(null);
-    };
+    }, [ready, provider])
 
     return {
         web3auth,
-        login,
-        logout,
+        web3authIsLoading,
+        web3authIsLoggedIn,
+        web3authAddress,
+        connect,
     };
 }
 
-export {
-    useWeb3auth,
-}
