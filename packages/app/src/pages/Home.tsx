@@ -31,6 +31,7 @@ export function Home() {
                     setAddingPendingGuardian(true);
                     return lumuksoSocialRecovery.connect(upSigner).addPendingGuardian(magicAddress).then(tx => tx.wait()).finally(() => setAddingPendingGuardian(false));
                 } else {
+                    // TODO: confirm pending guardian
                     setPendingGuardians(Object.assign(pendingGuardians, {[magicAddress]: true}));
                 }
             })
@@ -44,6 +45,7 @@ export function Home() {
                     setAddingPendingGuardian(true);
                     return lumuksoSocialRecovery.connect(upSigner).addPendingGuardian(web3authAddress).then(tx => tx.wait()).finally(() => setAddingPendingGuardian(false));
                 } else {
+                    // TODO: confirm pending guardian
                     setPendingGuardians(Object.assign(pendingGuardians, {[web3authAddress]: true}));
                 }
             })
