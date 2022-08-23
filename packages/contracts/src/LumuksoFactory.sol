@@ -12,6 +12,7 @@ contract LumuksoFactory {
     constructor() {}
 
     function create(UniversalProfile _profile) public returns(address) {
+        require(msg.sender == address(_profile), "Only the profile owner can create a Lumukso");
         Lumukso lumukso = new Lumukso(_profile);
         instances[address(_profile)] = lumukso;
         emit LumuksoDeployed(address(lumukso));

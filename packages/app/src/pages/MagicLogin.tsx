@@ -1,7 +1,7 @@
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useRef} from "react";
 import {MoonLoader} from "react-spinners";
 
-export function Login() {
+export function MagicLogin() {
     const rootEl = useRef(null);
 
     useEffect(() => {

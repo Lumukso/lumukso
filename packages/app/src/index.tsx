@@ -1,66 +1,21 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom/client'
-import { BrowserRouter } from "react-router-dom";
-import { Buffer } from 'buffer';
+import {BrowserRouter} from "react-router-dom";
+import {Buffer} from 'buffer';
+import {setUseWhatChange} from '@simbathesailor/use-what-changed';
+import whyDidYouRender from '@welldone-software/why-did-you-render';
+import {App} from './App'
+
 window.Buffer = Buffer;
-
-import {
-    WagmiConfig,
-    configureChains,
-    createClient,
-} from 'wagmi'
-import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
-import { InjectedConnector } from 'wagmi/connectors/injected'
-
-import { App } from './App'
-import Context from './LumuksoContext'
-import {L16_CHAIN_ID, L16_RPC_URL} from "./constants";
-
-const { chains, provider, webSocketProvider } = configureChains([
-    {
-        id: L16_CHAIN_ID,
-        name: "Lukso L16 Public Testnet",
-        network: "L16",
-        nativeCurrency: {
-            name: "LYXt",
-            symbol: "LYXt",
-            decimals: 18,
-        },
-        rpcUrls: {
-            default: L16_RPC_URL,
-        }
-    }
-], [
-    jsonRpcProvider({
-        rpc: (chain) => ({
-            http: L16_RPC_URL,
-        }),
-    }),
-])
-
-const client = createClient({
-    autoConnect: true,
-    connectors: [
-        new InjectedConnector({
-            chains,
-            options: {
-                name: 'Injected',
-                shimDisconnect: true,
-            },
-        }),
-    ],
-    provider,
-    webSocketProvider,
-})
+setUseWhatChange(true);
+whyDidYouRender(React, {
+    trackAllPureComponents: true,
+});
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
         <BrowserRouter>
-            <WagmiConfig client={client}>
-                <Context.Provider value={{}}>
-                    <App />
-                </Context.Provider>
-            </WagmiConfig>
+            <App />
         </BrowserRouter>
     </React.StrictMode>,
 )

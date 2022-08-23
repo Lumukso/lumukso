@@ -1,12 +1,14 @@
-import { Routes, Route } from "react-router-dom";
+import {Route, Routes} from "react-router-dom";
 import {Home} from "./pages/Home";
-import {Login} from "./pages/Login";
+import {MagicLogin} from "./pages/MagicLogin";
 
 export function App() {
     return (
         <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
+            <Route path="/magic-login" element={<MagicLogin />} />
+            <Route path="/web3auth-login" element={<></>} />
+            <Route path="/recover" element={<></>} />
         </Routes>
     )
 }

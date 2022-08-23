@@ -1,11 +1,11 @@
-import { useAccount, useEnsName } from 'wagmi'
 import {useProfile} from "../hooks/profile";
+import {useUp} from "../hooks/up";
 
 export function Account() {
-    const { address } = useAccount()
-    const { name, image } = useProfile();
+    const { address, name, image } = useProfile();
 
     return (
+        address && image ?
         <a className="fixed top-2 right-2 flex flex-row items-center max-w-[15rem] rounded-2xl border shadow-2xl dark:bg-gray-800 dark:border-gray-700 main-card"
            href={`https://l16.universalprofile.cloud/${address}`}
            target="_blank">
@@ -18,6 +18,6 @@ export function Account() {
                         address
                 }
             </div>
-        </a>
+        </a> : <></>
     )
 }
