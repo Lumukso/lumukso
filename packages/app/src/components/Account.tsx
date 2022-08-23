@@ -1,5 +1,4 @@
 import {useProfile} from "../hooks/profile";
-import {useUp} from "../hooks/up";
 
 export function Account() {
     const { address, name, image } = useProfile();

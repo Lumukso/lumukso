@@ -23,7 +23,6 @@
     "@tailwindcss/typography": "^0.5.4",
     "@web3auth/base": "^1.2.0",
     "@web3auth/web3auth": "^1.2.0",
-    "async-sema": "^3.1.1",
     "beautiful-react-hooks": "^3.10.0",
     "buffer": "^6.0.3",
     "crypto-browserify": "^3.12.0",
@@ -39,14 +38,14 @@
     "process": "^0.11.10",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hooks-global-state": "^2.0.0",
+    "react-native": "*",
     "react-router-dom": "6",
     "react-spinners": "^0.13.4",
     "rxjs": "^7.5.6",
     "stream": "^0.0.2",
     "typechain": "^8.1.0",
     "util": "^0.12.4",
-    "vite-plugin-html": "^3.2.0",
-    "wagmi": "^0.6.1",
     "webcrypto-shim": "^0.1.7"
   },
   "keywords": [],
@@ -54,11 +53,10 @@
   "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.18.10",
+    "@babel/preset-env": "^7.18.10",
     "@babel/runtime": "^7.18.9",
     "@simbathesailor/babel-plugin-use-what-changed": "^2.1.0",
     "@simbathesailor/use-what-changed": "^2.0.0",
-    "@testing-library/react": "^13.3.0",
-    "@testing-library/react-hooks": "^8.0.1",
     "@typechain/ethers-v5": "^10.1.0",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
@@ -78,6 +76,7 @@
     "vite": "^3.0.4",
     "vite-plugin-babel": "^1.1.2",
     "vite-plugin-eslint": "^1.8.1",
+    "vite-plugin-html": "^3.2.0",
     "wrangler": "^2.0.24"
   }
 }

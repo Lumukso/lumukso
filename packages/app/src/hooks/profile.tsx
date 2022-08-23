@@ -1,11 +1,10 @@
 // Import and Network Setup
-import {useEffect, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 
 import {ERC725, ERC725JSONSchema} from "@erc725/erc725.js";
 import identicon from 'ethereum-blockies-base64';
 import {DecodeDataOutput} from "@erc725/erc725.js/build/main/src/types/decodeData";
 import {useUp} from "./up";
-import {useWhatChanged} from "@simbathesailor/use-what-changed";
 
 // Our static variables
 const IPFS_GATEWAY = "https://2eff.lukso.dev/ipfs/";
@@ -29,7 +28,6 @@ export function useProfile() {
     const [image, setImage] = useState(null);
 
     useEffect(() => {
-        console.log(isConnected, address);
         if (isConnected && address) {
             const profile = new ERC725(schema, address, window.ethereum, {ipfsGateway: IPFS_GATEWAY});
             profile.fetchData('LSP3Profile')

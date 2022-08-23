@@ -2,15 +2,27 @@ import {useEffect, useState} from "react";
 import {UniversalProfile__factory} from "@lumukso/contracts/types/ethers-contracts/factories/UniversalProfile__factory";
 import {UniversalProfile} from "@lumukso/contracts/types/ethers-contracts/UniversalProfile";
 import {ethers} from "ethers";
+import {useWhatChanged} from "@simbathesailor/use-what-changed";
+import { createGlobalState } from 'react-hooks-global-state';
+
+const { useGlobalState } = createGlobalState({
+    isConnecting: false,
+    isConnected: false,
+    address: null,
+    provider: null,
+    signer: null,
+    universalProfileOwner: null,
+    universalProfile: null,
+});
 
 export function useUp() {
-    const [isConnecting, setIsConnecting] = useState(false);
-    const [isConnected, setIsConnected] = useState(false);
-    const [address, setAddress] = useState(null);
-    const [provider, setProvider] = useState(null);
-    const [signer, setSigner] = useState(null);
-    const [universalProfileOwner, setUniversalProfileOwner] = useState(null);
-    const [universalProfile, setUniversalProfile] : [UniversalProfile, any] = useState(null);
+    const [isConnecting, setIsConnecting] = useGlobalState('isConnecting');
+    const [isConnected, setIsConnected] = useGlobalState('isConnected');
+    const [address, setAddress] = useGlobalState('address');
+    const [provider, setProvider] = useGlobalState('provider');
+    const [signer, setSigner] = useGlobalState('signer');
+    const [universalProfileOwner, setUniversalProfileOwner] = useGlobalState('universalProfileOwner');
+    const [universalProfile, setUniversalProfile] = useGlobalState('universalProfile');
 
     function connect() {
         setIsConnecting(true);
@@ -22,7 +34,7 @@ export function useUp() {
         } else {
             setProvider(null);
         }
-    }, [window.ethereum]);
+    }, []);
 
     useEffect(() => {
         if (provider && isConnecting) {

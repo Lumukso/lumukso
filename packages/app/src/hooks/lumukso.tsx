@@ -58,6 +58,7 @@ export function useLumukso() {
         } else {
             setLumukso(null);
             setLumuksoSocialRecovery(null);
+            setIsLoading(false);
         }
     }, [lumuksoFactory, universalProfileAddress, signer]);
 

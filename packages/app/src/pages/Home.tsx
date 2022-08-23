@@ -7,12 +7,10 @@ import {Account} from "../components/Account";
 import Logo from "../components/Logo";
 import {QuestionMarkCircleIcon} from "@heroicons/react/outline";
 import {useUp} from "../hooks/up";
-import {useProfile} from "../hooks/profile";
-import {useWhatChanged} from "@simbathesailor/use-what-changed";
 
 export function Home() {
     const {connect, provider, isConnected, isConnecting, address: universalProfileAddress, universalProfileOwner} = useUp();
-    const {isLoading: lumuksoIsLoading, addPendingGuardian, confirmPendingGuardian} = useLumukso();
+    const {isLoading: isLumuksoLoading, addPendingGuardian, confirmPendingGuardian} = useLumukso();
     const navigate = useNavigate();
     const {magicIsLoggedIn, magicLogout, magicAddress} = useMagic();
 
@@ -26,14 +24,14 @@ export function Home() {
     }, [provider]);
 
     useEffect(() => {
-        if (isConnecting) {
+        if (isConnecting || isLumuksoLoading) {
             setIsLuksoLoading(true)
         } else {
             setIsLuksoLoading(false)
         }
 
         setIsGuardiansDisabled(!isConnected || isLuksoLoading)
-    }, [isConnected, isConnecting, isLuksoLoading]);
+    }, [isConnected, isConnecting, isLumuksoLoading]);
 
     return (
         <>
