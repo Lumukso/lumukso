@@ -4,9 +4,9 @@ Lumukso is a social recovery app made for [Lukso Universal Profile](https://docs
 
 ## Supported Guardians
 
-- ✔️ Magic.link
-- ✔️ Gitcoin Passport
+- ✔️ magic.link
+- ✔️ web3auth.io
 
 ## Deployments
 
-- Lumukso Factory: 0x7747b7477B53C37915FB7818c4C8FaF81877E1e0
+- Lumukso Factory: 0x8f022C2dd0081a2fa8807cf027f5AE3112720398
