@@ -4,7 +4,7 @@ import {ethers} from "ethers";
 import {createGlobalState} from 'react-hooks-global-state';
 
 const { useGlobalState } = createGlobalState({
-    isConnecting: false,
+    isConnecting: true,
     isConnected: false,
     address: null,
     provider: null,
@@ -23,19 +23,9 @@ export function useUp() {
     const [universalProfile, setUniversalProfile] = useGlobalState('universalProfile');
 
     function connect() {
-        setIsConnecting(true);
-    }
-
-    useEffect(() => {
         if (window.ethereum) {
+            setIsConnecting(true);
             setProvider(new ethers.providers.Web3Provider(window.ethereum));
-        } else {
-            setProvider(null);
-        }
-    }, []);
-
-    useEffect(() => {
-        if (provider && isConnecting) {
             window.ethereum.request({
                 method: 'eth_requestAccounts',
             }).then(accountsRequest => {
@@ -46,8 +36,17 @@ export function useUp() {
                     setIsConnected(false);
                 }
             }).finally(() => setIsConnecting(false));
+        } else {
+            setProvider(null);
+            setIsConnecting(false)
         }
-    }, [provider, isConnecting]);
+    }
+
+    useEffect(() => {
+        if (!provider && window.ethereum) {
+            connect();
+        }
+    }, [provider]);
 
     useEffect(() => {
         if (isConnected && provider && address) {
@@ -67,7 +66,8 @@ export function useUp() {
 
     useEffect(() => {
         if (universalProfile) {
-            universalProfile.owner().then(setUniversalProfileOwner);
+            setIsConnecting(true);
+            universalProfile.owner().then(setUniversalProfileOwner).finally(() => setIsConnecting(false));
         } else {
             setUniversalProfileOwner(null);
         }

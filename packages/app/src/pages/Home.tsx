@@ -16,26 +16,11 @@ export function Home() {
     const {magicIsLoggedIn, magicIsLoading, magicAddress} = useMagic();
     const {connect: connectWeb3auth, web3authAddress, web3authIsLoggedIn, web3authIsLoading, web3authIsReady} = useWeb3auth();
 
-    const [isLuksoLoading, setIsLuksoLoading] = useState(true);
     const [isGuardiansDisabled, setIsGuardiansDisabled] = useState(false);
 
     useEffect(() => {
-        if (provider) {
-            connect();
-        }
-    }, [provider]);
-
-    useEffect(() => {
-        if (isConnecting || isLumuksoLoading) {
-            setIsLuksoLoading(true);
-        } else {
-            setIsLuksoLoading(false);
-        }
-    }, [isConnected, isConnecting, isLumuksoLoading]);
-
-    useEffect(() => {
-        setIsGuardiansDisabled(!isConnected || isLuksoLoading);
-    }, [isConnected, isLuksoLoading]);
+        setIsGuardiansDisabled(!isConnected || isConnecting);
+    }, [isConnected, isConnecting]);
 
     return (
         <>
@@ -69,10 +54,10 @@ export function Home() {
                                                 <div>
                                                     <button type="button"
                                                             onClick={() => isConnected ? null : connect()}
-                                                            disabled={isLuksoLoading || isConnected}
+                                                            disabled={isConnecting || isConnected}
                                                             className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                                                         {
-                                                            isLuksoLoading ?
+                                                            isConnecting ?
                                                                 <Spinner/>
                                                                 : isConnected ? 'Connected' : 'Connect'
                                                         }
