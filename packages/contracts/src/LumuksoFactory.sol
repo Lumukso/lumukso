@@ -6,13 +6,15 @@ import "./Lumukso.sol";
 
 contract LumuksoFactory {
 
+    mapping(address => Lumukso) public instances;
     event LumuksoDeployed(address);
 
     constructor() {}
 
     function create(UniversalProfile _profile) public returns(address) {
-        address lumuksoAddress = address(new Lumukso(_profile));
-        emit LumuksoDeployed(lumuksoAddress);
-        return lumuksoAddress;
+        Lumukso lumukso = new Lumukso(_profile);
+        instances[address(_profile)] = lumukso;
+        emit LumuksoDeployed(address(lumukso));
+        return address(lumukso);
     }
 }

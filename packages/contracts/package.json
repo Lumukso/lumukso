@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "forge build --sizes --via-ir --optimize --optimizer-runs 200",
+    "deploy:factory": "forge create --interactive --optimize --optimizer-runs 200 --via-ir src/LumuksoFactory.sol:LumuksoFactory",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
@@ -15,5 +17,9 @@
   },
   "keywords": [],
   "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@typechain/ethers-v5": "^10.1.0",
+    "typechain": "^8.1.0"
+  }
 }

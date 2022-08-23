@@ -59,43 +59,24 @@ contract LumuksoTest is Test {
     }
 
     function testMagicLinkGuardian() public {
-        vm.startPrank(vm.addr(originalOwner));
-
         // set secret
+        vm.startPrank(address(myUniversalProfile));
         string memory secret = "recovery secret";
         bytes32 secretHash = keccak256(bytes(secret));
-        myLumukso.execute(abi.encodeWithSignature(
-                "execute(uint256,address,uint256,bytes)",
-                OPERATION_CALL,
-                address(myLumukso.socialRecovery()),
-                0,
-                abi.encodeWithSignature("setSecret(bytes32)", secretHash)
-            ));
+        myLumukso.socialRecovery().setSecret(secretHash);
+        vm.stopPrank();
 
-        // set guardian
-        uint256 expirationTimestamp = block.timestamp + 300;
-        myLumukso.execute(abi.encodeWithSignature(
-                "execute(uint256,address,uint256,bytes)",
-                OPERATION_CALL,
-                address(myLumukso.socialRecovery()),
-                0,
-                abi.encodeWithSignature("setPendingMagicLinkGuardian(address)", vm.addr(guardian))
-            ));
+        // add pending guardian
+        vm.startPrank(address(myUniversalProfile));
+        myLumukso.socialRecovery().addPendingGuardian(vm.addr(guardian));
         bytes32 hash = keccak256(bytes(string.concat(
-                "operation=confirmMagicLinkGuardian&expirationTimestamp=",
-                Strings.toString(expirationTimestamp),
-                "&address=",
+                "operation=confirmPendingGuardian&expirationTimestamp=",
+                Strings.toString(myLumukso.socialRecovery().getPendingGuardianExpiration(vm.addr(guardian))),
+                "&socialRecoveryAddress=",
                 string(abi.encodePacked(address(myLumukso.socialRecovery())))
             ))).toEthSignedMessageHash();
         (uint8 v, bytes32 r, bytes32 s) = vm.sign(guardian, hash);
-        myLumukso.execute(abi.encodeWithSignature(
-                "execute(uint256,address,uint256,bytes)",
-                OPERATION_CALL,
-                address(myLumukso.socialRecovery()),
-                0,
-                abi.encodeWithSignature("confirmMagicLinkGuardian(uint256,bytes32,bytes32,uint8)", expirationTimestamp, r, s, v)
-            ));
-
+        myLumukso.socialRecovery().confirmPendingGuardian(vm.addr(guardian), r, s, v);
         vm.stopPrank();
 
         // vote to recover bob
