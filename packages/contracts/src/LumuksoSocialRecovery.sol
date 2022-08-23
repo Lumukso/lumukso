@@ -2,6 +2,7 @@
 pragma solidity ^0.8.13;
 
 import "@lukso/lsp-smart-contracts/contracts/LSP11BasicSocialRecovery/LSP11BasicSocialRecovery.sol";
+import "@lukso/lsp-smart-contracts/contracts/UniversalProfile.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 import {LSP6Utils} from "@lukso/lsp-smart-contracts/contracts/LSP6KeyManager/LSP6Utils.sol";
@@ -19,7 +20,7 @@ contract LumuksoSocialRecovery is LSP11BasicSocialRecovery {
     event PendingGuardianAdded(address indexed guardian, uint256 expiration);
     event PendingGuardianConfirmed(address indexed guardian);
 
-    constructor(address _account) LSP11BasicSocialRecovery(_account) {
+    constructor(UniversalProfile profile) LSP11BasicSocialRecovery(address(profile)) {
     }
 
     function addPendingGuardian(address guardian) public virtual onlyOwner {
