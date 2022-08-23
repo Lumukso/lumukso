@@ -18,15 +18,26 @@ export function useLumukso() {
     const [lumuksoFactory, setLumuksoFactory] : [LumuksoFactory, any] = useState(null);
     const [lumuksoSocialRecovery, setLumuksoSocialRecovery] : [LumuksoSocialRecovery, any] = useState(null);
 
-    async function addPendingGuardian(guardian) {
+    function addPendingGuardian(guardian) {
         return lumuksoSocialRecovery.addPendingGuardian(guardian);
     }
 
-    async function confirmPendingGuardian(signer, guardian) {
+    function confirmPendingGuardian(guardian, r, s, v) {
+        return lumuksoSocialRecovery.confirmPendingGuardian(guardian, r, s, v);
+    }
+
+    async function getConfirmationMessage(guardian) {
         const expiration = await lumuksoSocialRecovery.getPendingGuardianExpiration(guardian);
-        const message = `operation=confirmPendingGuardian&expirationTimestamp=${expiration}&socialRecoveryAddress=${ethers.utils.solidityPack(["address"], [guardian])}`;
-        const signature = ethers.utils.splitSignature(signer.signMessage(message));
-        return lumuksoSocialRecovery.confirmPendingGuardian(guardian, signature.r, signature.s, signature.v);
+        return `operation=confirmPendingGuardian&expirationTimestamp=${expiration}&socialRecoveryAddress=${ethers.utils.solidityPack(["address"], [guardian])}`;
+    }
+
+    function isGuardian(guardian) {
+        return lumuksoSocialRecovery.isGuardian(guardian);
+    }
+
+    async function isPendingGuardian(guardian) {
+        const [address, _] = await lumuksoSocialRecovery.pendingGuardians(guardian);
+        return address !== ethers.constants.AddressZero;
     }
 
     useEffect(() => {
@@ -44,7 +55,7 @@ export function useLumukso() {
             setIsLoading(true);
             lumuksoFactory.instances(universalProfileAddress)
                 .then((lumuksoAddress) => {
-                    if (lumuksoAddress === "0x0000000000000000000000000000000000000000") {
+                    if (lumuksoAddress === ethers.constants.AddressZero) {
                         return lumuksoFactory.create(universalProfileAddress);
                     } else {
                         return Promise.resolve(lumuksoAddress);
@@ -70,5 +81,8 @@ export function useLumukso() {
         lumuksoSocialRecovery,
         addPendingGuardian,
         confirmPendingGuardian,
+        getConfirmationMessage,
+        isGuardian,
+        isPendingGuardian,
     }
 }
