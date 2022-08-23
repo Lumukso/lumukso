@@ -3,8 +3,6 @@ import {ethers} from "ethers";
 import {useUp} from "./up";
 import {LumuksoFactory__factory} from '@lumukso/contracts/types/ethers-contracts/factories/LumuksoFactory__factory';
 import {LumuksoFactory} from '@lumukso/contracts/types/ethers-contracts/LumuksoFactory';
-import {Lumukso__factory} from '@lumukso/contracts/types/ethers-contracts/factories/Lumukso__factory';
-import {Lumukso} from '@lumukso/contracts/types/ethers-contracts/Lumukso';
 import {LumuksoSocialRecovery__factory} from '@lumukso/contracts/types/ethers-contracts/factories/LumuksoSocialRecovery__factory';
 import {LumuksoSocialRecovery} from '@lumukso/contracts/types/ethers-contracts/LumuksoSocialRecovery';
 
@@ -16,7 +14,6 @@ export function useLumukso() {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const [lumuksoFactory, setLumuksoFactory] : [LumuksoFactory, any] = useState(null);
-    const [lumukso, setLumukso] : [Lumukso, any] = useState(null);
     const [lumuksoSocialRecovery, setLumuksoSocialRecovery] : [LumuksoSocialRecovery, any] = useState(null);
 
     async function addPendingGuardian(guardian) {
@@ -44,19 +41,21 @@ export function useLumukso() {
         if (lumuksoFactory && universalProfileAddress && signer) {
             setIsLoading(true);
             lumuksoFactory.instances(universalProfileAddress)
-                .then(async (lumuksoAddress) => {
+                .then((lumuksoAddress) => {
                     if (lumuksoAddress === "0x0000000000000000000000000000000000000000") {
-                        lumuksoAddress = await lumuksoFactory.create(universalProfileAddress);
+                        return lumuksoFactory.create(universalProfileAddress);
+                    } else {
+                        return Promise.resolve(lumuksoAddress);
                     }
-
-                    const _lumukso = new Lumukso__factory(signer).attach(lumuksoAddress);
-                    setLumukso(_lumukso);
-                    setLumuksoSocialRecovery(new LumuksoSocialRecovery__factory(signer).attach(await _lumukso.socialRecovery()));
+                })
+                .then((lumuksoAddress) => {
+                    setLumuksoSocialRecovery(new LumuksoSocialRecovery__factory(signer).attach(lumuksoAddress));
                 })
                 .catch(setError)
-                .finally(() => setIsLoading(false))
+                .finally(() => {
+                    setIsLoading(false);
+                })
         } else {
-            setLumukso(null);
             setLumuksoSocialRecovery(null);
             setIsLoading(false);
         }
@@ -66,7 +65,6 @@ export function useLumukso() {
         isLoading,
         error,
         lumuksoFactory,
-        lumukso,
         lumuksoSocialRecovery,
         addPendingGuardian,
         confirmPendingGuardian,

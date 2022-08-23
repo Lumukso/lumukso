@@ -4,6 +4,8 @@ import {UniversalProfile} from "@lumukso/contracts/types/ethers-contracts/Univer
 import {ethers} from "ethers";
 import {useWhatChanged} from "@simbathesailor/use-what-changed";
 import { createGlobalState } from 'react-hooks-global-state';
+import {ERC725} from "@erc725/erc725.js";
+import {createERC725, schema} from "./profile";
 
 const { useGlobalState } = createGlobalState({
     isConnecting: false,

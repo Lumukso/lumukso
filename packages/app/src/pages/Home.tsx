@@ -10,7 +10,7 @@ import {useUp} from "../hooks/up";
 
 export function Home() {
     const {connect, provider, isConnected, isConnecting, address: universalProfileAddress, universalProfileOwner} = useUp();
-    const {isLoading: isLumuksoLoading, addPendingGuardian, confirmPendingGuardian} = useLumukso();
+    const {isLoading: isLumuksoLoading, lumuksoSocialRecovery, addPendingGuardian, confirmPendingGuardian} = useLumukso();
     const navigate = useNavigate();
     const {magicIsLoggedIn, magicLogout, magicAddress} = useMagic();
 
@@ -47,8 +47,7 @@ export function Home() {
                             <h2 className="text-gray-500">Lukso social recovery made easy</h2>
                             <div className="flex flex-col grow justify-center items-center mt-5 bt-5 gap-y-2.5 w-full">
                                 <div className="flow-root w-full">
-                                    <div><small>Lumukso: {}</small></div>
-                                    <div><small>LumuksoSocialRecovery: {}</small></div>
+                                    <div><small>LumuksoSocialRecovery: {lumuksoSocialRecovery?.address}</small></div>
                                     <div><small>Universal Profile: {universalProfileAddress}</small></div>
                                     <div><small>Universal Profile Owner: {universalProfileOwner}</small></div>
                                     <div><small>Magic Address: {magicAddress}</small></div>

@@ -1,25 +1,19 @@
 // Import and Network Setup
-import {useEffect, useMemo, useState} from "react";
+import {useEffect, useState} from "react";
 
 import {ERC725, ERC725JSONSchema} from "@erc725/erc725.js";
 import identicon from 'ethereum-blockies-base64';
 import {DecodeDataOutput} from "@erc725/erc725.js/build/main/src/types/decodeData";
 import {useUp} from "./up";
+// Parameters for ERC725 Instance
+import LSP3UniversalProfileMetaDataSchema from "@erc725/erc725.js/schemas/LSP3UniversalProfileMetadata.json";
 
 // Our static variables
-const IPFS_GATEWAY = "https://2eff.lukso.dev/ipfs/";
+export const IPFS_GATEWAY = "https://2eff.lukso.dev/ipfs/";
 
-// Parameters for ERC725 Instance
-// import LSP3UniversalProfileMetaDataSchema from "@erc725/erc725.js/schemas/LSP3UniversalProfileMetadata.json";
-const schema: ERC725JSONSchema[] = [
-    {
-        name: 'LSP3Profile',
-        key: '0x5ef83ad9559033e6e941db7d7c495acdce616347d28e90c7ce47cbfcfcad3bc5',
-        keyType: 'Singleton',
-        valueContent: 'JSONURL',
-        valueType: 'bytes',
-    }
-];
+export function createERC725(address) : ERC725 {
+    return new ERC725(LSP3UniversalProfileMetaDataSchema as ERC725JSONSchema[], address, window.ethereum, {ipfsGateway: IPFS_GATEWAY});
+}
 
 export function useProfile() {
     const {address, isConnected} = useUp();
@@ -29,7 +23,7 @@ export function useProfile() {
 
     useEffect(() => {
         if (isConnected && address) {
-            const profile = new ERC725(schema, address, window.ethereum, {ipfsGateway: IPFS_GATEWAY});
+            const profile = createERC725(address);
             profile.fetchData('LSP3Profile')
                 .then((resp: DecodeDataOutput) => {
                     setProfileData(resp.value);
