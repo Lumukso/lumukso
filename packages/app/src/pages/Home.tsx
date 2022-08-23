@@ -18,6 +18,7 @@ export function Home() {
 
     const [isGuardiansDisabled, setIsGuardiansDisabled] = useState(false);
     const [addingPendingGuardian, setAddingPendingGuardian] = useState(false);
+    const [pendingGuardians, setPendingGuardians] = useState({});
 
     useEffect(() => {
         setIsGuardiansDisabled(!isConnected || isConnecting);
@@ -29,21 +30,25 @@ export function Home() {
                 if (!isPending) {
                     setAddingPendingGuardian(true);
                     return lumuksoSocialRecovery.connect(upSigner).addPendingGuardian(magicAddress).then(tx => tx.wait()).finally(() => setAddingPendingGuardian(false));
+                } else {
+                    setPendingGuardians(Object.assign(pendingGuardians, {[magicAddress]: true}));
                 }
             })
         }
-    }, [lumuksoSocialRecovery, magicIsLoggedIn, addingPendingGuardian])
+    }, [lumuksoSocialRecovery, magicIsLoggedIn, isPendingGuardian, addingPendingGuardian, pendingGuardians, magicAddress, upSigner])
 
     useEffect(() => {
-        if (lumuksoSocialRecovery && magicIsLoggedIn && !addingPendingGuardian) {
+        if (lumuksoSocialRecovery && web3authIsLoggedIn && !addingPendingGuardian) {
             isPendingGuardian(web3authAddress).then(isPending => {
                 if (!isPending) {
                     setAddingPendingGuardian(true);
                     return lumuksoSocialRecovery.connect(upSigner).addPendingGuardian(web3authAddress).then(tx => tx.wait()).finally(() => setAddingPendingGuardian(false));
+                } else {
+                    setPendingGuardians(Object.assign(pendingGuardians, {[web3authAddress]: true}));
                 }
             })
         }
-    }, [lumuksoSocialRecovery, web3authIsLoggedIn, web3authAddress, addingPendingGuardian])
+    }, [lumuksoSocialRecovery, web3authIsLoggedIn, web3authAddress, isPendingGuardian, addingPendingGuardian, pendingGuardians, upSigner])
 
     return (
         <>
@@ -63,7 +68,7 @@ export function Home() {
                                     <div><small>Universal Profile: {universalProfileAddress}</small></div>
                                     <div><small>Universal Profile Owner: {universalProfileOwner}</small></div>
                                     <div><small>Magic Address: {magicAddress}</small></div>
-                                    <div><small>Web3auth Address: {web3authAddress}</small></div>
+                                    <div><small>Web3auth Address: {web3authAddress} </small></div>
 
                                     <ul role="list"
                                         className="divide-y divide-gray-200 dark:divide-gray-700 w-full">
