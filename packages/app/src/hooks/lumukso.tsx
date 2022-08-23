@@ -3,7 +3,9 @@ import {ethers} from "ethers";
 import {useUp} from "./up";
 import {LumuksoFactory__factory} from '@lumukso/contracts/types/ethers-contracts/factories/LumuksoFactory__factory';
 import {LumuksoFactory} from '@lumukso/contracts/types/ethers-contracts/LumuksoFactory';
-import {LumuksoSocialRecovery__factory} from '@lumukso/contracts/types/ethers-contracts/factories/LumuksoSocialRecovery__factory';
+import {
+    LumuksoSocialRecovery__factory
+} from '@lumukso/contracts/types/ethers-contracts/factories/LumuksoSocialRecovery__factory';
 import {LumuksoSocialRecovery} from '@lumukso/contracts/types/ethers-contracts/LumuksoSocialRecovery';
 
 const LUMUKSO_FACTORY_ADDRESS = import.meta.env.VITE_LUMUKSO_FACTORY;

@@ -1,12 +1,7 @@
 import {useEffect, useState} from "react";
 import {Web3Auth} from "@web3auth/web3auth";
-import {OpenloginAdapter} from "@web3auth/openlogin-adapter";
-import {TorusWalletConnectorPlugin} from "@web3auth/torus-wallet-connector-plugin";
-import { TorusWalletAdapter } from "@web3auth/torus-evm-adapter";
 import {chain} from "../client";
 import {L16_EXPLORER_URL} from "../constants";
-import {ethers} from "ethers";
-import {CHAIN_NAMESPACES, SafeEventEmitterProvider} from "@web3auth/base";
 
 export function useWeb3auth() {
     const [ready, setReady] = useState(false);
