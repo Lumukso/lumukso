@@ -4,7 +4,7 @@ import {ethers} from "ethers";
 import {createGlobalState} from 'react-hooks-global-state';
 
 const { useGlobalState } = createGlobalState({
-    isConnecting: true,
+    isConnecting: false,
     isConnected: false,
     address: null,
     provider: null,
@@ -24,7 +24,6 @@ export function useUp() {
 
     function connect() {
         if (window.ethereum) {
-            setIsConnecting(true);
             setProvider(new ethers.providers.Web3Provider(window.ethereum));
             window.ethereum.request({
                 method: 'eth_requestAccounts',
@@ -43,10 +42,9 @@ export function useUp() {
     }
 
     useEffect(() => {
-        if (!provider && window.ethereum) {
-            connect();
-        }
-    }, [provider]);
+        setIsConnecting(true);
+        connect();
+    }, []);
 
     useEffect(() => {
         if (isConnected && provider && address) {

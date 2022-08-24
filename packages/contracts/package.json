@@ -23,6 +23,7 @@
     "@typechain/ethers-v5": "^10.1.0",
     "@typescript-eslint/eslint-plugin": "^5.34.0",
     "@typescript-eslint/parser": "^5.34.0",
+    "eslint": "^8.22.0",
     "typechain": "^8.1.0"
   }
 }

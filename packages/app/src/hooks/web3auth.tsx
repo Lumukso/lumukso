@@ -4,7 +4,6 @@ import {chain} from "../client";
 import {L16_EXPLORER_URL} from "../constants";
 
 export function useWeb3auth() {
-    const [ready, setReady] = useState(false);
     const [web3auth, setWeb3auth] = useState(null);
     const [web3authIsLoading, setWeb3authIsLoading] = useState(false);
     const [web3authIsLoggedIn, setWeb3authIsLoggedIn] = useState(false);
@@ -46,7 +45,6 @@ export function useWeb3auth() {
                 if (web3auth.provider) {
                     console.log(web3auth.provider);
                     setProvider(web3auth.provider);
-                    setReady(true);
                 }
             } catch (error) {
                 console.error(error);
@@ -59,7 +57,7 @@ export function useWeb3auth() {
     }, []);
 
     useEffect(() => {
-        if (ready && provider) {
+        if (provider) {
             setWeb3authIsLoading(true);
             provider.request({method: "eth_accounts"})
                 .then((accounts) => {
@@ -77,10 +75,9 @@ export function useWeb3auth() {
             setWeb3authAddress(null);
             setWeb3authIsLoggedIn(false)
         }
-    }, [ready, provider])
+    }, [provider])
 
     return {
-        web3authIsReady: ready,
         web3auth,
         web3authIsLoading,
         web3authIsLoggedIn,

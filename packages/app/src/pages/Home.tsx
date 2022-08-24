@@ -14,7 +14,7 @@ export function Home() {
     const {isLoading: isLumuksoLoading, lumuksoSocialRecovery, getConfirmationMessage, isPendingGuardian} = useLumukso();
     const navigate = useNavigate();
     const {magicIsLoggedIn, magicIsLoading, magicAddress} = useMagic();
-    const {connect: connectWeb3auth, web3authAddress, web3authIsLoggedIn, web3authIsLoading, web3authIsReady} = useWeb3auth();
+    const {connect: connectWeb3auth, web3authAddress, web3authIsLoggedIn, web3authIsLoading} = useWeb3auth();
 
     const [isGuardiansDisabled, setIsGuardiansDisabled] = useState(false);
     const [addingPendingGuardian, setAddingPendingGuardian] = useState(false);
@@ -87,7 +87,7 @@ export function Home() {
                                                             disabled={isConnecting || isConnected}
                                                             className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                                                         {
-                                                            isConnecting ?
+                                                            (isConnecting || isLumuksoLoading) ?
                                                                 <Spinner/>
                                                                 : isConnected ? 'Connected' : 'Connect'
                                                         }
@@ -126,7 +126,7 @@ export function Home() {
                                                             disabled={isGuardiansDisabled || web3authIsLoggedIn}
                                                             onClick={connectWeb3auth}>
                                                         {
-                                                            (web3authIsLoading || !web3authIsReady || addingPendingGuardian) ?  <Spinner/> :
+                                                            (web3authIsLoading || addingPendingGuardian) ?  <Spinner/> :
                                                                 web3authIsLoggedIn ? 'Connected' : 'Connect'
                                                         }
                                                     </button>
