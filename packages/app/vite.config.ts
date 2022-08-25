@@ -22,7 +22,7 @@ export default defineConfig({
         eslint(),
         react(),
         createHtmlPlugin({
-            minify: true,
+            minify: false,
         }),
     ],
     optimizeDeps: {
