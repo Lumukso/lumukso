@@ -5,7 +5,7 @@ export function NavButtons(props) {
     const navigate = useNavigate();
 
     return (
-        <div className={`grid grid-cols-2 gap-4 justify-items-stretch place-items-stretch items-center font-mono text-white font-bold leading-6 w-full h-full mb-2 ${props.className}`}>
+        <div className={`grid grid-cols-2 gap-4 justify-items-stretch place-items-stretch items-center font-mono text-white font-bold leading-6 w-full h-full py-3 ${props.className}`}>
             <button className="btn glass btn-block h-full rounded-lg flex-inline items-center justify-center bg-[#E685FC] hover:bg-[#E685FC] shadow-lg"
                     onClick={() => navigate('/setup')}>
                 <LockClosedIcon className="h-4 w-4" />
