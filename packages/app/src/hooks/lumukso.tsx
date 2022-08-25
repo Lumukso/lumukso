@@ -41,12 +41,12 @@ export function useLumukso() {
     }
 
     useEffect(() => {
-        if (isConnected && universalProfileAddress && signer) {
+        if (isConnected && signer) {
             setLumuksoFactory(new LumuksoFactory__factory(signer).attach(LUMUKSO_FACTORY_ADDRESS));
         } else {
             setLumuksoFactory(null);
         }
-    }, [universalProfileAddress, signer, isConnected]);
+    }, [signer, isConnected]);
 
     // check if there's a deployed instance of Lumukso
     // if not, try to create one via the LumuksoFactory

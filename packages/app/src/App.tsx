@@ -3,6 +3,7 @@ import {Home} from "./pages/Home";
 import {Setup} from "./pages/Setup";
 import {Recover} from "./pages/Recover";
 import {MagicLogin} from "./pages/MagicLogin";
+import {RecoverInput} from "./pages/RecoverInput";
 
 export function App() {
     return (
@@ -10,7 +11,8 @@ export function App() {
             <Route path="/" element={<Home />} />
             <Route path="/setup" element={<Setup />} />
             <Route path="/magic-login" element={<MagicLogin />} />
-            <Route path="/recover/:socialRecoveryAddress(0x[0-9a-fA-F]{40})" element={<Recover />} />
+            <Route path="/recover" element={<Recover />} />
+            <Route path="/recover/:socialRecoveryAddress" element={<Recover />} />
         </Routes>
     )
 }
