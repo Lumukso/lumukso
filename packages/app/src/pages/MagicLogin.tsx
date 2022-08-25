@@ -10,7 +10,7 @@ export function MagicLogin() {
         script.src = "https://auth.magic.link/pnp/login";
         script.async = true;
         script.setAttribute("data-magic-publishable-api-key", import.meta.env.VITE_MAGIC_KEY);
-        script.setAttribute("data-redirect-uri", "/");
+        script.setAttribute("data-redirect-uri", "/setup");
 
         rootEl.current.appendChild(script);
 

@@ -42,8 +42,10 @@ export function useUp() {
     }
 
     useEffect(() => {
-        setIsConnecting(true);
-        connect();
+        if (!isConnected) {
+            setIsConnecting(true);
+            connect();
+        }
     }, []);
 
     useEffect(() => {
