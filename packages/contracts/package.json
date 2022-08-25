@@ -10,8 +10,10 @@
   },
   "dependencies": {
     "@erc725/smart-contracts": "^3.1.2",
+    "@ethersproject/providers": "^5.7.0",
     "@lukso/lsp-smart-contracts": "https://github.com/lukso-network/lsp-smart-contracts.git#fa8697a6454be8ef0c3ae5524c2a4bb9abfc7a29",
     "@openzeppelin/contracts": "^4.7.2",
+    "ethers": "^5.7.0",
     "solidity-bytes-utils": "^0.8.0",
     "solmate": "^6.5.0",
     "typescript": "^4.7.4"

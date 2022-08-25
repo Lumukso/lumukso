@@ -12,14 +12,10 @@ import { nodeResolve } from '@rollup/plugin-node-resolve';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-    define: {
-        global: 'globalThis',
-    },
     resolve: {
         alias: {
-            buffer: 'rollup-plugin-node-polyfills/polyfills/buffer-es6', // add buffer
-            process: 'rollup-plugin-node-polyfills/polyfills/process-es6', // add process
-
+            buffer: 'node_modules/rollup-plugin-node-polyfills/polyfills/buffer-es6.js', // add buffer
+            process: 'node_modules/rollup-plugin-node-polyfills/polyfills/process-es6.js', // add process
         },
     },
     plugins: [
@@ -32,10 +28,6 @@ export default defineConfig({
     optimizeDeps: {
         esbuildOptions: {
             target: 'es2020',
-            // Node.js global to browser globalThis
-            define: {
-                global: 'globalThis'
-            },
             // Enable esbuild polyfill plugins
             plugins: [
                 NodeGlobalsPolyfillPlugin({
