@@ -54,7 +54,7 @@ export function useLumukso() {
         if (lumuksoFactory && universalProfileAddress && signer) {
             setIsLoading(true);
             lumuksoFactory.instances(universalProfileAddress)
-                .then((lumuksoAddress) => {
+                .then((lumuksoAddress : string | ethers.ContractTransaction) => {
                     if (lumuksoAddress === ethers.constants.AddressZero) {
                         return lumuksoFactory.create(universalProfileAddress);
                     } else {
@@ -62,7 +62,7 @@ export function useLumukso() {
                     }
                 })
                 .then((lumuksoAddress) => {
-                    setLumuksoSocialRecovery(new LumuksoSocialRecovery__factory(signer).attach(lumuksoAddress));
+                    setLumuksoSocialRecovery(new LumuksoSocialRecovery__factory(signer).attach(lumuksoAddress.toString()));
                 })
                 .catch(setError)
                 .finally(() => {

@@ -43,6 +43,9 @@ export function Recover() {
                        onInvalid={(e) => e.currentTarget.setCustomValidity("Please input a valid contract address")}
                        value={inputSocialRecoveryAddress}
                        ref={addressInputRef} />
+                {
+                    // TODO: add "Is this you?"
+                }
             </Layout>
             <ToastContainer position="top-center" autoClose={1000} />
         </>

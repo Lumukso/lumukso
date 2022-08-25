@@ -8,9 +8,11 @@ import {App} from './App'
 
 window.Buffer = Buffer;
 setUseWhatChange(true);
-whyDidYouRender(React, {
-    trackAllPureComponents: true,
-});
+if (import.meta.env.DEV) {
+    whyDidYouRender(React, {
+        trackAllPureComponents: true,
+    });
+}
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>

@@ -49,9 +49,9 @@ export default defineConfig({
                 main: resolve(__dirname, 'index.html'),
             },
             plugins: [
-                nodeResolve(),
+                nodeResolve() as Plugin,
                 rollupNodePolyFill()
-            ]
+            ],
         }
     }
 })

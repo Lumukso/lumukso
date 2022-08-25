@@ -8,7 +8,9 @@ import {useWeb3auth} from "../hooks/web3auth";
 import {Layout} from "./Layout";
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import luksoLogo from "../../assets/lukso2.png";
+import magicLogo from "../../assets/magic.png";
+import web3authLogo from "../../assets/web3auth.png";
 
 export function Setup() {
     const {
@@ -106,7 +108,7 @@ export function Setup() {
                             <div
                                 className="flex flex-row align-center items-center space-x-4">
                                 <div className="">
-                                    <img src="/assets/lukso2.png" className="lukso-item"/>
+                                    <img src={luksoLogo} className="lukso-item"/>
                                 </div>
                                 <div className="whitespace-nowrap justify-self-start grow"></div>
                                 <div>
@@ -126,7 +128,7 @@ export function Setup() {
                         <li className={`py-3 sm:py-4 ${isGuardiansDisabled ? 'grayscale' : ''}`}>
                             <div className="flex items-center space-x-4 w-full">
                                 <div className="">
-                                    <img src="/assets/magic.png" className="lukso-item"/>
+                                    <img src={magicLogo} className="lukso-item"/>
                                 </div>
                                 <div className="whitespace-nowrap justify-self-start grow"></div>
                                 <div className="justify-self-end">
@@ -145,7 +147,7 @@ export function Setup() {
                         <li className={`py-3 sm:py-4 ${isGuardiansDisabled ? 'grayscale' : ''}`}>
                             <div className="flex items-center space-x-4 w-full">
                                 <div className="">
-                                    <img src="/assets/web3auth.png" className="lukso-item"/>
+                                    <img src={web3authLogo} className="lukso-item"/>
                                 </div>
                                 <div className="whitespace-nowrap justify-self-start grow"></div>
                                 <div className="justify-self-end">

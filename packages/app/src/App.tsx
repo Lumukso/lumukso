@@ -3,7 +3,6 @@ import {Home} from "./pages/Home";
 import {Setup} from "./pages/Setup";
 import {Recover} from "./pages/Recover";
 import {MagicLogin} from "./pages/MagicLogin";
-import {RecoverInput} from "./pages/RecoverInput";
 
 export function App() {
     return (
