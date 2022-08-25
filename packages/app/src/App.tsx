@@ -10,7 +10,7 @@ export function App() {
             <Route path="/" element={<Home />} />
             <Route path="/setup" element={<Setup />} />
             <Route path="/magic-login" element={<MagicLogin />} />
-            <Route path="/recover" element={<Recover />} />
+            <Route path="/recover/:socialRecoveryAddress(0x[0-9a-fA-F]{40})" element={<Recover />} />
         </Routes>
     )
 }

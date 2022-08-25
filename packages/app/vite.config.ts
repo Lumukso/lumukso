@@ -4,14 +4,16 @@ import {defineConfig} from 'vite';
 
 const {resolve} = require('path');
 import eslint from 'vite-plugin-eslint'
+import mkcert from 'vite-plugin-mkcert'
 
-import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill';
-import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill';
+import {NodeGlobalsPolyfillPlugin} from '@esbuild-plugins/node-globals-polyfill';
+import {NodeModulesPolyfillPlugin} from '@esbuild-plugins/node-modules-polyfill';
 import rollupNodePolyFill from 'rollup-plugin-node-polyfills';
-import { nodeResolve } from '@rollup/plugin-node-resolve';
+import {nodeResolve} from '@rollup/plugin-node-resolve';
 
 // https://vitejs.dev/config/
 export default defineConfig({
+    server: {https: true},
     resolve: {
         alias: {
             buffer: 'node_modules/rollup-plugin-node-polyfills/polyfills/buffer-es6.js', // add buffer
@@ -19,6 +21,7 @@ export default defineConfig({
         },
     },
     plugins: [
+        mkcert(),
         eslint(),
         react(),
         createHtmlPlugin({

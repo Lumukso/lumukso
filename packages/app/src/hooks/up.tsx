@@ -46,7 +46,7 @@ export function useUp() {
             setIsConnecting(true);
             connect();
         }
-    }, []);
+    }, [isConnected]);
 
     useEffect(() => {
         if (isConnected && provider && address) {
