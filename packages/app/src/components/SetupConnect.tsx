@@ -18,7 +18,7 @@ export function SetupConnect() {
         invalid,
     } = useUp();
     const navigate = useNavigate();
-    const {magicIsLoggedIn, magicIsLoading} = useMagic();
+    const {magicIsLoggedIn, magicIsLoading, magicAddress} = useMagic();
     const {connect: connectWeb3auth, web3authIsLoggedIn, web3authIsLoading} = useWeb3auth();
 
     const notifyInvalidWallet = () => toast("Connected wallet is not an Universal Profile", {toastId: "invalidWallet", autoClose: false, type: "error"});
@@ -66,7 +66,7 @@ export function SetupConnect() {
                                     disabled={magicIsLoggedIn}
                                     onClick={() => magicIsLoggedIn ? null : navigate('/magic-login', {replace: true})}>
                                 {
-                                    magicIsLoading ? <Spinner/> :
+                                    (magicIsLoading || !magicAddress) ? <Spinner/> :
                                         magicIsLoggedIn ? 'Connected' : 'Connect'
                                 }
                             </button>
