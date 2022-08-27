@@ -11,6 +11,7 @@ export function Debug() {
     const lumuksoFactory = useLumuksoFactory();
     const {
         lumuksoSocialRecovery,
+        guardians,
     } = useSocialRecovery();
     const {
         magicAddress
@@ -28,6 +29,7 @@ export function Debug() {
                 <div><small>Universal Profile Owner: {universalProfileOwner}</small></div>
                 <div><small>Magic Address: {magicAddress}</small></div>
                 <div><small>Web3auth Address: {web3authAddress} </small></div>
+                <div><small>Guardians: {Object.keys(guardians).join(", ")}</small></div>
             </div>
         )
     } else {

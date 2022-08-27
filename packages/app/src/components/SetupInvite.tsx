@@ -8,7 +8,6 @@ export function SetupInvite() {
     const notifyCopied = () => toast("Copied to clipboard!", {toastId: "notifyCopied"});
     const socialRecoveryLinkRef = useRef(null);
 
-
     const {
         address: universalProfileAddress,
     } = useUp();

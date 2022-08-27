@@ -7,6 +7,7 @@ import {ToastContainer} from 'react-toastify';
 import {SetupConnect} from "../components/SetupConnect";
 import {SetupDeploy} from "../components/SetupDeploy";
 import {SetupInvite} from "../components/SetupInvite";
+import {useSocialRecovery} from "../hooks/lumukso";
 
 export function Setup() {
     const {

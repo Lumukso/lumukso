@@ -37,7 +37,8 @@ export function SetupDeploy() {
         addPendingGuardian,
         getConfirmationMessage,
         isDeployingSocialRecovery,
-        isGuardian
+        isGuardian,
+        confirmPendingGuardian,
     } = useSocialRecovery();
     const lumuksoUtils = useLumuksoUtils();
     const {magicSigner, magicAddress} = useMagic();
@@ -113,10 +114,9 @@ export function SetupDeploy() {
                             })
                             .then((rawSignature) => {
                                 console.log("rawSignature", rawSignature);
-                                return lumuksoSocialRecovery.confirmPendingGuardian(
+                                return confirmPendingGuardian(
                                     magicSigner.getAddress(),
                                     rawSignature,
-                                    {gasLimit: 1000000}
                                 );
                             })
                             .then((tx) => tx.wait())
@@ -170,10 +170,9 @@ export function SetupDeploy() {
                             })
                             .then((rawSignature) => {
                                 console.log("rawSignature", rawSignature);
-                                return lumuksoSocialRecovery.confirmPendingGuardian(
+                                return confirmPendingGuardian(
                                     web3authSigner.getAddress(),
                                     rawSignature,
-                                    {gasLimit: 1000000}
                                 );
                             })
                             .then((tx) => tx.wait())

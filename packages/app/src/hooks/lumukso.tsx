@@ -46,8 +46,8 @@ export function useLumuksoUtils() {
 
 const { useGlobalState } = createGlobalState({
     lumuksoSocialRecovery: null,
+    guardians: {},
 });
-
 
 export function useSocialRecovery() {
     const { address: universalProfileAddress, signer, isConnected } = useUp();
@@ -56,6 +56,7 @@ export function useSocialRecovery() {
     const [isDeployingSocialRecovery, setIsDeployingSocialRecovery] = useState(false);
     const [triggerDeploySocialRecovery, setTriggerDeploySocialRecovery] = useState(false);
     const [lumuksoSocialRecovery, setLumuksoSocialRecovery] = useGlobalState('lumuksoSocialRecovery');
+    const [guardians, setGuardians] = useGlobalState('guardians');
 
     function deploySocialRecovery() {
         setTriggerDeploySocialRecovery(true);
@@ -76,6 +77,19 @@ export function useSocialRecovery() {
     async function isPendingGuardian(guardian) {
         const [address, _] = await lumuksoSocialRecovery.pendingGuardians(guardian);
         return address !== ethers.constants.AddressZero;
+    }
+
+    function confirmPendingGuardian(guardian, rawSignature) {
+        return lumuksoSocialRecovery.confirmPendingGuardian(
+            guardian,
+            rawSignature,
+            {gasLimit: 1000000}
+        ).then(() => {
+           setGuardians((prevState) => ({
+               ...prevState,
+               [guardian]: true,
+            }))
+        });
     }
 
     // check if there's a deployed instance of Lumukso
@@ -104,6 +118,20 @@ export function useSocialRecovery() {
         }
     }, [triggerDeploySocialRecovery, isDeployingSocialRecovery, lumuksoFactory, universalProfileAddress, signer]);
 
+    useEffect(() => {
+        if (lumuksoSocialRecovery) {
+            lumuksoSocialRecovery.getGuardians()
+                .then(guardians => {
+                    guardians.forEach(guardian => {
+                        setGuardians((prevState) => ({
+                            ...prevState,
+                            [guardian]: true,
+                        }))
+                    });
+                })
+        }
+    }, [lumuksoSocialRecovery]);
+
     return {
         isDeployingSocialRecovery,
         lumuksoSocialRecovery,
@@ -112,5 +140,7 @@ export function useSocialRecovery() {
         getConfirmationMessage,
         isGuardian,
         isPendingGuardian,
+        confirmPendingGuardian,
+        guardians,
     }
 }
