@@ -32,13 +32,15 @@ export interface LumuksoSocialRecoveryInterface extends utils.Interface {
     "account()": FunctionFragment;
     "addGuardian(address)": FunctionFragment;
     "addPendingGuardian(address)": FunctionFragment;
-    "confirmPendingGuardian(address,bytes32,bytes32,uint8)": FunctionFragment;
+    "confirmPendingGuardian(address,bytes)": FunctionFragment;
     "getGuardianVote(bytes32,address)": FunctionFragment;
     "getGuardians()": FunctionFragment;
     "getGuardiansThreshold()": FunctionFragment;
+    "getInvitations()": FunctionFragment;
     "getPendingGuardianExpiration(address)": FunctionFragment;
     "getRecoverProcessesIds()": FunctionFragment;
     "isGuardian(address)": FunctionFragment;
+    "isInvited(address)": FunctionFragment;
     "owner()": FunctionFragment;
     "pendingGuardians(address)": FunctionFragment;
     "recoverOwnership(bytes32,string,bytes32)": FunctionFragment;
@@ -60,9 +62,11 @@ export interface LumuksoSocialRecoveryInterface extends utils.Interface {
       | "getGuardianVote"
       | "getGuardians"
       | "getGuardiansThreshold"
+      | "getInvitations"
       | "getPendingGuardianExpiration"
       | "getRecoverProcessesIds"
       | "isGuardian"
+      | "isInvited"
       | "owner"
       | "pendingGuardians"
       | "recoverOwnership"
@@ -86,12 +90,7 @@ export interface LumuksoSocialRecoveryInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "confirmPendingGuardian",
-    values: [
-      PromiseOrValue<string>,
-      PromiseOrValue<BytesLike>,
-      PromiseOrValue<BytesLike>,
-      PromiseOrValue<BigNumberish>
-    ]
+    values: [PromiseOrValue<string>, PromiseOrValue<BytesLike>]
   ): string;
   encodeFunctionData(
     functionFragment: "getGuardianVote",
@@ -106,6 +105,10 @@ export interface LumuksoSocialRecoveryInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "getInvitations",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "getPendingGuardianExpiration",
     values: [PromiseOrValue<string>]
   ): string;
@@ -115,6 +118,10 @@ export interface LumuksoSocialRecoveryInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "isGuardian",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "isInvited",
     values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
@@ -185,6 +192,10 @@ export interface LumuksoSocialRecoveryInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "getInvitations",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "getPendingGuardianExpiration",
     data: BytesLike
   ): Result;
@@ -193,6 +204,7 @@ export interface LumuksoSocialRecoveryInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "isGuardian", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "isInvited", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "pendingGuardians",
@@ -315,9 +327,7 @@ export interface LumuksoSocialRecovery extends BaseContract {
 
     confirmPendingGuardian(
       guardian: PromiseOrValue<string>,
-      r: PromiseOrValue<BytesLike>,
-      s: PromiseOrValue<BytesLike>,
-      v: PromiseOrValue<BigNumberish>,
+      signature: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -331,6 +341,8 @@ export interface LumuksoSocialRecovery extends BaseContract {
 
     getGuardiansThreshold(overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    getInvitations(overrides?: CallOverrides): Promise<[string[]]>;
+
     getPendingGuardianExpiration(
       guardian: PromiseOrValue<string>,
       overrides?: CallOverrides
@@ -340,6 +352,11 @@ export interface LumuksoSocialRecovery extends BaseContract {
 
     isGuardian(
       _address: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
+
+    isInvited(
+      pendingGuardian: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
@@ -409,9 +426,7 @@ export interface LumuksoSocialRecovery extends BaseContract {
 
   confirmPendingGuardian(
     guardian: PromiseOrValue<string>,
-    r: PromiseOrValue<BytesLike>,
-    s: PromiseOrValue<BytesLike>,
-    v: PromiseOrValue<BigNumberish>,
+    signature: PromiseOrValue<BytesLike>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -425,6 +440,8 @@ export interface LumuksoSocialRecovery extends BaseContract {
 
   getGuardiansThreshold(overrides?: CallOverrides): Promise<BigNumber>;
 
+  getInvitations(overrides?: CallOverrides): Promise<string[]>;
+
   getPendingGuardianExpiration(
     guardian: PromiseOrValue<string>,
     overrides?: CallOverrides
@@ -434,6 +451,11 @@ export interface LumuksoSocialRecovery extends BaseContract {
 
   isGuardian(
     _address: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
+
+  isInvited(
+    pendingGuardian: PromiseOrValue<string>,
     overrides?: CallOverrides
   ): Promise<boolean>;
 
@@ -501,9 +523,7 @@ export interface LumuksoSocialRecovery extends BaseContract {
 
     confirmPendingGuardian(
       guardian: PromiseOrValue<string>,
-      r: PromiseOrValue<BytesLike>,
-      s: PromiseOrValue<BytesLike>,
-      v: PromiseOrValue<BigNumberish>,
+      signature: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -517,6 +537,8 @@ export interface LumuksoSocialRecovery extends BaseContract {
 
     getGuardiansThreshold(overrides?: CallOverrides): Promise<BigNumber>;
 
+    getInvitations(overrides?: CallOverrides): Promise<string[]>;
+
     getPendingGuardianExpiration(
       guardian: PromiseOrValue<string>,
       overrides?: CallOverrides
@@ -526,6 +548,11 @@ export interface LumuksoSocialRecovery extends BaseContract {
 
     isGuardian(
       _address: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
+    isInvited(
+      pendingGuardian: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
@@ -621,9 +648,7 @@ export interface LumuksoSocialRecovery extends BaseContract {
 
     confirmPendingGuardian(
       guardian: PromiseOrValue<string>,
-      r: PromiseOrValue<BytesLike>,
-      s: PromiseOrValue<BytesLike>,
-      v: PromiseOrValue<BigNumberish>,
+      signature: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -637,6 +662,8 @@ export interface LumuksoSocialRecovery extends BaseContract {
 
     getGuardiansThreshold(overrides?: CallOverrides): Promise<BigNumber>;
 
+    getInvitations(overrides?: CallOverrides): Promise<BigNumber>;
+
     getPendingGuardianExpiration(
       guardian: PromiseOrValue<string>,
       overrides?: CallOverrides
@@ -646,6 +673,11 @@ export interface LumuksoSocialRecovery extends BaseContract {
 
     isGuardian(
       _address: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    isInvited(
+      pendingGuardian: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -714,9 +746,7 @@ export interface LumuksoSocialRecovery extends BaseContract {
 
     confirmPendingGuardian(
       guardian: PromiseOrValue<string>,
-      r: PromiseOrValue<BytesLike>,
-      s: PromiseOrValue<BytesLike>,
-      v: PromiseOrValue<BigNumberish>,
+      signature: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -732,6 +762,8 @@ export interface LumuksoSocialRecovery extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    getInvitations(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     getPendingGuardianExpiration(
       guardian: PromiseOrValue<string>,
       overrides?: CallOverrides
@@ -743,6 +775,11 @@ export interface LumuksoSocialRecovery extends BaseContract {
 
     isGuardian(
       _address: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    isInvited(
+      pendingGuardian: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

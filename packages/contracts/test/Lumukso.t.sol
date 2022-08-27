@@ -23,7 +23,9 @@ contract LumuksoTest is Test {
     UniversalProfile bobUniversalProfile;
     uint256 constant bobUPKey = 2;
 
-    uint256 constant guardian = 3;
+    LSP6KeyManager guardianKeyManager;
+    UniversalProfile guardianUniversalProfile;
+    uint256 constant guardianUPKey = 3;
 
     function setUp() public {
         (aliceUniversalProfile, aliceKeyManager) = createUniversalProfileViaUP(vm.addr(aliceUPKey));
@@ -95,6 +97,9 @@ contract LumuksoTest is Test {
         );
         vm.stopPrank();
 
+        // create guardian universal profile
+        (guardianUniversalProfile, guardianKeyManager) = createUniversalProfileViaUP(vm.addr(guardianUPKey));
+
         // add pending guardian
         vm.startPrank(vm.addr(aliceUPKey));
         aliceKeyManager.execute(
@@ -103,23 +108,27 @@ contract LumuksoTest is Test {
                 OPERATION_CALL,
                 address(lumuksoSocialRecovery),
                 0,
-                abi.encodeWithSignature("addPendingGuardian(address)", vm.addr(guardian))
+                abi.encodeWithSignature("addPendingGuardian(address)", address(guardianUniversalProfile))
             )
         );
+        vm.stopPrank();
+
+        // confirm pending guardian
+        vm.startPrank(vm.addr(guardianUPKey));
         bytes32 hash = keccak256(bytes(string.concat(
-            "operation=confirmPendingGuardian&expirationTimestamp=",
-            Strings.toString(lumuksoSocialRecovery.getPendingGuardianExpiration(vm.addr(guardian))),
-            "&socialRecoveryAddress=",
-            string(abi.encodePacked(address(lumuksoSocialRecovery))
-        )))).toEthSignedMessageHash();
-        (uint8 v, bytes32 r, bytes32 s) = vm.sign(guardian, hash);
-        aliceKeyManager.execute(
+                "operation=confirmPendingGuardian&expirationTimestamp=",
+                Strings.toString(lumuksoSocialRecovery.getPendingGuardianExpiration(guardianUniversalProfile)),
+                "&socialRecoveryAddress=",
+                string(abi.encodePacked(address(lumuksoSocialRecovery))
+                )))).toEthSignedMessageHash();
+        (uint8 v, bytes32 r, bytes32 s) = vm.sign(guardianUPKey, hash);
+        guardianKeyManager.execute(
             abi.encodeWithSignature(
                 "execute(uint256,address,uint256,bytes)",
                 OPERATION_CALL,
                 address(lumuksoSocialRecovery),
                 0,
-                abi.encodeWithSignature("confirmPendingGuardian(address,bytes32,bytes32,uint8)", vm.addr(guardian), r, s, v)
+                abi.encodeWithSignature("confirmPendingGuardian(address,bytes)", address(guardianUniversalProfile), bytes.concat(r, s, abi.encodePacked(v)))
             )
         );
         vm.stopPrank();
@@ -128,9 +137,17 @@ contract LumuksoTest is Test {
         (bobUniversalProfile, bobKeyManager) = createUniversalProfileViaUP(vm.addr(bobUPKey));
 
         // vote to recover bob
-        vm.startPrank(vm.addr(guardian));
+        vm.startPrank(vm.addr(guardianUPKey));
         bytes32 recoverProcessId = keccak256("e85183df-ec42-477f-9a0e-526033776310");
-        lumuksoSocialRecovery.voteToRecover(recoverProcessId, address(bobUniversalProfile));
+        guardianKeyManager.execute(
+            abi.encodeWithSignature(
+                "execute(uint256,address,uint256,bytes)",
+                OPERATION_CALL,
+                address(lumuksoSocialRecovery),
+                0,
+                abi.encodeWithSignature("voteToRecover(bytes32,address)", recoverProcessId, address(bobUniversalProfile))
+            )
+        );
         vm.stopPrank();
 
         // recover ownership to bob
