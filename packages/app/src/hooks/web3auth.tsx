@@ -1,14 +1,25 @@
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 import {Web3Auth} from "@web3auth/web3auth";
 import {chain} from "../client";
 import {L16_EXPLORER_URL} from "../constants";
+import {createGlobalState} from "react-hooks-global-state";
+
+const { useGlobalState } = createGlobalState({
+    web3auth: null,
+    web3authIsLoading: true,
+    web3authIsLoggedIn: false,
+    web3authIsConnected: false,
+    web3authAddress: "",
+    provider: null,
+});
 
 export function useWeb3auth() {
-    const [web3auth, setWeb3auth] = useState(null);
-    const [web3authIsLoading, setWeb3authIsLoading] = useState(false);
-    const [web3authIsLoggedIn, setWeb3authIsLoggedIn] = useState(false);
-    const [web3authAddress, setWeb3authAddress] = useState(null);
-    const [provider, setProvider] = useState(null);
+    const [web3auth, setWeb3auth] = useGlobalState('web3auth');
+    const [web3authIsLoading, setWeb3authIsLoading] = useGlobalState('web3authIsLoading');
+    const [web3authIsLoggedIn, setWeb3authIsLoggedIn] = useGlobalState('web3authIsLoggedIn');
+    const [web3authIsConnected, setWeb3authIsConnected] = useGlobalState('web3authIsConnected');
+    const [web3authAddress, setWeb3authAddress] = useGlobalState('web3authAddress');
+    const [provider, setProvider] = useGlobalState('provider');
 
     const connect = async () => {
         if (!web3auth) {
@@ -37,6 +48,14 @@ export function useWeb3auth() {
                         blockExplorer: L16_EXPLORER_URL,
                     },
                     enableLogging: false,
+                });
+
+                web3auth.addListener("ready", () => {
+                    setWeb3authIsLoading(false);
+                });
+
+                web3auth.addListener("connected", () => {
+                    setWeb3authIsConnected(true);
                 });
 
                 setWeb3auth(web3auth);
@@ -71,7 +90,6 @@ export function useWeb3auth() {
                 .catch(console.error)
                 .finally(() => setWeb3authIsLoading(false));
         } else {
-            setWeb3authIsLoading(false);
             setWeb3authAddress(null);
             setWeb3authIsLoggedIn(false)
         }
@@ -81,6 +99,7 @@ export function useWeb3auth() {
         web3auth,
         web3authIsLoading,
         web3authIsLoggedIn,
+        web3authIsConnected,
         web3authAddress,
         connect,
     };

@@ -6,6 +6,7 @@ import {createGlobalState} from 'react-hooks-global-state';
 const { useGlobalState } = createGlobalState({
     isConnecting: false,
     isConnected: false,
+    invalid: false,
     address: null,
     provider: null,
     signer: null,
@@ -16,6 +17,7 @@ const { useGlobalState } = createGlobalState({
 export function useUp() {
     const [isConnecting, setIsConnecting] = useGlobalState('isConnecting');
     const [isConnected, setIsConnected] = useGlobalState('isConnected');
+    const [invalid, setInvalid] = useGlobalState('invalid');
     const [address, setAddress] = useGlobalState('address');
     const [provider, setProvider] = useGlobalState('provider');
     const [signer, setSigner] = useGlobalState('signer');
@@ -24,6 +26,7 @@ export function useUp() {
 
     function connect() {
         if (window.ethereum) {
+            setIsConnecting(true);
             setProvider(new ethers.providers.Web3Provider(window.ethereum));
             window.ethereum.request({
                 method: 'eth_requestAccounts',
@@ -58,7 +61,7 @@ export function useUp() {
 
     useEffect(() => {
         if (address && signer) {
-            setUniversalProfile(new UniversalProfile__factory(signer).attach(address));
+            setUniversalProfile(UniversalProfile__factory.connect(address, signer));
         } else {
             setUniversalProfile(null);
         }
@@ -67,7 +70,13 @@ export function useUp() {
     useEffect(() => {
         if (universalProfile) {
             setIsConnecting(true);
-            universalProfile.owner().then(setUniversalProfileOwner).finally(() => setIsConnecting(false));
+            universalProfile.owner()
+                .then(setUniversalProfileOwner)
+                .catch((e) => {
+                    console.error(e);
+                    setInvalid(true);
+                })
+                .finally(() => setIsConnecting(false));
         } else {
             setUniversalProfileOwner(null);
         }
@@ -79,6 +88,7 @@ export function useUp() {
         universalProfileOwner,
         isConnected,
         isConnecting,
+        invalid,
         connect,
         signer,
         provider,

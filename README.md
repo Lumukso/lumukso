@@ -1,12 +1,31 @@
 # Lumukso
 
-Lumukso is a social recovery app made for [Lukso Universal Profile](https://docs.lukso.tech/guides/universal-profile/create-profile/).
+Lumukso is a multifactor social recovery app made for [Lukso Universal Profile](https://docs.lukso.tech/guides/universal-profile/create-profile/).
+
+The application utilizes external key managers such as Magic.link & web3auth.io to help Lukso universal profile users recover their access using SSO.
+
+There's also a new concept of "Fault Tolerance" introduced in this application. This concept is used to determine the guardians threshold using Byzantine Fault Tolerance theorem where there can be only one-third of the guardians being faulty. 
+
+```
+f = Number of faulty guardians
+Number of guardians = 3f + 1
+Guardians threshold = Number of guardians - f = 2f + 1
+```
+
+For example when fault tolerance is configured as 1, then 3 guardians are required to recover the access of a user.
 
 ## Supported Guardians
 
-- ✔️ magic.link
-- ✔️ web3auth.io
+- [x] Universal Profile
+- [x] magic.link
+- [x] web3auth.io
+
+## Utilized Standards
+
+- LSP0 - Universal Profile
+- LSP6 - Key Manager
+- LSP11 - Social Recovery
 
 ## Deployments
 
-- Lumukso Factory: 0x8f022C2dd0081a2fa8807cf027f5AE3112720398
+- Lumukso Factory: 0xd78dc5a5389c80209aaf8bb669e4cddfb88db2f3

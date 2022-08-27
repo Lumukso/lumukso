@@ -9,39 +9,48 @@ import {LSP6KeyManager} from "@lukso/lsp-smart-contracts/contracts/LSP6KeyManage
 import {_ALL_DEFAULT_PERMISSIONS} from "@lukso/lsp-smart-contracts/contracts/LSP6KeyManager/LSP6Constants.sol";
 import {OPERATION_CALL} from "@erc725/smart-contracts/contracts/constants.sol";
 import "../src/LumuksoSocialRecovery.sol";
+import "../src/LumuksoUtils.sol";
 
 contract LumuksoTest is Test {
     using ECDSA for bytes32;
 
+    LumuksoUtils utils;
+
+    uint8 constant faultTolerance = 0;
+
     UniversalProfile aliceUniversalProfile;
     LumuksoSocialRecovery lumuksoSocialRecovery;
 
+    // original owner
     LSP6KeyManager aliceKeyManager;
     uint256 constant aliceUPKey = 1;
 
+    // recovered owner
     LSP6KeyManager bobKeyManager;
     UniversalProfile bobUniversalProfile;
     uint256 constant bobUPKey = 2;
 
+    // universal profile guardian
     LSP6KeyManager guardianKeyManager;
     UniversalProfile guardianUniversalProfile;
     uint256 constant guardianUPKey = 3;
 
+    // sso guardian
+    uint256 constant guardianSSOKey = 4;
+
     function setUp() public {
+        utils = new LumuksoUtils();
         (aliceUniversalProfile, aliceKeyManager) = createUniversalProfileViaUP(vm.addr(aliceUPKey));
 
         // setup social recovery permissions
         vm.startPrank(vm.addr(aliceUPKey));
-        lumuksoSocialRecovery = new LumuksoSocialRecovery(aliceUniversalProfile);
+        lumuksoSocialRecovery = new LumuksoSocialRecovery(aliceUniversalProfile, faultTolerance);
         {
-            (bytes32[] memory keys, bytes[] memory values) = LSP6Utils
-            .createPermissionsKeysForController(
-                aliceUniversalProfile,
-                address(lumuksoSocialRecovery),
-                abi.encodePacked(hex"0000000000000000000000000000000000000000000000000000000000000026") // STATICCALL + CHANGEPERMISSIONS + ADDPERMISSIONS
-            );
+            (bytes32[] memory keys, bytes[] memory values) = utils.getSocialRecoveryPermissionKeyValues(aliceUniversalProfile, lumuksoSocialRecovery);
             aliceKeyManager.execute(abi.encodeWithSignature("setData(bytes32[],bytes[])", keys, values));
+            assertTrue(utils.checkSocialRecoveryPermissions(aliceUniversalProfile, lumuksoSocialRecovery));
         }
+        assertEq(2 * faultTolerance + 1, lumuksoSocialRecovery.getGuardiansThreshold());
         vm.stopPrank();
     }
 
@@ -114,24 +123,28 @@ contract LumuksoTest is Test {
         vm.stopPrank();
 
         // confirm pending guardian
-        vm.startPrank(vm.addr(guardianUPKey));
-        bytes32 hash = keccak256(bytes(string.concat(
+        {
+            vm.startPrank(vm.addr(guardianUPKey));
+            string memory message = string.concat(
                 "operation=confirmPendingGuardian&expirationTimestamp=",
-                Strings.toString(lumuksoSocialRecovery.getPendingGuardianExpiration(guardianUniversalProfile)),
+                Strings.toString(lumuksoSocialRecovery.getPendingGuardianExpiration(address(guardianUniversalProfile))),
                 "&socialRecoveryAddress=",
-                string(abi.encodePacked(address(lumuksoSocialRecovery))
-                )))).toEthSignedMessageHash();
-        (uint8 v, bytes32 r, bytes32 s) = vm.sign(guardianUPKey, hash);
-        guardianKeyManager.execute(
-            abi.encodeWithSignature(
-                "execute(uint256,address,uint256,bytes)",
-                OPERATION_CALL,
-                address(lumuksoSocialRecovery),
-                0,
-                abi.encodeWithSignature("confirmPendingGuardian(address,bytes)", address(guardianUniversalProfile), bytes.concat(r, s, abi.encodePacked(v)))
-            )
-        );
-        vm.stopPrank();
+                Strings.toHexString(uint256(uint160(address(lumuksoSocialRecovery))), 20)
+            );
+            emit log(message);
+            bytes32 hash = keccak256(bytes(message)).toEthSignedMessageHash();
+            (uint8 v, bytes32 r, bytes32 s) = vm.sign(guardianUPKey, hash);
+            guardianKeyManager.execute(
+                abi.encodeWithSignature(
+                    "execute(uint256,address,uint256,bytes)",
+                    OPERATION_CALL,
+                    address(lumuksoSocialRecovery),
+                    0,
+                    abi.encodeWithSignature("confirmPendingGuardian(address,bytes)", address(guardianUniversalProfile), bytes.concat(r, s, abi.encodePacked(v)))
+                )
+            );
+            vm.stopPrank();
+        }
 
         // create new UP profile
         (bobUniversalProfile, bobKeyManager) = createUniversalProfileViaUP(vm.addr(bobUPKey));
@@ -148,6 +161,37 @@ contract LumuksoTest is Test {
                 abi.encodeWithSignature("voteToRecover(bytes32,address)", recoverProcessId, address(bobUniversalProfile))
             )
         );
+        assertEq(lumuksoSocialRecovery.isValidRecoveryProcessId(recoverProcessId), true);
+        vm.stopPrank();
+
+        // add sso pending guardian
+        vm.startPrank(vm.addr(aliceUPKey));
+        aliceKeyManager.execute(
+            abi.encodeWithSignature(
+                "execute(uint256,address,uint256,bytes)",
+                OPERATION_CALL,
+                address(lumuksoSocialRecovery),
+                0,
+                abi.encodeWithSignature("addPendingGuardian(address)", vm.addr(guardianSSOKey))
+            )
+        );
+        vm.stopPrank();
+
+        // confirm pending guardian
+        vm.startPrank(vm.addr(guardianSSOKey));
+        bytes32 hash = keccak256(bytes(string.concat(
+                "operation=confirmPendingGuardian&expirationTimestamp=",
+                Strings.toString(lumuksoSocialRecovery.getPendingGuardianExpiration(vm.addr(guardianSSOKey))),
+                "&socialRecoveryAddress=",
+                Strings.toHexString(uint256(uint160(address(lumuksoSocialRecovery))), 20)
+                ))).toEthSignedMessageHash();
+        (uint8 v, bytes32 r, bytes32 s) = vm.sign(guardianSSOKey, hash);
+        lumuksoSocialRecovery.confirmPendingGuardian(vm.addr(guardianSSOKey), r, s, v);
+        vm.stopPrank();
+
+        // vote to recover bob
+        vm.startPrank(vm.addr(guardianSSOKey));
+        lumuksoSocialRecovery.voteToRecover(recoverProcessId, address(bobUniversalProfile));
         vm.stopPrank();
 
         // recover ownership to bob

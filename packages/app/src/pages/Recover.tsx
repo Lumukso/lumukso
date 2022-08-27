@@ -3,8 +3,18 @@ import {useParams} from "react-router-dom";
 import {useEffect, useRef, useState} from "react";
 import {ethers} from "ethers";
 import {toast, ToastContainer} from "react-toastify";
+import {useUp} from "../hooks/up";
 
 export function Recover() {
+    const {
+        connect,
+        signer: upSigner,
+        isConnected,
+        isConnecting,
+        address: universalProfileAddress,
+        universalProfileOwner
+    } = useUp();
+
     let {socialRecoveryAddress} = useParams();
     const [inputSocialRecoveryAddress, setInputSocialRecoveryAddress] = useState("");
     const addressInputRef = useRef(null);

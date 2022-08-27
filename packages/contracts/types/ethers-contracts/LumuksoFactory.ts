@@ -4,6 +4,7 @@
 import type {
   BaseContract,
   BigNumber,
+  BigNumberish,
   BytesLike,
   CallOverrides,
   ContractTransaction,
@@ -28,7 +29,7 @@ import type {
 
 export interface LumuksoFactoryInterface extends utils.Interface {
   functions: {
-    "create(address)": FunctionFragment;
+    "create(address,uint8)": FunctionFragment;
     "instances(address)": FunctionFragment;
   };
 
@@ -36,7 +37,7 @@ export interface LumuksoFactoryInterface extends utils.Interface {
 
   encodeFunctionData(
     functionFragment: "create",
-    values: [PromiseOrValue<string>]
+    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "instances",
@@ -92,6 +93,7 @@ export interface LumuksoFactory extends BaseContract {
   functions: {
     create(
       _profile: PromiseOrValue<string>,
+      faultTolerance: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -103,6 +105,7 @@ export interface LumuksoFactory extends BaseContract {
 
   create(
     _profile: PromiseOrValue<string>,
+    faultTolerance: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -114,6 +117,7 @@ export interface LumuksoFactory extends BaseContract {
   callStatic: {
     create(
       _profile: PromiseOrValue<string>,
+      faultTolerance: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<string>;
 
@@ -131,6 +135,7 @@ export interface LumuksoFactory extends BaseContract {
   estimateGas: {
     create(
       _profile: PromiseOrValue<string>,
+      faultTolerance: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -143,6 +148,7 @@ export interface LumuksoFactory extends BaseContract {
   populateTransaction: {
     create(
       _profile: PromiseOrValue<string>,
+      faultTolerance: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

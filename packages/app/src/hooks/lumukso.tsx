@@ -2,33 +2,75 @@ import {useEffect, useState} from "react";
 import {ethers} from "ethers";
 import {useUp} from "./up";
 import {LumuksoFactory__factory} from '@lumukso/contracts/types/ethers-contracts/factories/LumuksoFactory__factory';
+import {LumuksoUtils__factory} from '@lumukso/contracts/types/ethers-contracts/factories/LumuksoUtils__factory';
+import {LumuksoUtils} from '@lumukso/contracts/types/ethers-contracts/LumuksoUtils';
 import {LumuksoFactory} from '@lumukso/contracts/types/ethers-contracts/LumuksoFactory';
 import {
     LumuksoSocialRecovery__factory
 } from '@lumukso/contracts/types/ethers-contracts/factories/LumuksoSocialRecovery__factory';
 import {LumuksoSocialRecovery} from '@lumukso/contracts/types/ethers-contracts/LumuksoSocialRecovery';
+import {createGlobalState} from "react-hooks-global-state";
 
 const LUMUKSO_FACTORY_ADDRESS = import.meta.env.VITE_LUMUKSO_FACTORY;
+const LUMUKSO_UTILS_ADDRESS = import.meta.env.VITE_LUMUKSO_UTILS;
 
-export function useLumukso() {
-    const { address: universalProfileAddress, signer, isConnected } = useUp();
-
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState(null);
+export function useLumuksoFactory() {
+    const { signer, isConnected } = useUp();
     const [lumuksoFactory, setLumuksoFactory] : [LumuksoFactory, any] = useState(null);
-    const [lumuksoSocialRecovery, setLumuksoSocialRecovery] : [LumuksoSocialRecovery, any] = useState(null);
+
+    useEffect(() => {
+        if (isConnected && signer) {
+            setLumuksoFactory(new LumuksoFactory__factory(signer).attach(LUMUKSO_FACTORY_ADDRESS));
+        } else {
+            setLumuksoFactory(null);
+        }
+    }, [signer, isConnected]);
+
+    return lumuksoFactory;
+}
+
+export function useLumuksoUtils() {
+    const { signer, isConnected } = useUp();
+    const [lumuksoUtils, setLumuksoUtils] : [LumuksoUtils, any] = useState(null);
+
+    useEffect(() => {
+        if (isConnected && signer) {
+            setLumuksoUtils(new LumuksoUtils__factory(signer).attach(LUMUKSO_UTILS_ADDRESS));
+        } else {
+            setLumuksoUtils(null);
+        }
+    }, [signer, isConnected]);
+
+    return lumuksoUtils;
+}
+
+const { useGlobalState } = createGlobalState({
+    lumuksoSocialRecovery: null,
+});
+
+
+export function useSocialRecovery() {
+    const { address: universalProfileAddress, signer, isConnected } = useUp();
+    const lumuksoFactory = useLumuksoFactory();
+
+    const [isDeployingSocialRecovery, setIsDeployingSocialRecovery] = useState(false);
+    const [triggerDeploySocialRecovery, setTriggerDeploySocialRecovery] = useState(false);
+    const [lumuksoSocialRecovery, setLumuksoSocialRecovery] = useGlobalState('lumuksoSocialRecovery');
+
+    function deploySocialRecovery() {
+        setTriggerDeploySocialRecovery(true);
+    }
 
     function addPendingGuardian(guardian) {
-        return lumuksoSocialRecovery.addPendingGuardian(guardian);
+        return lumuksoSocialRecovery.addPendingGuardian(guardian, {gasLimit: 1000000});
     }
 
     function confirmPendingGuardian(guardian, r, s, v) {
-        return lumuksoSocialRecovery.confirmPendingGuardian(guardian, r, s, v);
+        return lumuksoSocialRecovery["confirmPendingGuardian(address,bytes32,bytes32,uint8)"](guardian, r, s, v, {gasLimit: 1000000});
     }
 
     async function getConfirmationMessage(guardian) {
-        const expiration = await lumuksoSocialRecovery.getPendingGuardianExpiration(guardian);
-        return `operation=confirmPendingGuardian&expirationTimestamp=${expiration}&socialRecoveryAddress=${ethers.utils.solidityPack(["address"], [guardian])}`;
+        return lumuksoSocialRecovery.getConfirmationMessage(guardian);
     }
 
     function isGuardian(guardian) {
@@ -40,23 +82,17 @@ export function useLumukso() {
         return address !== ethers.constants.AddressZero;
     }
 
-    useEffect(() => {
-        if (isConnected && signer) {
-            setLumuksoFactory(new LumuksoFactory__factory(signer).attach(LUMUKSO_FACTORY_ADDRESS));
-        } else {
-            setLumuksoFactory(null);
-        }
-    }, [signer, isConnected]);
-
     // check if there's a deployed instance of Lumukso
     // if not, try to create one via the LumuksoFactory
     useEffect(() => {
-        if (lumuksoFactory && universalProfileAddress && signer) {
-            setIsLoading(true);
+        if (triggerDeploySocialRecovery && !isDeployingSocialRecovery && lumuksoFactory && universalProfileAddress && signer) {
+            setIsDeployingSocialRecovery(true);
             lumuksoFactory.instances(universalProfileAddress)
                 .then((lumuksoAddress : string | ethers.ContractTransaction) => {
                     if (lumuksoAddress === ethers.constants.AddressZero) {
-                        return lumuksoFactory.create(universalProfileAddress);
+                        return lumuksoFactory.create(universalProfileAddress, 1).then(tx => tx.wait()).then(receipt => {
+                            return Promise.resolve(receipt.events.find(e => e.event === "LumuksoDeployed").args[0]);
+                        });
                     } else {
                         return Promise.resolve(lumuksoAddress);
                     }
@@ -64,21 +100,18 @@ export function useLumukso() {
                 .then((lumuksoAddress) => {
                     setLumuksoSocialRecovery(new LumuksoSocialRecovery__factory(signer).attach(lumuksoAddress.toString()));
                 })
-                .catch(setError)
+                .catch(console.error)
                 .finally(() => {
-                    setIsLoading(false);
+                    setTriggerDeploySocialRecovery(false);
+                    setIsDeployingSocialRecovery(false);
                 })
-        } else {
-            setLumuksoSocialRecovery(null);
-            setIsLoading(false);
         }
-    }, [lumuksoFactory, universalProfileAddress, signer]);
+    }, [triggerDeploySocialRecovery, isDeployingSocialRecovery, lumuksoFactory, universalProfileAddress, signer]);
 
     return {
-        isLoading,
-        error,
-        lumuksoFactory,
+        isDeployingSocialRecovery,
         lumuksoSocialRecovery,
+        deploySocialRecovery,
         addPendingGuardian,
         confirmPendingGuardian,
         getConfirmationMessage,

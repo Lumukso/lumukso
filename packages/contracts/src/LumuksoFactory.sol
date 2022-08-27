@@ -11,9 +11,9 @@ contract LumuksoFactory {
 
     constructor() {}
 
-    function create(UniversalProfile _profile) public returns(address) {
+    function create(UniversalProfile _profile, uint8 faultTolerance) public returns(address) {
         require(msg.sender == address(_profile), "Only the profile owner can create a Lumukso");
-        LumuksoSocialRecovery lumukso = new LumuksoSocialRecovery(_profile);
+        LumuksoSocialRecovery lumukso = new LumuksoSocialRecovery(_profile, faultTolerance);
         instances[address(_profile)] = lumukso;
         emit LumuksoDeployed(address(lumukso));
         return address(lumukso);

@@ -3,6 +3,7 @@ import Logo from "../components/Logo";
 import {QuestionMarkCircleIcon} from "@heroicons/react/outline";
 import {useNavigate} from "react-router-dom";
 import gridSvgPath from '/assets/grid.svg'
+import {Debug} from "../components/Debug";
 
 export function Layout(props) {
     const navigate = useNavigate();
@@ -11,6 +12,7 @@ export function Layout(props) {
         <>
             <div className={`absolute inset-0 bg-top [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]`} style={{backgroundImage: `url(${gridSvgPath})`}}></div>
 
+            <Debug />
             <Account/>
 
             <div className="flex h-screen justify-center items-center py-12 px-4 sm:px-6 lg:px-8">
