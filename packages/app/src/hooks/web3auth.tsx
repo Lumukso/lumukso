@@ -3,6 +3,7 @@ import {Web3Auth} from "@web3auth/web3auth";
 import {chain} from "../client";
 import {L16_EXPLORER_URL} from "../constants";
 import {createGlobalState} from "react-hooks-global-state";
+import {ethers} from "ethers";
 
 const { useGlobalState } = createGlobalState({
     web3auth: null,
@@ -11,6 +12,7 @@ const { useGlobalState } = createGlobalState({
     web3authIsConnected: false,
     web3authAddress: "",
     provider: null,
+    signer: null,
 });
 
 export function useWeb3auth() {
@@ -20,6 +22,7 @@ export function useWeb3auth() {
     const [web3authIsConnected, setWeb3authIsConnected] = useGlobalState('web3authIsConnected');
     const [web3authAddress, setWeb3authAddress] = useGlobalState('web3authAddress');
     const [provider, setProvider] = useGlobalState('provider');
+    const [signer, setSigner] = useGlobalState('signer');
 
     const connect = async () => {
         if (!web3auth) {
@@ -28,7 +31,9 @@ export function useWeb3auth() {
         }
         const web3authProvider = await web3auth.connect();
         console.log("web3authProvider", web3authProvider);
-        setProvider(web3authProvider);
+        const provider = new ethers.providers.Web3Provider(web3authProvider);
+        setProvider(provider);
+        setSigner(provider.getSigner());
     };
 
     useEffect(() => {
@@ -62,8 +67,9 @@ export function useWeb3auth() {
 
                 await web3auth.initModal();
                 if (web3auth.provider) {
-                    console.log(web3auth.provider);
-                    setProvider(web3auth.provider);
+                    const provider = new ethers.providers.Web3Provider(web3auth.provider);
+                    setProvider(provider);
+                    setSigner(provider.getSigner());
                 }
             } catch (error) {
                 console.error(error);
@@ -78,7 +84,7 @@ export function useWeb3auth() {
     useEffect(() => {
         if (provider) {
             setWeb3authIsLoading(true);
-            provider.request({method: "eth_accounts"})
+            provider.send("eth_accounts")
                 .then((accounts) => {
                     if (accounts && accounts.length) {
                         setWeb3authAddress(accounts[0]);
@@ -102,6 +108,8 @@ export function useWeb3auth() {
         web3authIsConnected,
         web3authAddress,
         connect,
+        provider,
+        signer,
     };
 }
 

@@ -41,7 +41,7 @@ export function SetupDeploy() {
     } = useSocialRecovery();
     const lumuksoUtils = useLumuksoUtils();
     const {magicSigner, magicAddress} = useMagic();
-    const {web3authAddress, web3authIsLoggedIn} = useWeb3auth();
+    const {web3authAddress, web3authIsLoggedIn, signer: web3authSigner} = useWeb3auth();
 
     useEffect(() => {
         deploySocialRecovery();
@@ -130,6 +130,63 @@ export function SetupDeploy() {
         }
     }, [magicLinkGuardianAdded, magicLinkGuardianConfirmed]);
 
+    // adding web3auth.io guardian
+    useEffect(() => {
+        if (!addingWeb3authGuardian && !web3authGuardianAdded && lumuksoSocialRecovery && magicLinkGuardianConfirmed) {
+            setAddingWeb3authGuardian(true);
+            lumuksoSocialRecovery
+                .isGuardian(web3authAddress)
+                .then(isGuardian => {
+                    if (isGuardian) {
+                        return Promise.resolve();
+                    } else {
+                        return isPendingGuardian(web3authAddress)
+                            .then(isPending => {
+                                if (!isPending) {
+                                    return addPendingGuardian(web3authAddress).then((tx) => tx.wait());
+                                } else {
+                                    return Promise.resolve();
+                                }
+                            })
+                    }
+                })
+                .then(() => setWeb3authGuardianAdded(true))
+                .catch(console.error)
+                .finally(() => setAddingWeb3authGuardian(false));
+        }
+    }, [addingWeb3authGuardian, web3authGuardianAdded, lumuksoSocialRecovery, magicLinkGuardianConfirmed]);
+
+    useEffect(() => {
+        if (web3authGuardianAdded && !web3authGuardianConfirmed && web3authSigner) {
+            setConfirmingWeb3authGuardian(true);
+            lumuksoSocialRecovery.isGuardian(web3authAddress)
+                .then((isGuardian) => {
+                    if (isGuardian) {
+                        return Promise.resolve();
+                    } else {
+                        return getConfirmationMessage(web3authAddress)
+                            .then((message) => {
+                                return web3authSigner.signMessage(message)
+                            })
+                            .then((rawSignature) => {
+                                console.log("rawSignature", rawSignature);
+                                return lumuksoSocialRecovery.confirmPendingGuardian(
+                                    web3authSigner.getAddress(),
+                                    rawSignature,
+                                    {gasLimit: 1000000}
+                                );
+                            })
+                            .then((tx) => tx.wait())
+                    }
+                })
+                .then(() => {
+                    setWeb3authGuardianConfirmed(true);
+                })
+                .catch(console.error)
+                .finally(() => setConfirmingWeb3authGuardian(false));
+        }
+    }, [web3authSigner, web3authGuardianAdded, web3authGuardianConfirmed]);
+
     return (
         <div className="w-full mt-5 mx-5">
             <ul className="w-full space-y-4 text-left text-gray-500 dark:text-gray-400">
@@ -160,7 +217,7 @@ export function SetupDeploy() {
                                 magicLinkGuardianAdded ? <CheckCircleIcon className="flex-shrink-0 w-5 h-5 text-green-500 dark:text-green-400" fill="currentColor" />
                                     : <Spinner size="sm" />
                             }
-                            <span>Adding Magick.link guardian</span>
+                            <span>Adding Magic.link guardian</span>
                         </li> : null
                 }
 
@@ -171,7 +228,7 @@ export function SetupDeploy() {
                                 magicLinkGuardianConfirmed ? <CheckCircleIcon className="flex-shrink-0 w-5 h-5 text-green-500 dark:text-green-400" fill="currentColor" />
                                     : <Spinner size="sm" />
                             }
-                            <span>Confirming Magick.link guardian</span>
+                            <span>Confirming Magic.link guardian</span>
                         </li> : null
                 }
 
