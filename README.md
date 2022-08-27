@@ -2,7 +2,7 @@
   <img src="./packages/app/assets/lumukso.png">
 </p>
 
-# Lumukso
+----------
 
 Lumukso is a multifactor social recovery app made for [Lukso Universal Profile](https://docs.lukso.tech/guides/universal-profile/create-profile/).
 
