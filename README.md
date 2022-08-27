@@ -28,4 +28,4 @@ For example when fault tolerance is configured as 1, then 3 guardians are requir
 
 ## Deployments
 
-- Lumukso Factory: 0xd78dc5a5389c80209aaf8bb669e4cddfb88db2f3
+- Lumukso Factory: 0xb98fbee836e763ac9205061526c99b0d319ee5d7

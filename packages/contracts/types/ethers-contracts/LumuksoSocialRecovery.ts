@@ -33,7 +33,6 @@ export interface LumuksoSocialRecoveryInterface extends utils.Interface {
     "addGuardian(address)": FunctionFragment;
     "addPendingGuardian(address)": FunctionFragment;
     "confirmPendingGuardian(address,bytes)": FunctionFragment;
-    "confirmPendingGuardian(address,bytes32,bytes32,uint8)": FunctionFragment;
     "getConfirmationMessage(address)": FunctionFragment;
     "getGuardianVote(bytes32,address)": FunctionFragment;
     "getGuardians()": FunctionFragment;
@@ -62,8 +61,7 @@ export interface LumuksoSocialRecoveryInterface extends utils.Interface {
       | "account"
       | "addGuardian"
       | "addPendingGuardian"
-      | "confirmPendingGuardian(address,bytes)"
-      | "confirmPendingGuardian(address,bytes32,bytes32,uint8)"
+      | "confirmPendingGuardian"
       | "getConfirmationMessage"
       | "getGuardianVote"
       | "getGuardians"
@@ -97,17 +95,8 @@ export interface LumuksoSocialRecoveryInterface extends utils.Interface {
     values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
-    functionFragment: "confirmPendingGuardian(address,bytes)",
+    functionFragment: "confirmPendingGuardian",
     values: [PromiseOrValue<string>, PromiseOrValue<BytesLike>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "confirmPendingGuardian(address,bytes32,bytes32,uint8)",
-    values: [
-      PromiseOrValue<string>,
-      PromiseOrValue<BytesLike>,
-      PromiseOrValue<BytesLike>,
-      PromiseOrValue<BigNumberish>
-    ]
   ): string;
   encodeFunctionData(
     functionFragment: "getConfirmationMessage",
@@ -205,11 +194,7 @@ export interface LumuksoSocialRecoveryInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "confirmPendingGuardian(address,bytes)",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "confirmPendingGuardian(address,bytes32,bytes32,uint8)",
+    functionFragment: "confirmPendingGuardian",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -384,17 +369,9 @@ export interface LumuksoSocialRecovery extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    "confirmPendingGuardian(address,bytes)"(
+    confirmPendingGuardian(
       guardian: PromiseOrValue<string>,
       signature: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    "confirmPendingGuardian(address,bytes32,bytes32,uint8)"(
-      guardian: PromiseOrValue<string>,
-      r: PromiseOrValue<BytesLike>,
-      s: PromiseOrValue<BytesLike>,
-      v: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -506,17 +483,9 @@ export interface LumuksoSocialRecovery extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  "confirmPendingGuardian(address,bytes)"(
+  confirmPendingGuardian(
     guardian: PromiseOrValue<string>,
     signature: PromiseOrValue<BytesLike>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  "confirmPendingGuardian(address,bytes32,bytes32,uint8)"(
-    guardian: PromiseOrValue<string>,
-    r: PromiseOrValue<BytesLike>,
-    s: PromiseOrValue<BytesLike>,
-    v: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -626,17 +595,9 @@ export interface LumuksoSocialRecovery extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    "confirmPendingGuardian(address,bytes)"(
+    confirmPendingGuardian(
       guardian: PromiseOrValue<string>,
       signature: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    "confirmPendingGuardian(address,bytes32,bytes32,uint8)"(
-      guardian: PromiseOrValue<string>,
-      r: PromiseOrValue<BytesLike>,
-      s: PromiseOrValue<BytesLike>,
-      v: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -785,17 +746,9 @@ export interface LumuksoSocialRecovery extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    "confirmPendingGuardian(address,bytes)"(
+    confirmPendingGuardian(
       guardian: PromiseOrValue<string>,
       signature: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    "confirmPendingGuardian(address,bytes32,bytes32,uint8)"(
-      guardian: PromiseOrValue<string>,
-      r: PromiseOrValue<BytesLike>,
-      s: PromiseOrValue<BytesLike>,
-      v: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -906,17 +859,9 @@ export interface LumuksoSocialRecovery extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    "confirmPendingGuardian(address,bytes)"(
+    confirmPendingGuardian(
       guardian: PromiseOrValue<string>,
       signature: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    "confirmPendingGuardian(address,bytes32,bytes32,uint8)"(
-      guardian: PromiseOrValue<string>,
-      r: PromiseOrValue<BytesLike>,
-      s: PromiseOrValue<BytesLike>,
-      v: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

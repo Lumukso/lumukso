@@ -13,6 +13,7 @@ import "../src/LumuksoUtils.sol";
 
 contract LumuksoTest is Test {
     using ECDSA for bytes32;
+    using ECDSA for bytes;
 
     LumuksoUtils utils;
 
@@ -124,7 +125,7 @@ contract LumuksoTest is Test {
 
         // confirm pending guardian
         {
-            vm.startPrank(vm.addr(guardianUPKey));
+            vm.startPrank(vm.addr(aliceUPKey));
             string memory message = string.concat(
                 "operation=confirmPendingGuardian&expirationTimestamp=",
                 Strings.toString(lumuksoSocialRecovery.getPendingGuardianExpiration(address(guardianUniversalProfile))),
@@ -132,17 +133,9 @@ contract LumuksoTest is Test {
                 Strings.toHexString(uint256(uint160(address(lumuksoSocialRecovery))), 20)
             );
             emit log(message);
-            bytes32 hash = keccak256(bytes(message)).toEthSignedMessageHash();
+            bytes32 hash = bytes(message).toEthSignedMessageHash();
             (uint8 v, bytes32 r, bytes32 s) = vm.sign(guardianUPKey, hash);
-            guardianKeyManager.execute(
-                abi.encodeWithSignature(
-                    "execute(uint256,address,uint256,bytes)",
-                    OPERATION_CALL,
-                    address(lumuksoSocialRecovery),
-                    0,
-                    abi.encodeWithSignature("confirmPendingGuardian(address,bytes)", address(guardianUniversalProfile), bytes.concat(r, s, abi.encodePacked(v)))
-                )
-            );
+            lumuksoSocialRecovery.confirmPendingGuardian(address(guardianUniversalProfile), bytes.concat(r, s, abi.encodePacked(v)));
             vm.stopPrank();
         }
 
@@ -178,15 +171,15 @@ contract LumuksoTest is Test {
         vm.stopPrank();
 
         // confirm pending guardian
-        vm.startPrank(vm.addr(guardianSSOKey));
-        bytes32 hash = keccak256(bytes(string.concat(
+        vm.startPrank(vm.addr(aliceUPKey));
+        bytes32 hash = bytes(string.concat(
                 "operation=confirmPendingGuardian&expirationTimestamp=",
                 Strings.toString(lumuksoSocialRecovery.getPendingGuardianExpiration(vm.addr(guardianSSOKey))),
                 "&socialRecoveryAddress=",
                 Strings.toHexString(uint256(uint160(address(lumuksoSocialRecovery))), 20)
-                ))).toEthSignedMessageHash();
+                )).toEthSignedMessageHash();
         (uint8 v, bytes32 r, bytes32 s) = vm.sign(guardianSSOKey, hash);
-        lumuksoSocialRecovery.confirmPendingGuardian(vm.addr(guardianSSOKey), r, s, v);
+        lumuksoSocialRecovery.confirmPendingGuardian(vm.addr(guardianSSOKey), bytes.concat(r, s, abi.encodePacked(v)));
         vm.stopPrank();
 
         // vote to recover bob

@@ -36,7 +36,6 @@ export function SetupDeploy() {
         deploySocialRecovery,
         addPendingGuardian,
         getConfirmationMessage,
-        confirmPendingGuardian,
         isDeployingSocialRecovery,
         isGuardian
     } = useSocialRecovery();
@@ -78,32 +77,58 @@ export function SetupDeploy() {
     useEffect(() => {
         if (!addingMagicLinkGuardian && !magicLinkGuardianAdded && lumuksoSocialRecovery && permissionsUpdated) {
             setAddingMagicLinkGuardian(true);
-            isPendingGuardian(magicAddress)
-                .then(isPending => {
-                    if (!isPending) {
-                        return addPendingGuardian(magicAddress).then((tx) => tx.wait());
-                    } else {
+            lumuksoSocialRecovery
+                .isGuardian(magicAddress)
+                .then(isGuardian => {
+                    if (isGuardian) {
                         return Promise.resolve();
+                    } else {
+                        return isPendingGuardian(magicAddress)
+                            .then(isPending => {
+                                if (!isPending) {
+                                    return addPendingGuardian(magicAddress).then((tx) => tx.wait());
+                                } else {
+                                    return Promise.resolve();
+                                }
+                            })
                     }
                 })
-                .then(() => getConfirmationMessage(magicAddress))
-                .then((message) => {
-                    console.log("message", message);
-                    return magicSigner.signMessage(message)
-                })
-                .then((rawSignature) => {
-                    console.log("rawSignature", rawSignature);
-                    const signature = ethers.utils.splitSignature(rawSignature)
-                    return confirmPendingGuardian(magicAddress, signature.r, signature.s, signature.v);
-                })
-                .then((tx) => tx.wait())
                 .then(() => setMagicLinkGuardianAdded(true))
                 .catch(console.error)
                 .finally(() => setAddingMagicLinkGuardian(false));
         }
     }, [magicLinkGuardianAdded, addingMagicLinkGuardian, lumuksoSocialRecovery, permissionsUpdated]);
 
-
+    useEffect(() => {
+        if (magicLinkGuardianAdded && !magicLinkGuardianConfirmed) {
+            setConfirmingMagicLinkGuardian(true);
+            lumuksoSocialRecovery.isGuardian(magicAddress)
+                .then((isGuardian) => {
+                    if (isGuardian) {
+                        return Promise.resolve();
+                    } else {
+                        return getConfirmationMessage(magicAddress)
+                            .then((message) => {
+                                return magicSigner.signMessage(message)
+                            })
+                            .then((rawSignature) => {
+                                console.log("rawSignature", rawSignature);
+                                return lumuksoSocialRecovery.confirmPendingGuardian(
+                                    magicSigner.getAddress(),
+                                    rawSignature,
+                                    {gasLimit: 1000000}
+                                );
+                            })
+                            .then((tx) => tx.wait())
+                    }
+                })
+                .then(() => {
+                    setMagicLinkGuardianConfirmed(true);
+                })
+                .catch(console.error)
+                .finally(() => setConfirmingMagicLinkGuardian(false));
+        }
+    }, [magicLinkGuardianAdded, magicLinkGuardianConfirmed]);
 
     return (
         <div className="w-full mt-5 mx-5">

@@ -4,12 +4,16 @@ pragma solidity ^0.8.13;
 import "@lukso/lsp-smart-contracts/contracts/LSP11BasicSocialRecovery/LSP11BasicSocialRecovery.sol";
 import "@lukso/lsp-smart-contracts/contracts/UniversalProfile.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
+import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 import "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
+import "@openzeppelin/contracts/interfaces/IERC1271.sol";
+import "@openzeppelin/contracts/interfaces/IERC165.sol";
 import {LSP6Utils} from "@lukso/lsp-smart-contracts/contracts/LSP6KeyManager/LSP6Utils.sol";
-import {_ERC1271_MAGICVALUE, _INTERFACEID_LSP0} from "@lukso/lsp-smart-contracts/contracts/LSP0ERC725Account/LSP0Constants.sol";
+import {_ERC1271_MAGICVALUE, _INTERFACEID_ERC1271} from "@lukso/lsp-smart-contracts/contracts/LSP0ERC725Account/LSP0Constants.sol";
 
 contract LumuksoSocialRecovery is LSP11BasicSocialRecovery {
+    using ECDSA for bytes;
     using ECDSA for bytes32;
     using EnumerableSet for EnumerableSet.AddressSet;
     using EnumerableSet for EnumerableSet.Bytes32Set;
@@ -57,38 +61,29 @@ contract LumuksoSocialRecovery is LSP11BasicSocialRecovery {
         return _recoverProcessesIds[_recoveryCounter].contains(recoveryProcessId);
     }
 
-    function confirmPendingGuardian(UniversalProfile guardian, bytes memory signature) public virtual {
-        require(guardian.supportsInterface(_INTERFACEID_LSP0), "INVALID_UNIVERSAL_PROFILE_ADDRESS");
+    function confirmPendingGuardian(address guardian, bytes memory signature) public virtual {
         require(invitations.contains(address(guardian)), "GUARDIAN_NOT_INVITED");
         require(pendingGuardians[address(guardian)].guardian == address(guardian), "INVALID_PENDING_GUARDIAN");
         require(pendingGuardians[address(guardian)].expiration > block.timestamp, "PENDING_GUARDIAN_EXPIRED");
-        require(
-            guardian.isValidSignature(
-                keccak256(bytes(getConfirmationMessage(address(guardian)))).toEthSignedMessageHash(),
-                signature
-            ) == _ERC1271_MAGICVALUE,
-            "SIGNATURE_INVALID"
-        );
+
+        if (Address.isContract(guardian) && IERC165(guardian).supportsInterface(_INTERFACEID_ERC1271)) {
+            require(
+                IERC1271(guardian).isValidSignature(
+                    bytes(getConfirmationMessage(address(guardian))).toEthSignedMessageHash(),
+                    signature
+                ) == _ERC1271_MAGICVALUE,
+                "SIGNATURE_INVALID"
+            );
+        } else {
+            require(
+                bytes(getConfirmationMessage(guardian)).toEthSignedMessageHash().recover(signature) == guardian,
+                "SIGNATURE_INVALID"
+            );
+        }
 
         // commit pending guardian address
         invitations.remove(address(guardian));
         delete pendingGuardians[address(guardian)];
-        _guardians.add(address(guardian));
-        emit PendingGuardianConfirmed(address(guardian));
-    }
-
-    function confirmPendingGuardian(address guardian, bytes32 r, bytes32 s, uint8 v) public virtual {
-        require(invitations.contains(address(guardian)), "GUARDIAN_NOT_INVITED");
-        require(pendingGuardians[guardian].guardian == address(guardian), "INVALID_PENDING_GUARDIAN");
-        require(pendingGuardians[guardian].expiration > block.timestamp, "PENDING_GUARDIAN_EXPIRED");
-        require(
-            keccak256(bytes(getConfirmationMessage(guardian))).toEthSignedMessageHash().recover(v, r, s) == guardian,
-            "SIGNATURE_INVALID"
-        );
-
-        // commit pending guardian address
-        invitations.remove(address(guardian));
-        delete pendingGuardians[guardian];
         _guardians.add(address(guardian));
         emit PendingGuardianConfirmed(address(guardian));
     }

@@ -65,10 +65,6 @@ export function useSocialRecovery() {
         return lumuksoSocialRecovery.addPendingGuardian(guardian, {gasLimit: 1000000});
     }
 
-    function confirmPendingGuardian(guardian, r, s, v) {
-        return lumuksoSocialRecovery["confirmPendingGuardian(address,bytes32,bytes32,uint8)"](guardian, r, s, v, {gasLimit: 1000000});
-    }
-
     async function getConfirmationMessage(guardian) {
         return lumuksoSocialRecovery.getConfirmationMessage(guardian);
     }
@@ -98,7 +94,7 @@ export function useSocialRecovery() {
                     }
                 })
                 .then((lumuksoAddress) => {
-                    setLumuksoSocialRecovery(new LumuksoSocialRecovery__factory(signer).attach(lumuksoAddress.toString()));
+                    setLumuksoSocialRecovery(LumuksoSocialRecovery__factory.connect(lumuksoAddress.toString(), signer));
                 })
                 .catch(console.error)
                 .finally(() => {
@@ -113,7 +109,6 @@ export function useSocialRecovery() {
         lumuksoSocialRecovery,
         deploySocialRecovery,
         addPendingGuardian,
-        confirmPendingGuardian,
         getConfirmationMessage,
         isGuardian,
         isPendingGuardian,
