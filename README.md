@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="./packages/app/assets/lumukso.png">
+</p>
+
 # Lumukso
 
 Lumukso is a multifactor social recovery app made for [Lukso Universal Profile](https://docs.lukso.tech/guides/universal-profile/create-profile/).
@@ -26,6 +30,33 @@ For example when fault tolerance is configured as 1, then 3 guardians are requir
 - LSP6 - Key Manager
 - LSP11 - Social Recovery
 
-## Deployments
+## Build
+
+### Contracts
+
+```
+cd packages/contracts
+pnpm install
+forge script script/deploy.s.sol --broadcast \
+    --optimize --optimizer-runs 200 --via-ir \
+    --rpc-url $ETH_RPC_URL \
+    --private-key $RAW_PRIVATE_KEY \
+    --chain-id $CHAIN_ID \
+    -vvvv
+```
+
+### App
+
+```
+cd packages/app
+pnpm install
+pnpm dev
+```
+
+## L16 Deployments
 
 - Lumukso Factory: 0x871227d9e34553315d2b8c8994418c93dfbc50a4
+
+## Credits
+
+- Peter Chung <touhonoob@gmail.com>
