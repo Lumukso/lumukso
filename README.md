@@ -57,6 +57,6 @@ pnpm dev
 
 - Lumukso Factory: 0x871227d9e34553315d2b8c8994418c93dfbc50a4
 
-## Credits
+## Contact
 
 - Peter Chung <touhonoob@gmail.com>
