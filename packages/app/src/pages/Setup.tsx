@@ -16,14 +16,29 @@ export function Setup() {
     } = useUp();
     const {magicAddress} = useMagic();
     const {web3authAddress} = useWeb3auth();
+    const {
+        guardians,
+    } = useSocialRecovery();
 
     const [currentStep, setCurrentStep] = useState(1);
 
     useEffect(() => {
-        if (!invalid && universalProfileAddress && magicAddress && web3authAddress) {
+        if (currentStep < 2 && !invalid && universalProfileAddress && magicAddress && web3authAddress) {
             setCurrentStep(2);
         }
-    }, [universalProfileAddress, magicAddress, web3authAddress, invalid]);
+    }, [currentStep, universalProfileAddress, magicAddress, web3authAddress, invalid]);
+
+    useEffect(() => {
+        console.log(guardians);
+        if (
+            currentStep < 3 &&
+            guardians && magicAddress && web3authAddress &&
+            guardians[magicAddress.toString().toLowerCase()] &&
+            guardians[web3authAddress.toString().toLowerCase()]
+        ) {
+            setCurrentStep(3);
+        }
+    }, [currentStep, magicAddress, web3authAddress, guardians]);
 
     return (
         <>

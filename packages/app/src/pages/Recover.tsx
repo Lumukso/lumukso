@@ -29,10 +29,10 @@ export function Recover() {
     }, []);
 
     useEffect(() => {
-        if (socialRecoveryAddress) {
-            setInputUniversalProfileAddress(socialRecoveryAddress);
+        if (universalProfileAddress) {
+            setInputUniversalProfileAddress(universalProfileAddress);
         }
-    }, [socialRecoveryAddress]);
+    }, [universalProfileAddress]);
 
     useEffect(() => {
         if (inputUniversalProfileAddress && !ethers.utils.isAddress(inputUniversalProfileAddress)) {

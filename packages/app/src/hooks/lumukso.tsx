@@ -87,13 +87,24 @@ export function useSocialRecovery() {
         ).then(() => {
            setGuardians((prevState) => ({
                ...prevState,
-               [guardian]: true,
+               [guardian.toString().toLowerCase()]: true,
             }))
         });
     }
 
     // check if there's a deployed instance of Lumukso
     // if not, try to create one via the LumuksoFactory
+    useEffect(() => {
+        if (lumuksoFactory && universalProfileAddress) {
+            lumuksoFactory.instances(universalProfileAddress)
+                .then((lumuksoAddress : string | ethers.ContractTransaction) => {
+                    if (lumuksoAddress !== ethers.constants.AddressZero) {
+                        setLumuksoSocialRecovery(LumuksoSocialRecovery__factory.connect(lumuksoAddress.toString(), signer));
+                    }
+                })
+        }
+    }, [lumuksoFactory, universalProfileAddress]);
+
     useEffect(() => {
         if (triggerDeploySocialRecovery && !isDeployingSocialRecovery && lumuksoFactory && universalProfileAddress && signer) {
             setIsDeployingSocialRecovery(true);
@@ -125,7 +136,7 @@ export function useSocialRecovery() {
                     guardians.forEach(guardian => {
                         setGuardians((prevState) => ({
                             ...prevState,
-                            [guardian]: true,
+                            [guardian.toString().toLowerCase()]: true,
                         }))
                     });
                 })

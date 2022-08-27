@@ -39,6 +39,7 @@ export function SetupDeploy() {
         isDeployingSocialRecovery,
         isGuardian,
         confirmPendingGuardian,
+        guardians,
     } = useSocialRecovery();
     const lumuksoUtils = useLumuksoUtils();
     const {magicSigner, magicAddress} = useMagic();
