@@ -11,12 +11,12 @@ export function Recover() {
         signer: upSigner,
         isConnected,
         isConnecting,
-        address: universalProfileAddress,
+        address,
         universalProfileOwner
     } = useUp();
 
-    let {socialRecoveryAddress} = useParams();
-    const [inputSocialRecoveryAddress, setInputSocialRecoveryAddress] = useState("");
+    let {universalProfileAddress} = useParams();
+    const [inputUniversalProfileAddress, setInputUniversalProfileAddress] = useState("");
     const addressInputRef = useRef(null);
     const notifyInvalidUniversalProfileAddress = () => toast("Please input a valid universal profile address", {
         toastId: "notifyInvalidUniversalProfileAddress",
@@ -30,15 +30,15 @@ export function Recover() {
 
     useEffect(() => {
         if (socialRecoveryAddress) {
-            setInputSocialRecoveryAddress(socialRecoveryAddress);
+            setInputUniversalProfileAddress(socialRecoveryAddress);
         }
     }, [socialRecoveryAddress]);
 
     useEffect(() => {
-        if (inputSocialRecoveryAddress && !ethers.utils.isAddress(inputSocialRecoveryAddress)) {
+        if (inputUniversalProfileAddress && !ethers.utils.isAddress(inputUniversalProfileAddress)) {
             addressInputRef.current.reportValidity();
         }
-    }, [inputSocialRecoveryAddress])
+    }, [inputUniversalProfileAddress])
 
     return (
         <>
@@ -48,10 +48,10 @@ export function Recover() {
                        className="input input-bordered input-info w-full"
                        pattern="^0x[0-9a-fA-F]{40}$"
                        onChange={(e) => {
-                           setInputSocialRecoveryAddress(e.currentTarget.value);
+                           setInputUniversalProfileAddress(e.currentTarget.value);
                        }}
                        onInvalid={(e) => e.currentTarget.setCustomValidity("Please input a valid contract address")}
-                       value={inputSocialRecoveryAddress}
+                       value={inputUniversalProfileAddress}
                        ref={addressInputRef} />
                 {
                     // TODO: add "Is this you?"
