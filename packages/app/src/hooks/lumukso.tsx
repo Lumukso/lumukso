@@ -10,9 +10,7 @@ import {
 } from '@lumukso/contracts/types/ethers-contracts/factories/LumuksoSocialRecovery__factory';
 import {LumuksoSocialRecovery} from '@lumukso/contracts/types/ethers-contracts/LumuksoSocialRecovery';
 import {createGlobalState} from "react-hooks-global-state";
-
-const LUMUKSO_FACTORY_ADDRESS = import.meta.env.VITE_LUMUKSO_FACTORY;
-const LUMUKSO_UTILS_ADDRESS = import.meta.env.VITE_LUMUKSO_UTILS;
+import {L16_LUMUKSO_FACTORY_ADDRESS, L16_LUMUKSO_UTILS_ADDRESS} from "../constants";
 
 export function useLumuksoFactory() {
     const { signer, isConnected } = useUp();
@@ -20,7 +18,7 @@ export function useLumuksoFactory() {
 
     useEffect(() => {
         if (isConnected && signer) {
-            setLumuksoFactory(new LumuksoFactory__factory(signer).attach(LUMUKSO_FACTORY_ADDRESS));
+            setLumuksoFactory(new LumuksoFactory__factory(signer).attach(L16_LUMUKSO_FACTORY_ADDRESS));
         } else {
             setLumuksoFactory(null);
         }
@@ -35,7 +33,7 @@ export function useLumuksoUtils() {
 
     useEffect(() => {
         if (isConnected && signer) {
-            setLumuksoUtils(new LumuksoUtils__factory(signer).attach(LUMUKSO_UTILS_ADDRESS));
+            setLumuksoUtils(new LumuksoUtils__factory(signer).attach(L16_LUMUKSO_UTILS_ADDRESS));
         } else {
             setLumuksoUtils(null);
         }

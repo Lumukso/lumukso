@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@erc725/smart-contracts": "^3.1.2",
+    "@ethersproject/abi": "^5.7.0",
     "@ethersproject/providers": "^5.7.0",
     "@lukso/lsp-smart-contracts": "https://github.com/lukso-network/lsp-smart-contracts.git#fa8697a6454be8ef0c3ae5524c2a4bb9abfc7a29",
     "@openzeppelin/contracts": "^4.7.2",
