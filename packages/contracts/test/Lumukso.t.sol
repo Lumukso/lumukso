@@ -204,5 +204,8 @@ contract LumuksoTest is Test {
         );
         assertEq(LSP6Utils.getPermissionsFor(aliceUniversalProfile, address(bobUniversalProfile)), _ALL_DEFAULT_PERMISSIONS);
         vm.stopPrank();
+
+        ids = lumuksoSocialRecovery.recoverProcessIds();
+        assertEq(0, ids.length);
     }
 }
