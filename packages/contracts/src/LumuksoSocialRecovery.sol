@@ -57,7 +57,7 @@ contract LumuksoSocialRecovery is LSP11BasicSocialRecovery {
         return invitations.contains(address(pendingGuardian));
     }
 
-    function recoverProcessIds() public virtual view returns(bytes32[] memory) {
+    function recoveryProcessIds() public virtual view returns(bytes32[] memory) {
         return _recoverProcessesIds[_recoveryCounter].values();
     }
 
@@ -106,7 +106,7 @@ contract LumuksoSocialRecovery is LSP11BasicSocialRecovery {
         emit VoteCast(recoverProcessId, newOwner, msg.sender);
     }
 
-    function isThresholdMet(bytes32 recoverProcessId) public virtual view returns(bool) {
+    function countVotes(bytes32 recoverProcessId, address newOwner) public virtual view returns(uint256) {
         uint256 recoverCounter = _recoveryCounter;
         uint256 senderVotes;
         uint256 guardiansLength = _guardians.length();
@@ -115,13 +115,17 @@ contract LumuksoSocialRecovery is LSP11BasicSocialRecovery {
             for (uint256 i = 0; i < guardiansLength; i++) {
                 if (
                     _guardiansVotes[recoverCounter][recoverProcessId][_guardians.at(i)] ==
-                    msg.sender
+                    newOwner
                 ) {
                     senderVotes++;
                 }
             }
         }
 
-        return senderVotes >= _guardiansThreshold;
+        return senderVotes;
+    }
+
+    function isThresholdMet(bytes32 recoverProcessId, address newOwner) public virtual view returns(bool) {
+        return countVotes(recoverProcessId, newOwner) >= _guardiansThreshold;
     }
 }

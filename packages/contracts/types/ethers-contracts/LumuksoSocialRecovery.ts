@@ -33,6 +33,7 @@ export interface LumuksoSocialRecoveryInterface extends utils.Interface {
     "addGuardian(address)": FunctionFragment;
     "addPendingGuardian(address)": FunctionFragment;
     "confirmPendingGuardian(address,bytes)": FunctionFragment;
+    "countVotes(bytes32,address)": FunctionFragment;
     "getConfirmationMessage(address)": FunctionFragment;
     "getGuardianVote(bytes32,address)": FunctionFragment;
     "getGuardians()": FunctionFragment;
@@ -42,12 +43,12 @@ export interface LumuksoSocialRecoveryInterface extends utils.Interface {
     "getRecoverProcessesIds()": FunctionFragment;
     "isGuardian(address)": FunctionFragment;
     "isInvited(address)": FunctionFragment;
-    "isThresholdMet(bytes32)": FunctionFragment;
+    "isThresholdMet(bytes32,address)": FunctionFragment;
     "isValidRecoveryProcessId(bytes32)": FunctionFragment;
     "owner()": FunctionFragment;
     "pendingGuardians(address)": FunctionFragment;
     "recoverOwnership(bytes32,string,bytes32)": FunctionFragment;
-    "recoverProcessIds()": FunctionFragment;
+    "recoveryProcessIds()": FunctionFragment;
     "removeGuardian(address)": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "setSecret(bytes32)": FunctionFragment;
@@ -63,6 +64,7 @@ export interface LumuksoSocialRecoveryInterface extends utils.Interface {
       | "addGuardian"
       | "addPendingGuardian"
       | "confirmPendingGuardian"
+      | "countVotes"
       | "getConfirmationMessage"
       | "getGuardianVote"
       | "getGuardians"
@@ -77,7 +79,7 @@ export interface LumuksoSocialRecoveryInterface extends utils.Interface {
       | "owner"
       | "pendingGuardians"
       | "recoverOwnership"
-      | "recoverProcessIds"
+      | "recoveryProcessIds"
       | "removeGuardian"
       | "renounceOwnership"
       | "setSecret"
@@ -99,6 +101,10 @@ export interface LumuksoSocialRecoveryInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "confirmPendingGuardian",
     values: [PromiseOrValue<string>, PromiseOrValue<BytesLike>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "countVotes",
+    values: [PromiseOrValue<BytesLike>, PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "getConfirmationMessage",
@@ -138,7 +144,7 @@ export interface LumuksoSocialRecoveryInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "isThresholdMet",
-    values: [PromiseOrValue<BytesLike>]
+    values: [PromiseOrValue<BytesLike>, PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "isValidRecoveryProcessId",
@@ -158,7 +164,7 @@ export interface LumuksoSocialRecoveryInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: "recoverProcessIds",
+    functionFragment: "recoveryProcessIds",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -203,6 +209,7 @@ export interface LumuksoSocialRecoveryInterface extends utils.Interface {
     functionFragment: "confirmPendingGuardian",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "countVotes", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getConfirmationMessage",
     data: BytesLike
@@ -251,7 +258,7 @@ export interface LumuksoSocialRecoveryInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "recoverProcessIds",
+    functionFragment: "recoveryProcessIds",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -385,6 +392,12 @@ export interface LumuksoSocialRecovery extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    countVotes(
+      recoverProcessId: PromiseOrValue<BytesLike>,
+      newOwner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
     getConfirmationMessage(
       guardian: PromiseOrValue<string>,
       overrides?: CallOverrides
@@ -421,6 +434,7 @@ export interface LumuksoSocialRecovery extends BaseContract {
 
     isThresholdMet(
       recoverProcessId: PromiseOrValue<BytesLike>,
+      newOwner: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
@@ -445,7 +459,7 @@ export interface LumuksoSocialRecovery extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    recoverProcessIds(overrides?: CallOverrides): Promise<[string[]]>;
+    recoveryProcessIds(overrides?: CallOverrides): Promise<[string[]]>;
 
     removeGuardian(
       currentGuardian: PromiseOrValue<string>,
@@ -501,6 +515,12 @@ export interface LumuksoSocialRecovery extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  countVotes(
+    recoverProcessId: PromiseOrValue<BytesLike>,
+    newOwner: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
   getConfirmationMessage(
     guardian: PromiseOrValue<string>,
     overrides?: CallOverrides
@@ -537,6 +557,7 @@ export interface LumuksoSocialRecovery extends BaseContract {
 
   isThresholdMet(
     recoverProcessId: PromiseOrValue<BytesLike>,
+    newOwner: PromiseOrValue<string>,
     overrides?: CallOverrides
   ): Promise<boolean>;
 
@@ -559,7 +580,7 @@ export interface LumuksoSocialRecovery extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  recoverProcessIds(overrides?: CallOverrides): Promise<string[]>;
+  recoveryProcessIds(overrides?: CallOverrides): Promise<string[]>;
 
   removeGuardian(
     currentGuardian: PromiseOrValue<string>,
@@ -615,6 +636,12 @@ export interface LumuksoSocialRecovery extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    countVotes(
+      recoverProcessId: PromiseOrValue<BytesLike>,
+      newOwner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     getConfirmationMessage(
       guardian: PromiseOrValue<string>,
       overrides?: CallOverrides
@@ -651,6 +678,7 @@ export interface LumuksoSocialRecovery extends BaseContract {
 
     isThresholdMet(
       recoverProcessId: PromiseOrValue<BytesLike>,
+      newOwner: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
@@ -675,7 +703,7 @@ export interface LumuksoSocialRecovery extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    recoverProcessIds(overrides?: CallOverrides): Promise<string[]>;
+    recoveryProcessIds(overrides?: CallOverrides): Promise<string[]>;
 
     removeGuardian(
       currentGuardian: PromiseOrValue<string>,
@@ -768,6 +796,12 @@ export interface LumuksoSocialRecovery extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    countVotes(
+      recoverProcessId: PromiseOrValue<BytesLike>,
+      newOwner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     getConfirmationMessage(
       guardian: PromiseOrValue<string>,
       overrides?: CallOverrides
@@ -804,6 +838,7 @@ export interface LumuksoSocialRecovery extends BaseContract {
 
     isThresholdMet(
       recoverProcessId: PromiseOrValue<BytesLike>,
+      newOwner: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -826,7 +861,7 @@ export interface LumuksoSocialRecovery extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    recoverProcessIds(overrides?: CallOverrides): Promise<BigNumber>;
+    recoveryProcessIds(overrides?: CallOverrides): Promise<BigNumber>;
 
     removeGuardian(
       currentGuardian: PromiseOrValue<string>,
@@ -883,6 +918,12 @@ export interface LumuksoSocialRecovery extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
+    countVotes(
+      recoverProcessId: PromiseOrValue<BytesLike>,
+      newOwner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     getConfirmationMessage(
       guardian: PromiseOrValue<string>,
       overrides?: CallOverrides
@@ -923,6 +964,7 @@ export interface LumuksoSocialRecovery extends BaseContract {
 
     isThresholdMet(
       recoverProcessId: PromiseOrValue<BytesLike>,
+      newOwner: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -945,7 +987,9 @@ export interface LumuksoSocialRecovery extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    recoverProcessIds(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    recoveryProcessIds(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     removeGuardian(
       currentGuardian: PromiseOrValue<string>,

@@ -144,18 +144,20 @@ contract LumuksoTest is Test {
 
         // vote to recover bob
         vm.startPrank(vm.addr(guardianUPKey));
-        bytes32 recoverProcessId = keccak256("e85183df-ec42-477f-9a0e-526033776310");
+        bytes32 recoveryProcessId = keccak256("e85183df-ec42-477f-9a0e-526033776310");
         guardianKeyManager.execute(
             abi.encodeWithSignature(
                 "execute(uint256,address,uint256,bytes)",
                 OPERATION_CALL,
                 address(lumuksoSocialRecovery),
                 0,
-                abi.encodeWithSignature("voteToRecover(bytes32,address)", recoverProcessId, address(bobUniversalProfile))
+                abi.encodeWithSignature("voteToRecover(bytes32,address)", recoveryProcessId, address(bobUniversalProfile))
             )
         );
-        assertEq(lumuksoSocialRecovery.isValidRecoveryProcessId(recoverProcessId), true);
+        assertEq(lumuksoSocialRecovery.isValidRecoveryProcessId(recoveryProcessId), true);
         vm.stopPrank();
+
+        assertEq(lumuksoSocialRecovery.countVotes(recoveryProcessId, address(bobUniversalProfile)), 1);
 
         // add sso pending guardian
         vm.startPrank(vm.addr(aliceUPKey));
@@ -184,12 +186,14 @@ contract LumuksoTest is Test {
 
         // vote to recover bob
         vm.startPrank(vm.addr(guardianSSOKey));
-        lumuksoSocialRecovery.voteToRecover(recoverProcessId, address(bobUniversalProfile));
+        lumuksoSocialRecovery.voteToRecover(recoveryProcessId, address(bobUniversalProfile));
         vm.stopPrank();
 
-        bytes32[] memory ids = lumuksoSocialRecovery.recoverProcessIds();
-        assertEq(1, ids.length);
-        assertEq(recoverProcessId, ids[0]);
+        bytes32[] memory ids = lumuksoSocialRecovery.recoveryProcessIds();
+        assertEq(ids.length, 1);
+        assertEq(ids[0], recoveryProcessId);
+
+        assertEq(lumuksoSocialRecovery.countVotes(recoveryProcessId, address(bobUniversalProfile)), 2);
 
         // recover ownership to bob
         vm.startPrank(vm.addr(bobUPKey));
@@ -199,13 +203,13 @@ contract LumuksoTest is Test {
                 OPERATION_CALL,
                 address(lumuksoSocialRecovery),
                 0,
-                abi.encodeWithSignature("recoverOwnership(bytes32,string,bytes32)", recoverProcessId, secret, keccak256("new secret"))
+                abi.encodeWithSignature("recoverOwnership(bytes32,string,bytes32)", recoveryProcessId, secret, keccak256("new secret"))
             )
         );
         assertEq(LSP6Utils.getPermissionsFor(aliceUniversalProfile, address(bobUniversalProfile)), _ALL_DEFAULT_PERMISSIONS);
         vm.stopPrank();
 
-        ids = lumuksoSocialRecovery.recoverProcessIds();
-        assertEq(0, ids.length);
+        ids = lumuksoSocialRecovery.recoveryProcessIds();
+        assertEq(ids.length, 0);
     }
 }
