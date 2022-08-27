@@ -47,6 +47,7 @@ export interface LumuksoSocialRecoveryInterface extends utils.Interface {
     "owner()": FunctionFragment;
     "pendingGuardians(address)": FunctionFragment;
     "recoverOwnership(bytes32,string,bytes32)": FunctionFragment;
+    "recoverProcessIds()": FunctionFragment;
     "removeGuardian(address)": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "setSecret(bytes32)": FunctionFragment;
@@ -76,6 +77,7 @@ export interface LumuksoSocialRecoveryInterface extends utils.Interface {
       | "owner"
       | "pendingGuardians"
       | "recoverOwnership"
+      | "recoverProcessIds"
       | "removeGuardian"
       | "renounceOwnership"
       | "setSecret"
@@ -154,6 +156,10 @@ export interface LumuksoSocialRecoveryInterface extends utils.Interface {
       PromiseOrValue<string>,
       PromiseOrValue<BytesLike>
     ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "recoverProcessIds",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "removeGuardian",
@@ -242,6 +248,10 @@ export interface LumuksoSocialRecoveryInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "recoverOwnership",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "recoverProcessIds",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -435,6 +445,8 @@ export interface LumuksoSocialRecovery extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    recoverProcessIds(overrides?: CallOverrides): Promise<[string[]]>;
+
     removeGuardian(
       currentGuardian: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -546,6 +558,8 @@ export interface LumuksoSocialRecovery extends BaseContract {
     newHash: PromiseOrValue<BytesLike>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
+
+  recoverProcessIds(overrides?: CallOverrides): Promise<string[]>;
 
   removeGuardian(
     currentGuardian: PromiseOrValue<string>,
@@ -660,6 +674,8 @@ export interface LumuksoSocialRecovery extends BaseContract {
       newHash: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    recoverProcessIds(overrides?: CallOverrides): Promise<string[]>;
 
     removeGuardian(
       currentGuardian: PromiseOrValue<string>,
@@ -810,6 +826,8 @@ export interface LumuksoSocialRecovery extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    recoverProcessIds(overrides?: CallOverrides): Promise<BigNumber>;
+
     removeGuardian(
       currentGuardian: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -926,6 +944,8 @@ export interface LumuksoSocialRecovery extends BaseContract {
       newHash: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
+
+    recoverProcessIds(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     removeGuardian(
       currentGuardian: PromiseOrValue<string>,

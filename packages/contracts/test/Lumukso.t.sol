@@ -187,6 +187,10 @@ contract LumuksoTest is Test {
         lumuksoSocialRecovery.voteToRecover(recoverProcessId, address(bobUniversalProfile));
         vm.stopPrank();
 
+        bytes32[] memory ids = lumuksoSocialRecovery.recoverProcessIds();
+        assertEq(1, ids.length);
+        assertEq(recoverProcessId, ids[0]);
+
         // recover ownership to bob
         vm.startPrank(vm.addr(bobUPKey));
         bobKeyManager.execute(

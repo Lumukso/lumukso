@@ -57,6 +57,10 @@ contract LumuksoSocialRecovery is LSP11BasicSocialRecovery {
         return invitations.contains(address(pendingGuardian));
     }
 
+    function recoverProcessIds() public virtual view returns(bytes32[] memory) {
+        return _recoverProcessesIds[_recoveryCounter].values();
+    }
+
     function isValidRecoveryProcessId(bytes32 recoveryProcessId) public virtual view returns(bool) {
         return _recoverProcessesIds[_recoveryCounter].contains(recoveryProcessId);
     }
