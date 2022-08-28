@@ -45,6 +45,12 @@ export function Recover() {
         error: recoverError,
         isLoading: recoverLoading
     } = useProfile({address: inputUniversalProfileAddress, isConnected: true});
+    const [self, setSelf] = useState(false);
+    const notifyRecoverSelf = () => toast("You can't recover yourself.", {
+        toastId: "notifyRecoverSelf",
+        autoClose: 10000,
+        type: "error"
+    });
 
     useEffect(() => {
         addressInputRef.current.focus();
@@ -66,6 +72,17 @@ export function Recover() {
             }
         }
     }, [inputUniversalProfileAddress])
+
+    useEffect(() => {
+        if (inputUniversalProfileAddress && upAddress) {
+            if (inputUniversalProfileAddress.toLowerCase() === upAddress.toLowerCase()) {
+                setSelf(true);
+                notifyRecoverSelf();
+            } else {
+                setSelf(false);
+            }
+        }
+    }, [inputUniversalProfileAddress, upAddress]);
 
     useEffect(() => {
         if (lumuksoFactory && universalProfileAddressIsValid && signer && !isSocialRecoveryLoading && inputUniversalProfileAddress) {
@@ -152,7 +169,7 @@ export function Recover() {
     }, [magicAddress, loadedMagicAddressIsGuardian, magicAddressIsGuardian]);
     const [isMagicVoted, setIsMagicVoted] = useState(false);
     useEffect(() => {
-        if (magicSigner && !loadingMagicAddressIsGuardian && inputUniversalProfileAddress && upAddress && !isRecovered) {
+        if (magicSigner && !loadingMagicAddressIsGuardian && inputUniversalProfileAddress && upAddress && !isRecovered && !self) {
             if (!isVotingMagic && !isMagicVoted && magicAddressIsGuardian) {
                 setIsVotingMagic(true)
                 const _recoveryProcessId = recoveryProcessId({profileAddress: inputUniversalProfileAddress, newOwnerAddress: upAddress});
@@ -182,7 +199,7 @@ export function Recover() {
     const [loadedWeb3authAddressIsGuardian, setLoadedWeb3authAddressIsGuardian] = useState(false);
     const [web3authAddressIsGuardian, setWeb3authAddressIsGuardian] = useState(false);
     useEffect(() => {
-        if (lumuksoSocialRecovery && web3authAddress && !loadingWeb3authAddressIsGuardian && !web3authAddressIsGuardian) {
+        if (lumuksoSocialRecovery && web3authAddress && !loadingWeb3authAddressIsGuardian && !web3authAddressIsGuardian && !self) {
             setLoadingWeb3authAddressIsGuardian(true);
             lumuksoSocialRecovery
                 .isGuardian(web3authAddress)
