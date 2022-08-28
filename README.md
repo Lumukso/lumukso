@@ -18,6 +18,14 @@ Guardians threshold = Number of guardians - f = 2f + 1
 
 For example when fault tolerance is configured as 1, then 3 guardians are required to recover the access of a user.
 
+## Workflow
+
+- Alice is the original owner
+- Bob is the new owner
+- Charlie is the guardian
+
+[![](https://mermaid.ink/img/pako:eNp1Uk1rwzAM_SvCl126wL5HDoVuHWMwGCywUy6ara6miZX5I1BK__ucJhluuvlkPb8nPUneCcmKRC4cfQcykpYavyzWpYF4UHq2sKi0pB5o0HotdYPGw2uow8Zxynxco600pdADf_bhIcv5fD7IcrjIYElNxVsoWGqs4J0kt2S3__AvM1goBUXxBujgOaBVGo07Zg8OcrjK4MW02tNoKhX1muEhrXEda0hJjQfdidFrHsixj5R4k0Hh4zDADqahsSzJOWg1dh5T1a-p2xNTnqHlGK_iqOxR_3-4u8vgY0oGXnVVzlyc96F-zJgsbGL7PuuQUexgFapqKhQzUZOtUav4LXZdmlL4NdVUijxeFdpNKUqzj7zQKPT0pHTctMi9DTQTGDwXWyPHuOcM36oH9z8iAdJQ)](https://mermaid.live/edit#pako:eNp1Uk1rwzAM_SvCl126wL5HDoVuHWMwGCywUy6ara6miZX5I1BK__ucJhluuvlkPb8nPUneCcmKRC4cfQcykpYavyzWpYF4UHq2sKi0pB5o0HotdYPGw2uow8Zxynxco600pdADf_bhIcv5fD7IcrjIYElNxVsoWGqs4J0kt2S3__AvM1goBUXxBujgOaBVGo07Zg8OcrjK4MW02tNoKhX1muEhrXEda0hJjQfdidFrHsixj5R4k0Hh4zDADqahsSzJOWg1dh5T1a-p2xNTnqHlGK_iqOxR_3-4u8vgY0oGXnVVzlyc96F-zJgsbGL7PuuQUexgFapqKhQzUZOtUav4LXZdmlL4NdVUijxeFdpNKUqzj7zQKPT0pHTctMi9DTQTGDwXWyPHuOcM36oH9z8iAdJQ)
+
 ## Supported Guardians
 
 - [x] Universal Profile
