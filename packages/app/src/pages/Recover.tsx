@@ -113,14 +113,14 @@ export function Recover() {
 
     const [checkingProfileAccess, setCheckingProfileAccess] = useState(false);
     useEffect(() => {
-        if (lumuksoUtils && !isRecovered && !checkingProfileAccess) {
+        if (lumuksoUtils && !isRecovered && !checkingProfileAccess && inputUniversalProfileAddress && upAddress) {
             setCheckingProfileAccess(true);
             lumuksoUtils
                 .checkProfileAccessRecovered(inputUniversalProfileAddress, upAddress)
                 .then((_isRecovered) => setIsRecovered(_isRecovered))
                 .finally(() => setCheckingProfileAccess(false));
         }
-    }, [lumuksoUtils, isRecovered, checkingProfileAccess]);
+    }, [lumuksoUtils, isRecovered, checkingProfileAccess, inputUniversalProfileAddress, upAddress]);
 
     const {magicAddress, magicSigner, magic} = useMagic();
     const [loadingMagicAddressIsGuardian, setLoadingMagicAddressIsGuardian] = useState(false);
