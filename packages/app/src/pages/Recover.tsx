@@ -3,7 +3,7 @@ import {useParams} from "react-router-dom";
 import {useEffect, useRef, useState} from "react";
 import {ethers} from "ethers";
 import {toast, ToastContainer} from "react-toastify";
-import {useLumuksoFactory} from "../hooks/lumukso";
+import {useLumuksoFactory, useLumuksoUtils} from "../hooks/lumukso";
 import {
     LumuksoSocialRecovery__factory
 } from "@lumukso/contracts/types/ethers-contracts/factories/LumuksoSocialRecovery__factory";
@@ -24,6 +24,7 @@ export function recoveryProcessId({profileAddress, newOwnerAddress}) {
 
 export function Recover() {
     const lumuksoFactory = useLumuksoFactory();
+    const lumuksoUtils = useLumuksoUtils();
     const {share} = useWebShare();
     const {
         signer,
@@ -35,6 +36,8 @@ export function Recover() {
     const [lumuksoSocialRecovery, setLumuksoSocialRecovery] = useState(null);
     const [isSocialRecoveryLoading, setIsSocialRecoveryLoading] = useState(false);
     const [nonRecoverableUniversalProfileAddress, setNonRecoverableUniversalProfileAddress] = useState(false);
+    const [isRecovering, setIsRecovering] = useState(false);
+    const [isRecovered, setIsRecovered] = useState(false);
     const addressInputRef = useRef(null);
     const {
         image: recoverImage,
@@ -108,6 +111,17 @@ export function Recover() {
         }
     }, [lumuksoSocialRecovery, isLoadingGuardianThreshold, guardianThreshold]);
 
+    const [checkingProfileAccess, setCheckingProfileAccess] = useState(false);
+    useEffect(() => {
+        if (lumuksoUtils && !isRecovered && !checkingProfileAccess) {
+            setCheckingProfileAccess(true);
+            lumuksoUtils
+                .checkProfileAccessRecovered(inputUniversalProfileAddress, upAddress)
+                .then((_isRecovered) => setIsRecovered(_isRecovered))
+                .finally(() => setCheckingProfileAccess(false));
+        }
+    }, [lumuksoUtils, isRecovered, checkingProfileAccess]);
+
     const {magicAddress, magicSigner, magic} = useMagic();
     const [loadingMagicAddressIsGuardian, setLoadingMagicAddressIsGuardian] = useState(false);
     const [loadedMagicAddressIsGuardian, setLoadedMagicAddressIsGuardian] = useState(false);
@@ -138,7 +152,7 @@ export function Recover() {
     }, [magicAddress, loadedMagicAddressIsGuardian, magicAddressIsGuardian]);
     const [isMagicVoted, setIsMagicVoted] = useState(false);
     useEffect(() => {
-        if (magicSigner && !loadingMagicAddressIsGuardian && inputUniversalProfileAddress && upAddress) {
+        if (magicSigner && !loadingMagicAddressIsGuardian && inputUniversalProfileAddress && upAddress && !isRecovered) {
             if (!isVotingMagic && !isMagicVoted && magicAddressIsGuardian) {
                 setIsVotingMagic(true)
                 const _recoveryProcessId = recoveryProcessId({profileAddress: inputUniversalProfileAddress, newOwnerAddress: upAddress});
@@ -161,7 +175,7 @@ export function Recover() {
                     .finally(() => setIsVotingMagic(false));
             }
         }
-    }, [magicAddress, magicSigner, loadingMagicAddressIsGuardian, isVotingMagic, inputUniversalProfileAddress, upAddress, isMagicVoted]);
+    }, [magicAddress, magicSigner, loadingMagicAddressIsGuardian, isVotingMagic, inputUniversalProfileAddress, upAddress, isMagicVoted, isRecovered]);
 
     const {web3authAddress, signer: web3authSigner} = useWeb3auth();
     const [loadingWeb3authAddressIsGuardian, setLoadingWeb3authAddressIsGuardian] = useState(false);
@@ -192,7 +206,7 @@ export function Recover() {
     }, [web3authAddress, loadedWeb3authAddressIsGuardian, web3authAddressIsGuardian]);
     const [isWeb3authVoted, setIsWeb3authVoted] = useState(false);
     useEffect(() => {
-        if (web3authSigner && !loadingWeb3authAddressIsGuardian && inputUniversalProfileAddress && upAddress) {
+        if (web3authSigner && !loadingWeb3authAddressIsGuardian && inputUniversalProfileAddress && upAddress && !isRecovered) {
             if (!isVotingWeb3auth && !isWeb3authVoted && web3authAddressIsGuardian) {
                 setIsVotingWeb3auth(true)
                 const _recoveryProcessId = recoveryProcessId({
@@ -218,7 +232,7 @@ export function Recover() {
                     .finally(() => setIsVotingWeb3auth(false));
             }
         }
-    }, [web3authAddress, web3authSigner, loadingWeb3authAddressIsGuardian, isVotingWeb3auth, inputUniversalProfileAddress, upAddress, isWeb3authVoted]);
+    }, [web3authAddress, web3authSigner, loadingWeb3authAddressIsGuardian, isVotingWeb3auth, inputUniversalProfileAddress, upAddress, isWeb3authVoted, isRecovered]);
 
     const [recoveryProcess, setRecoveryProcess] = useState(null);
     useEffect(() => {
@@ -234,8 +248,6 @@ export function Recover() {
         }
     }, [inputUniversalProfileAddress, lumuksoSocialRecovery, upAddress, isVotingWeb3auth, isVotingMagic]);
 
-    const [isRecovering, setIsRecovering] = useState(false);
-    const [isRecovered, setIsRecovered] = useState(false);
     function recover(oldSecret, newSecret) {
         if (lumuksoSocialRecovery && inputUniversalProfileAddress && upAddress && oldSecret && newSecret && !isRecovering && !isRecovered) {
             setIsRecovering(true);
