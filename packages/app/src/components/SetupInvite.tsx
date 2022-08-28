@@ -1,11 +1,12 @@
 import {toast} from "react-toastify";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {useSocialRecovery} from "../hooks/lumukso";
 import {useProfile} from "../hooks/profile";
 import {Spinner} from "flowbite-react";
 import {InformationCircleIcon} from "@heroicons/react/outline";
 import {useNavigate} from "react-router-dom";
 import {useUp} from "../hooks/up";
+import {ethers} from "ethers";
 
 export function SetupInvite() {
     const {address: universalProfileAddress} = useUp();
@@ -94,6 +95,24 @@ export function SetupInvite() {
         }
     }, [alreadyPendingGuardian]);
 
+    const newRecoverySecretRef : any = useRef();
+    const [isSettingSecret, setIsSettingSecret] = useState(false);
+    function setSecret(newSecret : string) {
+        if (newRecoverySecretRef.current) {
+            newRecoverySecretRef.current.value = "";
+        }
+
+        if (!isSettingSecret) {
+            setIsSettingSecret(true);
+            const newSecretHash = ethers.utils.hashMessage(newSecret);
+            lumuksoSocialRecovery
+                .setSecret(newSecretHash)
+                .then(tx => tx.wait())
+                .catch(console.error)
+                .finally(() => setIsSettingSecret(false));
+        }
+    }
+
     return (
         <div className="mt-6">
             <div className="p-3 flex">
@@ -150,6 +169,34 @@ export function SetupInvite() {
             <button className="btn w-full" onClick={() => navigate('/pending')}>
                 See Pending Invitations
             </button>
+
+            <a href="#my-modal-2">
+                <button className="btn w-full mt-2"
+                        disabled={isSettingSecret}>
+                    {
+                        isSettingSecret ?
+                            <div className="mr-2">
+                                <Spinner />
+                            </div> : null
+                    }
+                    Set Recovery Secret
+                </button>
+            </a>
+
+            <div className="modal" id="my-modal-2">
+                <div className="modal-box">
+                    <h3 className="font-bold text-lg">Set recovery secret</h3>
+                    <p className="py-4">
+                        <input type="password"
+                               className="input input-bordered w-full"
+                               placeholder="Your recovery secret"
+                               ref={newRecoverySecretRef} />
+                    </p>
+                    <div className="modal-action">
+                        <a href="#" className="btn" onClick={() => setSecret(newRecoverySecretRef.current.value)}>Submit</a>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }
