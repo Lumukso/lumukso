@@ -41,6 +41,7 @@ export interface LumuksoSocialRecoveryInterface extends utils.Interface {
     "getInvitations()": FunctionFragment;
     "getPendingGuardianExpiration(address)": FunctionFragment;
     "getRecoverProcessesIds()": FunctionFragment;
+    "getVoteToRecoverMessage(bytes32,address)": FunctionFragment;
     "isGuardian(address)": FunctionFragment;
     "isInvited(address)": FunctionFragment;
     "isThresholdMet(bytes32,address)": FunctionFragment;
@@ -56,6 +57,7 @@ export interface LumuksoSocialRecoveryInterface extends utils.Interface {
     "supportsInterface(bytes4)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
     "voteToRecover(bytes32,address)": FunctionFragment;
+    "voteToRecoverViaSignature(address,bytes32,address,bytes)": FunctionFragment;
   };
 
   getFunction(
@@ -72,6 +74,7 @@ export interface LumuksoSocialRecoveryInterface extends utils.Interface {
       | "getInvitations"
       | "getPendingGuardianExpiration"
       | "getRecoverProcessesIds"
+      | "getVoteToRecoverMessage"
       | "isGuardian"
       | "isInvited"
       | "isThresholdMet"
@@ -87,6 +90,7 @@ export interface LumuksoSocialRecoveryInterface extends utils.Interface {
       | "supportsInterface"
       | "transferOwnership"
       | "voteToRecover"
+      | "voteToRecoverViaSignature"
   ): FunctionFragment;
 
   encodeFunctionData(functionFragment: "account", values?: undefined): string;
@@ -133,6 +137,10 @@ export interface LumuksoSocialRecoveryInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "getRecoverProcessesIds",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getVoteToRecoverMessage",
+    values: [PromiseOrValue<BytesLike>, PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "isGuardian",
@@ -195,6 +203,15 @@ export interface LumuksoSocialRecoveryInterface extends utils.Interface {
     functionFragment: "voteToRecover",
     values: [PromiseOrValue<BytesLike>, PromiseOrValue<string>]
   ): string;
+  encodeFunctionData(
+    functionFragment: "voteToRecoverViaSignature",
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<BytesLike>,
+      PromiseOrValue<string>,
+      PromiseOrValue<BytesLike>
+    ]
+  ): string;
 
   decodeFunctionResult(functionFragment: "account", data: BytesLike): Result;
   decodeFunctionResult(
@@ -236,6 +253,10 @@ export interface LumuksoSocialRecoveryInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "getRecoverProcessesIds",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getVoteToRecoverMessage",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "isGuardian", data: BytesLike): Result;
@@ -284,6 +305,10 @@ export interface LumuksoSocialRecoveryInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "voteToRecover",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "voteToRecoverViaSignature",
     data: BytesLike
   ): Result;
 
@@ -422,6 +447,12 @@ export interface LumuksoSocialRecovery extends BaseContract {
 
     getRecoverProcessesIds(overrides?: CallOverrides): Promise<[string[]]>;
 
+    getVoteToRecoverMessage(
+      recoverProcessId: PromiseOrValue<BytesLike>,
+      newOwner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
     isGuardian(
       _address: PromiseOrValue<string>,
       overrides?: CallOverrides
@@ -495,6 +526,14 @@ export interface LumuksoSocialRecovery extends BaseContract {
       newOwner: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
+
+    voteToRecoverViaSignature(
+      guardian: PromiseOrValue<string>,
+      recoverProcessId: PromiseOrValue<BytesLike>,
+      newOwner: PromiseOrValue<string>,
+      signature: PromiseOrValue<BytesLike>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
   };
 
   account(overrides?: CallOverrides): Promise<string>;
@@ -544,6 +583,12 @@ export interface LumuksoSocialRecovery extends BaseContract {
   ): Promise<BigNumber>;
 
   getRecoverProcessesIds(overrides?: CallOverrides): Promise<string[]>;
+
+  getVoteToRecoverMessage(
+    recoverProcessId: PromiseOrValue<BytesLike>,
+    newOwner: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<string>;
 
   isGuardian(
     _address: PromiseOrValue<string>,
@@ -617,6 +662,14 @@ export interface LumuksoSocialRecovery extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  voteToRecoverViaSignature(
+    guardian: PromiseOrValue<string>,
+    recoverProcessId: PromiseOrValue<BytesLike>,
+    newOwner: PromiseOrValue<string>,
+    signature: PromiseOrValue<BytesLike>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   callStatic: {
     account(overrides?: CallOverrides): Promise<string>;
 
@@ -665,6 +718,12 @@ export interface LumuksoSocialRecovery extends BaseContract {
     ): Promise<BigNumber>;
 
     getRecoverProcessesIds(overrides?: CallOverrides): Promise<string[]>;
+
+    getVoteToRecoverMessage(
+      recoverProcessId: PromiseOrValue<BytesLike>,
+      newOwner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<string>;
 
     isGuardian(
       _address: PromiseOrValue<string>,
@@ -735,6 +794,14 @@ export interface LumuksoSocialRecovery extends BaseContract {
     voteToRecover(
       recoverProcessId: PromiseOrValue<BytesLike>,
       newOwner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    voteToRecoverViaSignature(
+      guardian: PromiseOrValue<string>,
+      recoverProcessId: PromiseOrValue<BytesLike>,
+      newOwner: PromiseOrValue<string>,
+      signature: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<void>;
   };
@@ -826,6 +893,12 @@ export interface LumuksoSocialRecovery extends BaseContract {
 
     getRecoverProcessesIds(overrides?: CallOverrides): Promise<BigNumber>;
 
+    getVoteToRecoverMessage(
+      recoverProcessId: PromiseOrValue<BytesLike>,
+      newOwner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     isGuardian(
       _address: PromiseOrValue<string>,
       overrides?: CallOverrides
@@ -897,6 +970,14 @@ export interface LumuksoSocialRecovery extends BaseContract {
       newOwner: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
+
+    voteToRecoverViaSignature(
+      guardian: PromiseOrValue<string>,
+      recoverProcessId: PromiseOrValue<BytesLike>,
+      newOwner: PromiseOrValue<string>,
+      signature: PromiseOrValue<BytesLike>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -949,6 +1030,12 @@ export interface LumuksoSocialRecovery extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     getRecoverProcessesIds(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getVoteToRecoverMessage(
+      recoverProcessId: PromiseOrValue<BytesLike>,
+      newOwner: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -1023,6 +1110,14 @@ export interface LumuksoSocialRecovery extends BaseContract {
     voteToRecover(
       recoverProcessId: PromiseOrValue<BytesLike>,
       newOwner: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    voteToRecoverViaSignature(
+      guardian: PromiseOrValue<string>,
+      recoverProcessId: PromiseOrValue<BytesLike>,
+      newOwner: PromiseOrValue<string>,
+      signature: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
   };

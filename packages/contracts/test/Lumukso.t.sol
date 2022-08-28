@@ -185,8 +185,11 @@ contract LumuksoTest is Test {
         vm.stopPrank();
 
         // vote to recover bob
-        vm.startPrank(vm.addr(guardianSSOKey));
-        lumuksoSocialRecovery.voteToRecover(recoveryProcessId, address(bobUniversalProfile));
+        vm.startPrank(vm.addr(bobUPKey));
+        string memory voteToRecoverMessage = lumuksoSocialRecovery.getVoteToRecoverMessage(recoveryProcessId, address(bobUniversalProfile));
+        bytes32 voteToRecoverMessageHash = bytes(voteToRecoverMessage).toEthSignedMessageHash();
+        (v, r, s) = vm.sign(guardianSSOKey, voteToRecoverMessageHash);
+        lumuksoSocialRecovery.voteToRecoverViaSignature(vm.addr(guardianSSOKey), recoveryProcessId, address(bobUniversalProfile), bytes.concat(r, s, abi.encodePacked(v)));
         vm.stopPrank();
 
         bytes32[] memory ids = lumuksoSocialRecovery.recoveryProcessIds();

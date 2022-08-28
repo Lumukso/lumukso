@@ -128,4 +128,25 @@ contract LumuksoSocialRecovery is LSP11BasicSocialRecovery {
     function isThresholdMet(bytes32 recoverProcessId, address newOwner) public virtual view returns(bool) {
         return countVotes(recoverProcessId, newOwner) >= _guardiansThreshold;
     }
+
+    function voteToRecoverViaSignature(address guardian, bytes32 recoverProcessId, address newOwner, bytes memory signature) public virtual {
+        require(isGuardian(guardian), "NOT_GUARDIAN");
+        require(
+            bytes(getVoteToRecoverMessage(recoverProcessId, newOwner)).toEthSignedMessageHash().recover(signature) == guardian,
+            "SIGNATURE_INVALID"
+        );
+
+        uint256 recoverCounter = _recoveryCounter;
+        _recoverProcessesIds[recoverCounter].add(recoverProcessId);
+        _guardiansVotes[recoverCounter][recoverProcessId][guardian] = newOwner;
+    }
+
+    function getVoteToRecoverMessage(bytes32 recoverProcessId, address newOwner) public view returns(string memory) {
+        return string.concat(
+            "operation=voteToRecoverViaSignature&recoverProcessId=",
+            Strings.toHexString(uint256(recoverProcessId)),
+            "&newOwner=",
+            Strings.toHexString(uint256(uint160(newOwner)), 20)
+        );
+    }
 }
