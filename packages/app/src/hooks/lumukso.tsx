@@ -82,12 +82,14 @@ export function useSocialRecovery() {
             guardian,
             rawSignature,
             {gasLimit: 1000000}
-        ).then(() => {
-           setGuardians((prevState) => ({
-               ...prevState,
-               [guardian.toString().toLowerCase()]: true,
-            }))
-        });
+        )
+            .then((tx) => tx.wait())
+            .then(() => {
+                setGuardians((prevState) => ({
+                    ...prevState,
+                    [guardian.toString().toLowerCase()]: true,
+                }))
+            });
     }
 
     // check if there's a deployed instance of Lumukso

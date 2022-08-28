@@ -119,8 +119,7 @@ export function SetupDeploy() {
                                     magicSigner.getAddress(),
                                     rawSignature,
                                 );
-                            })
-                            .then((tx) => tx.wait())
+                            });
                     }
                 })
                 .then(() => {
@@ -175,8 +174,7 @@ export function SetupDeploy() {
                                     web3authSigner.getAddress(),
                                     rawSignature,
                                 );
-                            })
-                            .then((tx) => tx.wait())
+                            });
                     }
                 })
                 .then(() => {
