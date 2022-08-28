@@ -324,7 +324,7 @@ export function Recover() {
                                 <div className="card-actions">
                                     {
                                         isRecovered ?
-                                            <strong>You have recovered access to this profile!</strong> :
+                                            <strong>🎉 You have recovered access to this profile! 🎉</strong> :
                                             <div className="tooltip tooltip-top" data-tip={`You need ${guardianThreshold} votes to recover this profile`}>
                                                 <a href="#recover-modal">
                                                     <button className="btn btn-primary"
