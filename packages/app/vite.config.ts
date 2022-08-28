@@ -18,6 +18,7 @@ export default defineConfig({
         alias: {
             buffer: 'node_modules/rollup-plugin-node-polyfills/polyfills/buffer-es6.js', // add buffer
             process: 'node_modules/rollup-plugin-node-polyfills/polyfills/process-es6.js', // add process
+            stream: 'node_modules/rollup-plugin-node-polyfills/polyfills/stream.js'
         },
     },
     plugins: [
