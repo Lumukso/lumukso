@@ -13,7 +13,6 @@ export function Layout(props) {
             <div className={`absolute inset-0 bg-top [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]`} style={{backgroundImage: `url(${gridSvgPath})`}}></div>
 
             <Debug />
-            <Account/>
 
             <div className="flex h-screen justify-center items-center py-12 px-4 sm:px-6 lg:px-8">
                 <div className="max-w-md w-full space-y-8">

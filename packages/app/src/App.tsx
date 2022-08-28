@@ -7,6 +7,7 @@ import {ConfirmInvitation} from "./pages/ConfirmInvitation";
 import {VoteToRecover} from "./pages/VoteToRecover";
 import {PendingInvitations} from "./pages/PendingInvitations";
 import {ToastContainer} from "react-toastify";
+import {Account} from "./components/Account";
 
 export function App() {
     return (
@@ -22,6 +23,7 @@ export function App() {
                 <Route path="/recover/:universalProfileAddress/vote/:newOwnerAddress" element={<VoteToRecover/>}/>
             </Routes>
             <ToastContainer position="top-center" autoClose={1000} />
+            <Account/>
         </>
     )
 }
