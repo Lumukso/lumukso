@@ -19,7 +19,7 @@ import input = Simulate.input;
 import {UserIcon} from "@heroicons/react/solid";
 
 export function recoveryProcessId({profileAddress, newOwnerAddress}) {
-    return ethers.utils.hashMessage(`${profileAddress}:${newOwnerAddress}`);
+    return ethers.utils.hashMessage(`${profileAddress.toString().toLowerCase()}:${newOwnerAddress.toString().toLowerCase()}`);
 }
 
 export function Recover() {
@@ -299,7 +299,7 @@ export function Recover() {
 
                 {
                     recoverImage && !nonRecoverableUniversalProfileAddress ?
-                        <button className="btn w-full" onClick={() => share({title: " ", text: "", url: `https://${window.location.host}/recover/${inputUniversalProfileAddress}/vote/${upAddress}`})}>
+                        <button className="btn btn-primary w-full" onClick={() => share({title: " ", text: "", url: `https://${window.location.host}/recover/${inputUniversalProfileAddress}/vote/${upAddress}`})}>
                             Invite Guardians
                         </button> : null
                 }
