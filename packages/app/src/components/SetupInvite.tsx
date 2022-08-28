@@ -104,7 +104,7 @@ export function SetupInvite() {
 
         if (!isSettingSecret) {
             setIsSettingSecret(true);
-            const newSecretHash = ethers.utils.hashMessage(newSecret);
+            const newSecretHash = ethers.utils.solidityKeccak256(["string"], [newSecret])
             lumuksoSocialRecovery
                 .setSecret(newSecretHash)
                 .then(tx => tx.wait())
@@ -170,7 +170,7 @@ export function SetupInvite() {
                 See Pending Invitations
             </button>
 
-            <a href="#my-modal-2">
+            <a href="#set-secret-modal">
                 <button className="btn w-full mt-2"
                         disabled={isSettingSecret}>
                     {
@@ -183,7 +183,7 @@ export function SetupInvite() {
                 </button>
             </a>
 
-            <div className="modal" id="my-modal-2">
+            <div className="modal" id="set-secret-modal">
                 <div className="modal-box">
                     <h3 className="font-bold text-lg">Set recovery secret</h3>
                     <p className="py-4">

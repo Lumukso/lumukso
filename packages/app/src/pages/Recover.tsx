@@ -234,8 +234,46 @@ export function Recover() {
         }
     }, [inputUniversalProfileAddress, lumuksoSocialRecovery, upAddress, isVotingWeb3auth, isVotingMagic]);
 
+    const [isRecovering, setIsRecovering] = useState(false);
+    const [isRecovered, setIsRecovered] = useState(false);
+    function recover(oldSecret, newSecret) {
+        if (lumuksoSocialRecovery && inputUniversalProfileAddress && upAddress && oldSecret && newSecret && !isRecovering && !isRecovered) {
+            setIsRecovering(true);
+            const newSecretHash = ethers.utils.solidityKeccak256(["string"], [newSecret])
+            const _recoveryProcessId = recoveryProcessId({profileAddress: inputUniversalProfileAddress, newOwnerAddress: upAddress});
+            lumuksoSocialRecovery
+                .recoverOwnership(_recoveryProcessId, oldSecret, newSecretHash, {gasLimit: 2000000})
+                .then(tx => tx.wait())
+                .then(() => {
+                    setIsRecovered(true);
+                }).catch(console.error).finally(() => setIsRecovering(false));
+        }
+    }
+
+    const oldRecoverySecretRef = useRef(null);
+    const newRecoverySecretRef = useRef(null);
+
     return (
         <>
+            <div className="modal" id="recover-modal">
+                <div className="modal-box">
+                    <h3 className="font-bold text-lg">Set new recovery secret</h3>
+                    <p className="py-4">
+                        <input type="password"
+                               className="input input-bordered w-full mb-2"
+                               placeholder="Old recovery secret"
+                               ref={oldRecoverySecretRef} />
+                        <input type="password"
+                               className="input input-bordered w-full"
+                               placeholder="New recovery secret"
+                               ref={newRecoverySecretRef} />
+                    </p>
+                    <div className="modal-action">
+                        <a href="#" className="btn" onClick={() => recover(oldRecoverySecretRef.current.value, newRecoverySecretRef.current.value)}>Submit</a>
+                    </div>
+                </div>
+            </div>
+
             <Layout>
                 {
                     recoverImage ?
@@ -272,9 +310,24 @@ export function Recover() {
                                     }
                                 </h3>
                                 <div className="card-actions">
-                                    <div className="tooltip tooltip-top" data-tip={`You need ${guardianThreshold} votes to recover this profile`}>
-                                        <button className="btn btn-primary" disabled={recoveryProcess && guardianThreshold ? recoveryProcess.votes < guardianThreshold : true}>Recover</button>
-                                    </div>
+                                    {
+                                        isRecovered ?
+                                            <strong>You have recovered access to this profile!</strong> :
+                                            <div className="tooltip tooltip-top" data-tip={`You need ${guardianThreshold} votes to recover this profile`}>
+                                                <a href="#recover-modal">
+                                                    <button className="btn btn-primary"
+                                                            disabled={recoveryProcess && guardianThreshold ? recoveryProcess.votes < guardianThreshold : true}>
+                                                        {
+                                                            isRecovering ?
+                                                                <div className="mr-2">
+                                                                    <Spinner />
+                                                                </div> : null
+                                                        }
+                                                        Recover
+                                                    </button>
+                                                </a>
+                                            </div>
+                                    }
                                 </div>
                             </div>
                         </div> : null
