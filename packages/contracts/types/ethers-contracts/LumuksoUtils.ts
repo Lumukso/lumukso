@@ -22,16 +22,22 @@ import type {
 
 export interface LumuksoUtilsInterface extends utils.Interface {
   functions: {
+    "checkProfileAccessRecovered(address,address)": FunctionFragment;
     "checkSocialRecoveryPermissions(address,address)": FunctionFragment;
     "getSocialRecoveryPermissionKeyValues(address,address)": FunctionFragment;
   };
 
   getFunction(
     nameOrSignatureOrTopic:
+      | "checkProfileAccessRecovered"
       | "checkSocialRecoveryPermissions"
       | "getSocialRecoveryPermissionKeyValues"
   ): FunctionFragment;
 
+  encodeFunctionData(
+    functionFragment: "checkProfileAccessRecovered",
+    values: [PromiseOrValue<string>, PromiseOrValue<string>]
+  ): string;
   encodeFunctionData(
     functionFragment: "checkSocialRecoveryPermissions",
     values: [PromiseOrValue<string>, PromiseOrValue<string>]
@@ -41,6 +47,10 @@ export interface LumuksoUtilsInterface extends utils.Interface {
     values: [PromiseOrValue<string>, PromiseOrValue<string>]
   ): string;
 
+  decodeFunctionResult(
+    functionFragment: "checkProfileAccessRecovered",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "checkSocialRecoveryPermissions",
     data: BytesLike
@@ -80,6 +90,12 @@ export interface LumuksoUtils extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
+    checkProfileAccessRecovered(
+      profile: PromiseOrValue<string>,
+      newOwner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
+
     checkSocialRecoveryPermissions(
       profile: PromiseOrValue<string>,
       socialRecovery: PromiseOrValue<string>,
@@ -92,6 +108,12 @@ export interface LumuksoUtils extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[string[], string[]]>;
   };
+
+  checkProfileAccessRecovered(
+    profile: PromiseOrValue<string>,
+    newOwner: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
 
   checkSocialRecoveryPermissions(
     profile: PromiseOrValue<string>,
@@ -106,6 +128,12 @@ export interface LumuksoUtils extends BaseContract {
   ): Promise<[string[], string[]]>;
 
   callStatic: {
+    checkProfileAccessRecovered(
+      profile: PromiseOrValue<string>,
+      newOwner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
     checkSocialRecoveryPermissions(
       profile: PromiseOrValue<string>,
       socialRecovery: PromiseOrValue<string>,
@@ -122,6 +150,12 @@ export interface LumuksoUtils extends BaseContract {
   filters: {};
 
   estimateGas: {
+    checkProfileAccessRecovered(
+      profile: PromiseOrValue<string>,
+      newOwner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     checkSocialRecoveryPermissions(
       profile: PromiseOrValue<string>,
       socialRecovery: PromiseOrValue<string>,
@@ -136,6 +170,12 @@ export interface LumuksoUtils extends BaseContract {
   };
 
   populateTransaction: {
+    checkProfileAccessRecovered(
+      profile: PromiseOrValue<string>,
+      newOwner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     checkSocialRecoveryPermissions(
       profile: PromiseOrValue<string>,
       socialRecovery: PromiseOrValue<string>,

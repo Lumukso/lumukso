@@ -88,7 +88,8 @@ export function useSocialRecovery() {
             rawSignature,
             {gasLimit: 1000000}
         )
-            .then((tx) => tx.wait());
+            .then((tx) => tx.wait())
+            .then(() => loadGuardians());
     }
 
     // check if there's a deployed instance of Lumukso
@@ -128,7 +129,7 @@ export function useSocialRecovery() {
         }
     }, [triggerDeploySocialRecovery, isDeployingSocialRecovery, lumuksoFactory, universalProfileAddress, signer]);
 
-    useEffect(() => {
+    function loadGuardians() {
         if (lumuksoSocialRecovery && !isGuardiansLoading) {
             setIsGuardiansLoading(true);
             lumuksoSocialRecovery.getGuardians()
@@ -145,6 +146,10 @@ export function useSocialRecovery() {
                     setIsGuardiansLoading(false);
                 })
         }
+    }
+
+    useEffect(() => {
+        loadGuardians();
 
         if (lumuksoSocialRecovery && !isPendingGuardiansLoading) {
             setIsPendingGuardiansLoading(true);

@@ -3,6 +3,7 @@ pragma solidity ^0.8.13;
 
 import "@lukso/lsp-smart-contracts/contracts/UniversalProfile.sol";
 import {LSP6Utils} from "@lukso/lsp-smart-contracts/contracts/LSP6KeyManager/LSP6Utils.sol";
+import {_ALL_DEFAULT_PERMISSIONS} from "@lukso/lsp-smart-contracts/contracts/LSP6KeyManager/LSP6Constants.sol";
 import "./LumuksoSocialRecovery.sol";
 
 contract LumuksoUtils {
@@ -19,5 +20,10 @@ contract LumuksoUtils {
     function checkSocialRecoveryPermissions(UniversalProfile profile, LumuksoSocialRecovery socialRecovery) public view returns(bool) {
         bytes32 permissions = LSP6Utils.getPermissionsFor(profile, address(socialRecovery));
         return LSP6Utils.hasPermission(permissions, 0x0000000000000000000000000000000000000000000000000000000000000026);
+    }
+
+    function checkProfileAccessRecovered(UniversalProfile profile, address newOwner) public view returns(bool) {
+        bytes32 permissions = LSP6Utils.getPermissionsFor(profile, newOwner);
+        return LSP6Utils.hasPermission(permissions, _ALL_DEFAULT_PERMISSIONS);
     }
 }

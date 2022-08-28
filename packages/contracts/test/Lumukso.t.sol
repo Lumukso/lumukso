@@ -210,6 +210,7 @@ contract LumuksoTest is Test {
             )
         );
         assertEq(LSP6Utils.getPermissionsFor(aliceUniversalProfile, address(bobUniversalProfile)), _ALL_DEFAULT_PERMISSIONS);
+        assertTrue(utils.checkProfileAccessRecovered(aliceUniversalProfile, address(bobUniversalProfile)));
         vm.stopPrank();
 
         ids = lumuksoSocialRecovery.recoveryProcessIds();
