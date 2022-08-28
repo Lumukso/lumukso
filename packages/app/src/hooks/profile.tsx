@@ -23,6 +23,8 @@ export function loadProfile({address}) {
             const profileImages = (resp.value as any).LSP3Profile.profileImage;
             if (profileImages && profileImages.length) {
                 image = profileImages[profileImages.length - 1].url.replace("ipfs://", IPFS_GATEWAY);
+            } else {
+                image = identicon(address);
             }
 
             return Promise.resolve({
@@ -73,12 +75,6 @@ export function useProfile({address, isConnected}) {
             setProfileData(null);
         }
     }, [isConnected, address])
-
-    useEffect(() => {
-        if (address && !image && !error && !isLoading) {
-            setImage(identicon(address));
-        }
-    }, [image, address, error, isLoading]);
 
     useEffect(() => {
         if (error) {

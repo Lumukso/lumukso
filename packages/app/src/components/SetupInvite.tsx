@@ -7,8 +7,10 @@ import {InformationCircleIcon} from "@heroicons/react/outline";
 import {useNavigate} from "react-router-dom";
 import {useUp} from "../hooks/up";
 import {ethers} from "ethers";
+import useWebShare from "react-use-web-share";
 
 export function SetupInvite() {
+    const { share } = useWebShare();
     const {address: universalProfileAddress} = useUp();
     const {
         lumuksoSocialRecovery,
@@ -57,6 +59,7 @@ export function SetupInvite() {
             .then(() => {
                 setInviteAddress("");
                 notifyInvitationSuccess();
+                share({title: " ", text: "", url: `https://${window.location.host}/confirm/${universalProfileAddress}/${inviteAddress}`});
             })
             .catch(console.error)
             .finally(() => setIsInviting(false));
