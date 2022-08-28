@@ -143,7 +143,10 @@ contract LumuksoSocialRecovery is LSP11BasicSocialRecovery {
 
     function getVoteToRecoverMessage(bytes32 recoverProcessId, address newOwner) public view returns(string memory) {
         return string.concat(
-            "operation=voteToRecoverViaSignature&recoverProcessId=",
+            "operation=voteToRecoverViaSignature",
+            "&socialRecoveryAddress=",
+            Strings.toHexString(uint256(uint160(address(this))), 20),
+            "&recoverProcessId=",
             Strings.toHexString(uint256(recoverProcessId)),
             "&newOwner=",
             Strings.toHexString(uint256(uint160(newOwner)), 20)

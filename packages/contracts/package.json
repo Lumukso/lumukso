@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "forge build --sizes --via-ir --optimize --optimizer-runs 200",
-    "deploy": "forge script script/deploy.s.sol --broadcast --optimize --optimizer-runs 200 --via-ir --rpc-url $ETH_RPC_URL --private-key $RAW_PRIVATE_KEY --chain-id $CHAIN_ID -vvvv",
+    "deploy": "source .env && forge script script/deploy.s.sol --broadcast --optimize --optimizer-runs 200 --via-ir --rpc-url $ETH_RPC_URL --private-key $RAW_PRIVATE_KEY --chain-id $CHAIN_ID -vvvv",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
