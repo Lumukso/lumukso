@@ -1,5 +1,5 @@
 import {Magic} from 'magic-sdk';
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 import {L16_CHAIN_ID, L16_RPC_URL} from "../constants";
 import {ethers} from "ethers";
 import {createGlobalState} from "react-hooks-global-state";

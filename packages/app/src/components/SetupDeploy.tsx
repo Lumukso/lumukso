@@ -1,13 +1,10 @@
 import {useEffect, useState} from "react";
 import {useUp} from "../hooks/up";
 import {useLumuksoUtils, useSocialRecovery} from "../hooks/lumukso";
-import {useNavigate} from "react-router-dom";
 import {useMagic} from "../hooks/magic";
 import {useWeb3auth} from "../hooks/web3auth";
-import {CheckCircleIcon, CheckIcon} from "@heroicons/react/solid";
+import {CheckCircleIcon} from "@heroicons/react/solid";
 import {Spinner} from "flowbite-react";
-import {ethers} from "ethers";
-import {L16_CHAIN_ID} from "../constants";
 
 export function SetupDeploy() {
     const [updatingPermissions, setUpdatingPermissions] = useState(false);

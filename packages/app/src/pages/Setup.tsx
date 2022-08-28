@@ -29,7 +29,6 @@ export function Setup() {
     }, [currentStep, universalProfileAddress, magicAddress, web3authAddress, invalid]);
 
     useEffect(() => {
-        console.log(guardians);
         if (
             currentStep < 3 &&
             guardians && magicAddress && web3authAddress &&
@@ -57,7 +56,6 @@ export function Setup() {
                     }
                 </div>
             </Layout>
-            <ToastContainer position="top-center" autoClose={1000} />
         </>
     )
 }

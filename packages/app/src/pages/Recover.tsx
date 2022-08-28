@@ -4,7 +4,9 @@ import {useEffect, useRef, useState} from "react";
 import {ethers} from "ethers";
 import {toast, ToastContainer} from "react-toastify";
 import {useLumuksoFactory} from "../hooks/lumukso";
-import {LumuksoSocialRecovery__factory} from "@lumukso/contracts/types/ethers-contracts/factories/LumuksoSocialRecovery__factory";
+import {
+    LumuksoSocialRecovery__factory
+} from "@lumukso/contracts/types/ethers-contracts/factories/LumuksoSocialRecovery__factory";
 import {useUp} from "../hooks/up";
 
 export function Recover() {
@@ -83,7 +85,6 @@ export function Recover() {
                        value={inputUniversalProfileAddress}
                        ref={addressInputRef} />
             </Layout>
-            <ToastContainer position="top-center" autoClose={1000} />
         </>
     )
 }

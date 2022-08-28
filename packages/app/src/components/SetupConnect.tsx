@@ -66,7 +66,7 @@ export function SetupConnect() {
                                     disabled={magicIsLoggedIn}
                                     onClick={() => magicIsLoggedIn ? null : navigate('/magic-login', {replace: true})}>
                                 {
-                                    (magicIsLoading || !magicAddress) ? <Spinner/> :
+                                    (magicIsLoading) ? <Spinner/> :
                                         magicIsLoggedIn ? 'Connected' : 'Connect'
                                 }
                             </button>

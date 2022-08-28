@@ -12,6 +12,7 @@ export function Debug() {
     const {
         lumuksoSocialRecovery,
         guardians,
+        pendingGuardians,
     } = useSocialRecovery();
     const {
         magicAddress
@@ -30,6 +31,7 @@ export function Debug() {
                 <div><small>Magic Address: {magicAddress}</small></div>
                 <div><small>Web3auth Address: {web3authAddress} </small></div>
                 <div><small>Guardians: {Object.keys(guardians).join(", ")}</small></div>
+                <div><small>Pending: {Object.keys(pendingGuardians).join(", ")}</small></div>
             </div>
         )
     } else {

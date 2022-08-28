@@ -8,13 +8,12 @@ import {LumuksoFactory} from '@lumukso/contracts/types/ethers-contracts/LumuksoF
 import {
     LumuksoSocialRecovery__factory
 } from '@lumukso/contracts/types/ethers-contracts/factories/LumuksoSocialRecovery__factory';
-import {LumuksoSocialRecovery} from '@lumukso/contracts/types/ethers-contracts/LumuksoSocialRecovery';
 import {createGlobalState} from "react-hooks-global-state";
 import {L16_LUMUKSO_FACTORY_ADDRESS, L16_LUMUKSO_UTILS_ADDRESS} from "../constants";
 
 export function useLumuksoFactory() {
-    const { signer, isConnected } = useUp();
-    const [lumuksoFactory, setLumuksoFactory] : [LumuksoFactory, any] = useState(null);
+    const {signer, isConnected} = useUp();
+    const [lumuksoFactory, setLumuksoFactory]: [LumuksoFactory, any] = useState(null);
 
     useEffect(() => {
         if (isConnected && signer) {
@@ -28,8 +27,8 @@ export function useLumuksoFactory() {
 }
 
 export function useLumuksoUtils() {
-    const { signer, isConnected } = useUp();
-    const [lumuksoUtils, setLumuksoUtils] : [LumuksoUtils, any] = useState(null);
+    const {signer, isConnected} = useUp();
+    const [lumuksoUtils, setLumuksoUtils]: [LumuksoUtils, any] = useState(null);
 
     useEffect(() => {
         if (isConnected && signer) {
@@ -42,19 +41,25 @@ export function useLumuksoUtils() {
     return lumuksoUtils;
 }
 
-const { useGlobalState } = createGlobalState({
+const {useGlobalState} = createGlobalState({
     lumuksoSocialRecovery: null,
     guardians: {},
+    isGuardiansLoading: false,
+    pendingGuardians: {},
+    isPendingGuardiansLoading: false,
 });
 
 export function useSocialRecovery() {
-    const { address: universalProfileAddress, signer, isConnected } = useUp();
+    const {address: universalProfileAddress, signer, isConnected} = useUp();
     const lumuksoFactory = useLumuksoFactory();
 
     const [isDeployingSocialRecovery, setIsDeployingSocialRecovery] = useState(false);
     const [triggerDeploySocialRecovery, setTriggerDeploySocialRecovery] = useState(false);
     const [lumuksoSocialRecovery, setLumuksoSocialRecovery] = useGlobalState('lumuksoSocialRecovery');
     const [guardians, setGuardians] = useGlobalState('guardians');
+    const [isGuardiansLoading, setIsGuardiansLoading] = useGlobalState('isGuardiansLoading');
+    const [pendingGuardians, setPendingGuardians] = useGlobalState('pendingGuardians');
+    const [isPendingGuardiansLoading, setIsPendingGuardiansLoading] = useGlobalState('isPendingGuardiansLoading');
 
     function deploySocialRecovery() {
         setTriggerDeploySocialRecovery(true);
@@ -97,7 +102,7 @@ export function useSocialRecovery() {
     useEffect(() => {
         if (lumuksoFactory && universalProfileAddress) {
             lumuksoFactory.instances(universalProfileAddress)
-                .then((lumuksoAddress : string | ethers.ContractTransaction) => {
+                .then((lumuksoAddress: string | ethers.ContractTransaction) => {
                     if (lumuksoAddress !== ethers.constants.AddressZero) {
                         setLumuksoSocialRecovery(LumuksoSocialRecovery__factory.connect(lumuksoAddress.toString(), signer));
                     }
@@ -109,7 +114,7 @@ export function useSocialRecovery() {
         if (triggerDeploySocialRecovery && !isDeployingSocialRecovery && lumuksoFactory && universalProfileAddress && signer) {
             setIsDeployingSocialRecovery(true);
             lumuksoFactory.instances(universalProfileAddress)
-                .then((lumuksoAddress : string | ethers.ContractTransaction) => {
+                .then((lumuksoAddress: string | ethers.ContractTransaction) => {
                     if (lumuksoAddress === ethers.constants.AddressZero) {
                         return lumuksoFactory.create(universalProfileAddress, 1).then(tx => tx.wait()).then(receipt => {
                             return Promise.resolve(receipt.events.find(e => e.event === "LumuksoDeployed").args[0]);
@@ -130,7 +135,8 @@ export function useSocialRecovery() {
     }, [triggerDeploySocialRecovery, isDeployingSocialRecovery, lumuksoFactory, universalProfileAddress, signer]);
 
     useEffect(() => {
-        if (lumuksoSocialRecovery) {
+        if (lumuksoSocialRecovery && !isGuardiansLoading) {
+            setIsGuardiansLoading(true);
             lumuksoSocialRecovery.getGuardians()
                 .then(guardians => {
                     guardians.forEach(guardian => {
@@ -139,6 +145,27 @@ export function useSocialRecovery() {
                             [guardian.toString().toLowerCase()]: true,
                         }))
                     });
+                })
+                .catch(console.error)
+                .finally(() => {
+                    setIsGuardiansLoading(false);
+                })
+        }
+
+        if (lumuksoSocialRecovery && !isPendingGuardiansLoading) {
+            setIsPendingGuardiansLoading(true);
+            lumuksoSocialRecovery.getInvitations()
+                .then(pendingGuardians => {
+                    pendingGuardians.forEach(pendingGuardian => {
+                        setPendingGuardians((prevState) => ({
+                            ...prevState,
+                            [pendingGuardian.toLowerCase()]: true,
+                        }))
+                    });
+                })
+                .catch(console.error)
+                .finally(() => {
+                    setIsPendingGuardiansLoading(false)
                 })
         }
     }, [lumuksoSocialRecovery]);
@@ -153,5 +180,8 @@ export function useSocialRecovery() {
         isPendingGuardian,
         confirmPendingGuardian,
         guardians,
+        isGuardiansLoading,
+        pendingGuardians,
+        isPendingGuardiansLoading,
     }
 }
