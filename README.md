@@ -26,6 +26,23 @@ For example when fault tolerance is configured as 1, then 3 guardians are requir
 
 [![](https://mermaid.ink/img/pako:eNp1Uk1rwzAM_SvCl126wL5HDoVuHWMwGCywUy6ara6miZX5I1BK__ucJhluuvlkPb8nPUneCcmKRC4cfQcykpYavyzWpYF4UHq2sKi0pB5o0HotdYPGw2uow8Zxynxco600pdADf_bhIcv5fD7IcrjIYElNxVsoWGqs4J0kt2S3__AvM1goBUXxBujgOaBVGo07Zg8OcrjK4MW02tNoKhX1muEhrXEda0hJjQfdidFrHsixj5R4k0Hh4zDADqahsSzJOWg1dh5T1a-p2xNTnqHlGK_iqOxR_3-4u8vgY0oGXnVVzlyc96F-zJgsbGL7PuuQUexgFapqKhQzUZOtUav4LXZdmlL4NdVUijxeFdpNKUqzj7zQKPT0pHTctMi9DTQTGDwXWyPHuOcM36oH9z8iAdJQ)](https://mermaid.live/edit#pako:eNp1Uk1rwzAM_SvCl126wL5HDoVuHWMwGCywUy6ara6miZX5I1BK__ucJhluuvlkPb8nPUneCcmKRC4cfQcykpYavyzWpYF4UHq2sKi0pB5o0HotdYPGw2uow8Zxynxco600pdADf_bhIcv5fD7IcrjIYElNxVsoWGqs4J0kt2S3__AvM1goBUXxBujgOaBVGo07Zg8OcrjK4MW02tNoKhX1muEhrXEda0hJjQfdidFrHsixj5R4k0Hh4zDADqahsSzJOWg1dh5T1a-p2xNTnqHlGK_iqOxR_3-4u8vgY0oGXnVVzlyc96F-zJgsbGL7PuuQUexgFapqKhQzUZOtUav4LXZdmlL4NdVUijxeFdpNKUqzj7zQKPT0pHTctMi9DTQTGDwXWyPHuOcM36oH9z8iAdJQ)
 
+## Concepts
+
+### SSO Guardians
+
+External key managers like Magic.link and Web3auth.io enable users to become their own social recovery guardian via SSO. The private keys of these key managers are accessible to end users as long as they have access to the configured SSO methods.
+
+### Guardian Invitation & Confirmation
+
+2-Phase guardian address setup is applied to Lumukso in order to make sure that every added guardian has made a consent to confirm their intention to become a guardian. This consent is made via a specially crafted signature defined in Lumukso smart contract. 
+
+### Social Recovery Fault Tolerance
+
+This concept is used to determine the LSP11 guardians threshold parameter using Byzantine Fault Tolerance theorem where there can be only one-third of the guardians being faulty. 
+
+$Number of Guardians = 3Faulty Guardians + 1$
+$Guardians Threshold = Number of Guardians - Faulty Guardians = 2Faulty Guardians + 1$
+
 ## Supported Guardians
 
 - [x] Universal Profile
