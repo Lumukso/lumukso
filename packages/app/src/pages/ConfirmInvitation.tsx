@@ -51,6 +51,7 @@ export function ConfirmInvitation() {
         type: "error"
     });
 
+    const [isConfirmed, setIsConfirmed] = useState(false);
     function confirm() {
         if (isConfirming || !socialRecovery || !signer) return;
 
@@ -72,6 +73,7 @@ export function ConfirmInvitation() {
             })
             .then(tx => tx.wait())
             .then(() => notifyConfirmed())
+            .then(() => setIsConfirmed(true))
             .catch(console.error)
             .finally(() => setIsConfirming(false));
     }
@@ -102,10 +104,10 @@ export function ConfirmInvitation() {
     }, [socialRecovery, isGuardianLoading, alreadyGuardian]);
 
     useEffect(() => {
-        if (alreadyGuardian) {
+        if (alreadyGuardian && !isConfirmed && !isConfirming) {
             notifyAlreadyGuardian();
         }
-    }, [alreadyGuardian]);
+    }, [alreadyGuardian, isConfirmed, isConfirming]);
 
     useEffect(() => {
         if (lumuksoFactory && universalProfile && !isSocialRecoveryLoading && signer && !socialRecovery) {

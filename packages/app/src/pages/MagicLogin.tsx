@@ -1,8 +1,10 @@
 import {useEffect, useRef} from "react";
 import {MoonLoader} from "react-spinners";
+import {useSearchParams} from "react-router-dom";
 
 export function MagicLogin() {
     const rootEl = useRef(null);
+    let [searchParams, setSearchParams] = useSearchParams();
 
     useEffect(() => {
         const script = document.createElement('script');
@@ -10,7 +12,7 @@ export function MagicLogin() {
         script.src = "https://auth.magic.link/pnp/login";
         script.async = true;
         script.setAttribute("data-magic-publishable-api-key", import.meta.env.VITE_MAGIC_KEY);
-        script.setAttribute("data-redirect-uri", "/setup");
+        script.setAttribute("data-redirect-uri", searchParams.get("redirect"));
 
         rootEl.current.appendChild(script);
 

@@ -50,7 +50,7 @@ export function Setup() {
                     </ul>
 
                     {
-                        currentStep === 1 ? <SetupConnect /> :
+                        currentStep === 1 ? <SetupConnect redirect="/setup" /> :
                             currentStep === 2 ? <SetupDeploy /> :
                                 currentStep === 3 ? <SetupInvite /> : null
                     }

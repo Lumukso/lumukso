@@ -15,6 +15,9 @@ specifiers:
   '@heroicons/react': ^1.0.6
   '@lukso/lsp-factory.js': ^2.3.3
   '@lumukso/contracts': workspace:../contracts
+  '@magic-sdk/commons': ^5.0.0
+  '@magic-sdk/provider': ^9.0.0
+  '@magic-sdk/types': ^8.0.0
   '@rollup/plugin-inject': ^4.0.4
   '@rollup/plugin-node-resolve': ^13.3.0
   '@rollup/pluginutils': ^4.2.1
@@ -54,6 +57,7 @@ specifiers:
   flowbite: ^1.5.1
   flowbite-react: ^0.1.5
   isomorphic-unfetch: ^3.1.0
+  localforage: ^1.10.0
   magic-sdk: ^9.0.0
   node-fetch: ^3.2.10
   postcss: ^8.4.16
@@ -95,6 +99,9 @@ dependencies:
   '@heroicons/react': 1.0.6_react@18.2.0
   '@lukso/lsp-factory.js': 2.3.3_x6pecotbhoqc73npki3lawdjza
   '@lumukso/contracts': link:../contracts
+  '@magic-sdk/commons': 5.0.0_mh3fnbxtippm5kb4yvyalj7zhu
+  '@magic-sdk/provider': 9.0.0_localforage@1.10.0
+  '@magic-sdk/types': 8.0.0
   '@tailwindcss/aspect-ratio': 0.4.0_tailwindcss@3.1.8
   '@tailwindcss/forms': 0.5.2_tailwindcss@3.1.8
   '@tailwindcss/typography': 0.5.4_tailwindcss@3.1.8
@@ -115,6 +122,7 @@ dependencies:
   flowbite: 1.5.2
   flowbite-react: 0.1.10_5gpsvf2cjw4zlguc4umrhekegq
   isomorphic-unfetch: 3.1.0
+  localforage: 1.10.0
   magic-sdk: 9.0.0
   node-fetch: 3.2.10
   process: 0.11.10
@@ -1636,7 +1644,7 @@ packages:
       '@ethersproject/logger': 5.5.0
       '@ethersproject/networks': 5.5.0
       '@ethersproject/properties': 5.5.0
-      '@ethersproject/transactions': 5.5.0
+      '@ethersproject/transactions': 5.7.0
       '@ethersproject/web': 5.5.0
     dev: false
 
@@ -1762,7 +1770,7 @@ packages:
       '@ethersproject/constants': 5.5.0
       '@ethersproject/logger': 5.5.0
       '@ethersproject/properties': 5.5.0
-      '@ethersproject/transactions': 5.5.0
+      '@ethersproject/transactions': 5.7.0
     dev: false
 
   /@ethersproject/contracts/5.7.0:
@@ -1829,7 +1837,7 @@ packages:
       '@ethersproject/sha2': 5.5.0
       '@ethersproject/signing-key': 5.5.0
       '@ethersproject/strings': 5.5.0
-      '@ethersproject/transactions': 5.5.0
+      '@ethersproject/transactions': 5.7.0
       '@ethersproject/wordlists': 5.5.0
     dev: false
 
@@ -1862,7 +1870,7 @@ packages:
       '@ethersproject/properties': 5.5.0
       '@ethersproject/random': 5.5.0
       '@ethersproject/strings': 5.5.0
-      '@ethersproject/transactions': 5.5.0
+      '@ethersproject/transactions': 5.7.0
       aes-js: 3.0.0
       scrypt-js: 3.0.1
     dev: false
@@ -1957,7 +1965,7 @@ packages:
       '@ethersproject/rlp': 5.5.0
       '@ethersproject/sha2': 5.5.0
       '@ethersproject/strings': 5.5.0
-      '@ethersproject/transactions': 5.5.0
+      '@ethersproject/transactions': 5.7.0
       '@ethersproject/web': 5.5.0
       bech32: 1.1.4
       ws: 7.4.6
@@ -2149,7 +2157,7 @@ packages:
       '@ethersproject/properties': 5.5.0
       '@ethersproject/random': 5.5.0
       '@ethersproject/signing-key': 5.5.0
-      '@ethersproject/transactions': 5.5.0
+      '@ethersproject/transactions': 5.7.0
       '@ethersproject/wordlists': 5.5.0
     dev: false
 

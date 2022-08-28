@@ -14,7 +14,7 @@ export function App() {
             <Routes>
                 <Route path="/" element={<Home/>}/>
                 <Route path="/setup" element={<Setup/>}/>
-                <Route path="/magic-login" element={<MagicLogin/>}/>
+                <Route path="/magic-login" element={<MagicLogin />}/>
                 <Route path="/pending" element={<PendingInvitations/>}/>
                 <Route path="/confirm/:universalProfileAddress/:pendingGuardianAddress" element={<ConfirmInvitation/>}/>
                 <Route path="/recover" element={<Recover/>}/>
