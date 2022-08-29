@@ -32,8 +32,9 @@ External key managers like Magic.link and Web3auth.io enable users to become the
 
 This concept is used to determine the LSP11 guardians threshold parameter using Byzantine Fault Tolerance theorem where there can be only one-third of the guardians being faulty. 
 
-$Number of Guardians = 3Faulty Guardians + 1$
-$Guardians Threshold = Number of Guardians - Faulty Guardians = 2Faulty Guardians + 1$
+$$Number of Guardians = 3Faulty Guardians + 1$$
+
+$$Guardians Threshold = Number of Guardians - Faulty Guardians = 2Faulty Guardians + 1$$
 
 For example when fault tolerance is configured as 1, then 3 guardians are required to recover the access of a user.
 
