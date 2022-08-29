@@ -8,15 +8,7 @@ Lumukso is a multifactor social recovery app made for [Lukso Universal Profile](
 
 The application utilizes external key managers such as Magic.link & web3auth.io to help Lukso universal profile users recover their access using SSO.
 
-There's also a new concept of "Fault Tolerance" introduced in this application. This concept is used to determine the guardians threshold using Byzantine Fault Tolerance theorem where there can be only one-third of the guardians being faulty. 
-
-```
-f = Number of faulty guardians
-Number of guardians = 3f + 1
-Guardians threshold = Number of guardians - f = 2f + 1
-```
-
-For example when fault tolerance is configured as 1, then 3 guardians are required to recover the access of a user.
+There's also a new concept of "Guardian Invitation" being introduced intro Lumukso's smart contract. This concept applies a 2-phase consent flow that requires a signature from invited addresses to confirm their agreement on becoming a guardian.
 
 ## Workflow
 
@@ -34,7 +26,7 @@ External key managers like Magic.link and Web3auth.io enable users to become the
 
 ### Guardian Invitation & Confirmation
 
-2-Phase guardian address setup is applied to Lumukso in order to make sure that every added guardian has made a consent to confirm their intention to become a guardian. This consent is made via a specially crafted signature defined in Lumukso smart contract. 
+2-Phase guardian address configuration is applied to Lumukso in order to make sure that every added guardian has made a consent to confirm their intention to become a guardian. This consent is made via a specially crafted signature defined in Lumukso smart contract. 
 
 ### Social Recovery Fault Tolerance
 
@@ -42,6 +34,8 @@ This concept is used to determine the LSP11 guardians threshold parameter using 
 
 $Number of Guardians = 3Faulty Guardians + 1$
 $Guardians Threshold = Number of Guardians - Faulty Guardians = 2Faulty Guardians + 1$
+
+For example when fault tolerance is configured as 1, then 3 guardians are required to recover the access of a user.
 
 ## Supported Guardians
 
