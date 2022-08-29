@@ -8,7 +8,7 @@ Lumukso is a multifactor social recovery app made for [Lukso Universal Profile](
 
 The application utilizes external key managers such as Magic.link & web3auth.io to help Lukso universal profile users recover their access using SSO.
 
-There's also a new concept of "Guardian Invitation" being introduced intro Lumukso's smart contract. This concept applies a 2-phase consent flow that requires a signature from invited addresses to confirm their agreement on becoming a guardian.
+There's also a new concept of "Guardian Invitation" being introduced into Lumukso's smart contract. This concept applies a 2-phase consent flow that requires a signature from invited addresses to confirm their agreement on becoming a guardian.
 
 ## Workflow
 
