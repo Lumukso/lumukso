@@ -30,7 +30,7 @@ export function Layout(props) {
                                    className="flex flex-row justify-center items-center self-end text-xs align-middle font-normal text-gray-500 hover:underline dark:text-gray-400">
                                     <QuestionMarkCircleIcon className="mr-1 w-3 h-3" aria-hidden="true"
                                                             focusable="false" data-prefix="far"/>
-                                    <span className="align-middle"><a href="https://github.com/Lumukso/lumukso" target="_blank">How this works?</a></span>
+                                    <span className="align-middle"><a href="https://youtu.be/QLu0rdujZxg" target="_blank">How this works?</a></span>
                                 </a>
                             </div>
                         </div>
