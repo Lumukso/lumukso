@@ -9,6 +9,7 @@ import {useWeb3auth} from "../hooks/web3auth";
 import {ExclamationCircleIcon} from "@heroicons/react/outline";
 import {useEffect} from "react";
 import {toast} from "react-toastify";
+import { useMountEffect } from '@react-hookz/web';
 
 export function SetupConnect({redirect}) {
     const {

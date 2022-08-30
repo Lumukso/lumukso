@@ -4,6 +4,7 @@ import {chain} from "../client";
 import {L16_EXPLORER_URL} from "../constants";
 import {createGlobalState} from "react-hooks-global-state";
 import {ethers} from "ethers";
+import {useMountEffect} from "@react-hookz/web";
 
 const { useGlobalState } = createGlobalState({
     web3auth: null,
@@ -14,6 +15,8 @@ const { useGlobalState } = createGlobalState({
     provider: null,
     signer: null,
 });
+
+let initialized = false;
 
 export function useWeb3auth() {
     const [web3auth, setWeb3auth] = useGlobalState('web3auth');
@@ -36,49 +39,56 @@ export function useWeb3auth() {
         setSigner(provider.getSigner());
     };
 
-    useEffect(() => {
-        const init = async () => {
-            try {
-                setWeb3authIsLoading(true);
-                const web3auth = new Web3Auth({
-                    clientId: import.meta.env.VITE_WEB3AUTH_KEY,
-                    authMode: "DAPP",
-                    chainConfig: {
-                        chainNamespace: 'eip155',
-                        chainId: `0x${chain.id.toString(16)}`,
-                        rpcTarget: chain.rpcUrls.default,
-                        displayName: chain.name,
-                        ticker: chain.nativeCurrency.symbol,
-                        tickerName: chain.nativeCurrency.name,
-                        blockExplorer: L16_EXPLORER_URL,
-                    },
-                    enableLogging: false,
-                });
+    const init = async () => {
+        console.log("init----------------------------------------");
+        try {
+            setWeb3authIsLoading(true);
+            const web3auth = new Web3Auth({
+                clientId: import.meta.env.VITE_WEB3AUTH_KEY,
+                authMode: "DAPP",
+                storageKey: "local",
+                sessionTime: 86400,
+                chainConfig: {
+                    chainNamespace: 'eip155',
+                    chainId: `0x${chain.id.toString(16)}`,
+                    rpcTarget: chain.rpcUrls.default,
+                    displayName: chain.name,
+                    ticker: chain.nativeCurrency.symbol,
+                    tickerName: chain.nativeCurrency.name,
+                    blockExplorer: L16_EXPLORER_URL,
+                },
+                displayErrorsOnModal: true,
+                enableLogging: true,
+            });
 
-                web3auth.addListener("ready", () => {
-                    setWeb3authIsLoading(false);
-                });
-
-                web3auth.addListener("connected", () => {
-                    setWeb3authIsConnected(true);
-                });
-
-                setWeb3auth(web3auth);
-
-                await web3auth.initModal();
-                if (web3auth.provider) {
-                    const provider = new ethers.providers.Web3Provider(web3auth.provider);
-                    setProvider(provider);
-                    setSigner(provider.getSigner());
-                }
-            } catch (error) {
-                console.error(error);
-            } finally {
+            web3auth.addListener("ready", () => {
                 setWeb3authIsLoading(false);
-            }
-        };
+            });
 
-        init();
+            web3auth.addListener("connected", () => {
+                setWeb3authIsConnected(true);
+            });
+
+            setWeb3auth(web3auth);
+
+            await web3auth.initModal();
+            if (web3auth.provider) {
+                const provider = new ethers.providers.Web3Provider(web3auth.provider);
+                setProvider(provider);
+                setSigner(provider.getSigner());
+            }
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setWeb3authIsLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        if (!initialized) {
+            initialized = true;
+            init();
+        }
     }, []);
 
     useEffect(() => {
@@ -102,6 +112,7 @@ export function useWeb3auth() {
     }, [provider])
 
     return {
+        init,
         web3auth,
         web3authIsLoading,
         web3authIsLoggedIn,

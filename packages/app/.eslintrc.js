@@ -1,8 +1,8 @@
 module.exports = {
     "parser": "@typescript-eslint/parser",
-    "plugins": ["@typescript-eslint", "react-hooks"],
+    "plugins": ["@typescript-eslint", "react-hooks-addons", "react-hooks"],
     "rules": {
-        "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
+        "react-hooks-addons/no-unused-deps": "warn",
         "react-hooks/exhaustive-deps": "warn" // Checks effect dependencies
     }
 }

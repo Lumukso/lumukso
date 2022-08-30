@@ -16,9 +16,14 @@ export default defineConfig({
     server: {https: true},
     resolve: {
         alias: {
-            buffer: 'node_modules/rollup-plugin-node-polyfills/polyfills/buffer-es6.js', // add buffer
-            process: 'node_modules/rollup-plugin-node-polyfills/polyfills/process-es6.js', // add process
-            stream: 'node_modules/rollup-plugin-node-polyfills/polyfills/stream.js'
+            buffer: 'node_modules/rollup-plugin-node-polyfills/polyfills/buffer-es6.js',
+            process: 'node_modules/rollup-plugin-node-polyfills/polyfills/process-es6.js',
+            stream: 'node_modules/rollup-plugin-node-polyfills/polyfills/stream.js',
+            _stream_duplex: 'rollup-plugin-node-polyfills/polyfills/readable-stream/duplex',
+            _stream_passthrough: 'rollup-plugin-node-polyfills/polyfills/readable-stream/passthrough',
+            _stream_readable: 'rollup-plugin-node-polyfills/polyfills/readable-stream/readable',
+            _stream_writable: 'rollup-plugin-node-polyfills/polyfills/readable-stream/writable',
+            _stream_transform: 'rollup-plugin-node-polyfills/polyfills/readable-stream/transform',
         },
     },
     plugins: [
