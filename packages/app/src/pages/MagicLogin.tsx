@@ -17,7 +17,8 @@ export function MagicLogin() {
         rootEl.current.appendChild(script);
 
         return () => {
-            rootEl.current.removeChild(script);
+            document.querySelectorAll(".magic-iframe").forEach(ele => ele.remove());
+            document.querySelectorAll("script[src='https://auth.magic.link/pnp/login']").forEach(ele => ele.remove());
         }
     }, []);
 

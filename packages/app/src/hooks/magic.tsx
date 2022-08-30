@@ -26,6 +26,8 @@ const { useGlobalState } = createGlobalState({
     magicSigner: null,
 });
 
+let preloaded = false;
+
 export function useMagic() {
     const [magicIsLoading, setMagicIsLoading] = useGlobalState('magicIsLoading');
     const [magicIsLoggedIn, setMagicIsLoggedIn] = useGlobalState('magicIsLoggedIn');
@@ -34,12 +36,15 @@ export function useMagic() {
     const [magicSigner, setMagicSigner] = useGlobalState('magicSigner');
 
     useEffect(() => {
-        setMagicIsLoading(true);
-        magic.preload()
-            .then(() => magic.user.isLoggedIn())
-            .then((result) => setMagicIsLoggedIn(result))
-            .catch(console.error)
-            .finally(() => setMagicIsLoading(false));
+        if (!preloaded) {
+            preloaded = true;
+            setMagicIsLoading(true);
+            magic.preload()
+                .then(() => magic.user.isLoggedIn())
+                .then((result) => setMagicIsLoggedIn(result))
+                .catch(console.error)
+                .finally(() => setMagicIsLoading(false));
+        }
     }, []);
 
     useEffect(() => {
