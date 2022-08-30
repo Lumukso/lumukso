@@ -4,7 +4,7 @@
 
 <p align="center">
 <a href="https://lumukso.app/" target="_blank">App</a> | 
-<a href="https://www.youtube.com/watch?v=CndbkymCQtA" target="_blank">Demo Video</a> |
+<a href="https://youtu.be/QLu0rdujZxg" target="_blank">Demo Video</a> |
 <a href="mailto:contact@lumukso.app" target="_blank">Contact</a>
 </p>
 
