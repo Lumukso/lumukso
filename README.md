@@ -2,6 +2,12 @@
   <img src="./packages/app/assets/lumukso.png">
 </p>
 
+<p align="center">
+<a href="https://lumukso.app/" target="_blank">App</a> | 
+<a href="https://www.youtube.com/watch?v=CndbkymCQtA" target="_blank">Demo Video</a> |
+<a href="mailto:contact@lumukso.app" target="_blank">Contact</a>
+</p>
+
 ----------
 
 Lumukso is a multifactor social recovery app made for [Lukso Universal Profile](https://docs.lukso.tech/guides/universal-profile/create-profile/).
