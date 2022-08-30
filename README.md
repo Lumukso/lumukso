@@ -57,12 +57,7 @@ For example when fault tolerance is configured as 1, then 3 guardians are requir
 ```
 cd packages/contracts
 pnpm install
-forge script script/deploy.s.sol --broadcast \
-    --optimize --optimizer-runs 200 --via-ir \
-    --rpc-url $ETH_RPC_URL \
-    --private-key $RAW_PRIVATE_KEY \
-    --chain-id $CHAIN_ID \
-    -vvvv
+pnpm test
 ```
 
 ### App
