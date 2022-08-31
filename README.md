@@ -18,7 +18,7 @@ There's also a new concept of "Guardian Invitation" being introduced into Lumuks
 
 ## Prerequisite
 
-Please make sure you have installed v1.0.0-develop.298-MV3 Lukso UP browser extension and disabled Metamask and other browser wallets.
+Please make sure you have installed **v1.0.0-develop.298-MV3** Lukso UP browser extension and disabled Metamask and other browser wallets.
 
 Visit https://docs.lukso.tech/guides/browser-extension/install-browser-extension/ for the download link and instruction.
 
