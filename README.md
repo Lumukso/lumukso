@@ -16,6 +16,12 @@ The application utilizes external key managers such as Magic.link & web3auth.io 
 
 There's also a new concept of "Guardian Invitation" being introduced into Lumukso's smart contract. This concept applies a 2-phase consent flow that requires a signature from invited addresses to confirm their agreement on becoming a guardian.
 
+## Prerequisite
+
+Please make sure you have installed v1.0.0-develop.298-MV3 Lukso UP browser extension and disabled Metamask and other browser wallets.
+
+Visit https://docs.lukso.tech/guides/browser-extension/install-browser-extension/ for the download link and instruction.
+
 ## Workflow
 
 - Alice is the original owner
